@@ -11,7 +11,7 @@
 	<groupId>irt</groupId>
 	<artifactId>irt.test</artifactId>
 	<version>1.1</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 
 	<name>HTTP Test</name>
 
