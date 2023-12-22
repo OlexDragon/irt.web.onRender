@@ -11,5 +11,6 @@ RUN mvn -f /home/app/pom.xml clean package
 #
 FROM openjdk:11-jre-slim
 COPY --from=build /home/app/target/irt.test-1.1.jar /usr/local/lib/test.jar
+ENV PORT=8080
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","/usr/local/lib/test.jar"]"spring-boot:run"]
