@@ -1,0 +1,18 @@
+.btn-check:checked+.btn-oval {
+    background-color: rgba(158, 9, 16, 0.979);
+    color: rgb(250, 247, 247);
+  }
+  .btn-check:checked+.btn-diamond {
+    background-color: #0d2c69;
+    color: rgb(252, 251, 251);
+  }
+  .btn-check+.btn-diamond:hover{
+    background-color: #0f2b64;
+    color: rgb(253, 251, 251);
+  } 
+  .btn-check+.btn-oval:hover{
+    background-color: rgba(172, 3, 12, 0.973);
+    color: rgb(253, 251, 251); 
+  }
+  
+  

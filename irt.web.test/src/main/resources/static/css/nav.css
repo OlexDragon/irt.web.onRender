@@ -1,0 +1,130 @@
+.navbar{
+    padding-bottom: 0px;
+}
+.nav-link{
+    font-family: var(--font-primary);
+    font-size: var(--font-size-regular);
+}
+.nav-link:hover{
+    font-weight: 800;
+    color: rgb(5, 36, 138);
+}
+.nav-img {
+    max-width: 200px;
+    height: auto;
+    object-fit: cover;
+
+}
+.nav-link{
+    color: rgb(5, 36, 138);
+}
+
+.navbar-nav .nav-link.active, .navbar-nav .nav-link.show {
+    color: rgb(5, 36, 138);
+}
+
+
+.slogan{
+    font-size: var(--font-size-x-small) ;
+    margin-left: -10px;
+}
+.dropdown-menu[data-bs-popper]{
+    margin-top: 0px;
+}
+  
+.dropdown-menu{
+    background-color: #e2e2e2;
+}
+.dropdown-menu.show {
+    animation: fade-in 0.7s ease-in-out;
+}
+.dropdown-menu[data-bs-popper] {
+    top: 99%;
+    left: 0;
+}
+    
+.dropdown-menu.hide {
+    animation: fade-out 0.7s ease-in-out;
+}
+
+.dropdown-divider{
+    border-top: 0.5px solid rgb(53, 53, 137); 
+}
+.dropdown-var .dropdown-menu{
+    background-color: #f7f5f5;
+}
+.sous-link a{
+    font-size: 16px;
+    text-align: right;
+    padding-right: 20px;
+    border-radius: 0%;
+}
+.m_products p{
+    font-size: 14px;
+    font-weight: 600;
+    color: #0d182e;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    text-align: right;
+    padding-right: 20px;
+  
+}
+.dropdown-link  {
+    font-size: 14px;
+    font-weight: 600;
+    color: #0d182e;
+    display: flex;
+    justify-content: end;
+    margin-right: 20px;
+    text-align: end;
+    text-decoration: none;
+}
+
+.dropdown-menu .row>*{
+  padding-right: 0px;
+  padding-left: 0px;
+}
+
+@keyframes fade-in {
+    0% {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fade-out {
+    0% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+  }
+@media (max-width: 576px) {
+    .navbar-brand.ms-3 {
+        margin-left: -5px !important;
+    }
+    .slogan{
+        font-size: 10px ;
+        margin-left: -20px;
+    }
+    .navbar{
+        padding-bottom: 10px;
+    }
+    .nav-img {
+        max-width: 150px;
+       
+    
+    }
+    .navbar-toggler {
+        padding:0px 5px;
+       
+    }
+    
+  }

@@ -1,0 +1,31 @@
+.modal{
+    background-color: rgba(235, 238, 241, 0.521);
+}
+.modal-content{
+    background-color:rgb(9, 49, 105);
+    padding: 20px;
+}
+.modal .container{
+    background-color: #fff;
+    border-radius: 10px;
+    min-height: auto;
+}
+.modal-title h2{
+    letter-spacing: 2px;
+    font-size: 32px;
+}
+.modal-title h3{
+    font-size: 28px;
+    color: rgb(10, 37, 158);
+}
+.modal-title p{
+   /* font-family: Georgia, 'Times New Roman', Times, serif; */
+   font-weight: 600;
+   font-size: 16px;
+}
+.modal h4{
+    color: rgb(10, 37, 158);
+}
+.modal ul li {
+    list-style-type: none;
+}

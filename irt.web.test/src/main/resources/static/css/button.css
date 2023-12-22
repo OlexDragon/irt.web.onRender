@@ -1,0 +1,164 @@
+
+.button-v1{
+    
+    /* border: 1px solid #80807d; */
+    background: #eae8e8; 
+}
+.button-v1:hover{
+    color: rgb(9, 49, 105);
+    border: 1px solid #a1a1a0;
+    background: #ecebeb; 
+    font-weight: 600;
+}
+.button-v1{
+    border-radius: 10px;
+    font-weight: 400;
+    padding: 0.55em 1.75em;
+    box-shadow: none;
+}
+.m_products.btn{
+    border: none;
+}
+/* .contact.btn{
+    border: 1px solid #80807d;
+} */
+.oval{
+    border-radius:20px;
+    background-color: #c0c0be;
+}
+
+.diamond {
+    width: 200px;
+    height: 40px;
+    background-color: #c0c0be;
+    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+    position: relative;
+    text-align: center;
+}
+/* .btn-check:checked+.btn{
+    background-color: #2b5099;
+ 
+} */
+.btn{
+  color: rgb(9, 49, 105);
+}
+.btn-outline-primary{
+    color: #000;
+}
+.btn-check:checked+.btn {
+    color: #000;
+    font-weight: 600;
+    border: none;
+  }
+  .btn-check:checked+.btn-diamond {
+    background-color: rgb(9, 49, 105);
+    color: rgb(252, 251, 251);
+  }
+  .btn-check+.btn-diamond:hover{
+    background-color: rgb(9, 49, 105);
+    color: rgb(253, 251, 251);
+  } 
+  .btn-check+.btn:hover{
+    color: #000;
+    text-shadow: 1px 1px #f9f9fa;
+  }
+
+.expand:hover{
+    background-color: #bebebe;
+}
+.navbar-toggler:focus{
+    box-shadow: 0 0 0 1px rgb(9, 49, 105);
+}
+  
+/* Card button var1 */
+  .shine-button {
+    text-decoration: none;
+    display: inline-block;
+    padding: 5px 10px;
+    /* margin: 10px 10px; */
+    position: relative;
+    overflow: hidden;
+    border: 2px solid rgb(9, 49, 105);
+    border-radius: 10px;
+    color: rgb(9, 49, 105);
+    transition: .2s ease-in-out;
+  }
+  .shine-button:before {
+    content: "";
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.5));
+    height: 50px;
+    width: 50px;
+    position: absolute;
+    top: -8px;
+    left: -75px;
+    transform: skewX(-45deg);
+  }
+  .shine-button:hover {
+    background: rgb(9, 49, 105);
+    color: #fff;
+  }
+  .shine-button:hover:before {
+    left: 150px;
+    transition: .5s ease-in-out;
+  }
+  .contact .shine-button{
+    border: 1px solid rgb(46, 95, 163);
+  }
+  .contact .shine-button:hover{
+    background: rgb(46, 95, 163);
+  }
+  
+
+  /*Card button var2 */
+  .button2 {
+    display: inline-block;
+    border: 2px solid rgb(9, 49, 105);
+    border-radius: 10px;
+    outline: none;
+    background: #fdfdfd no-repeat;
+    /* background-image: linear-gradient(to left, #aaaaaa, #aaaaaa), linear-gradient(to left, #f9f9fa, #e8ecff), linear-gradient(#e8ecff, #224499); */
+    background-position: calc(100% - 2.7em) 0, calc(100% - 2.7em + 1px) 0, 0 0;
+    background-size: 1px 100%, 1px 100%, auto auto;
+    overflow: hidden;
+    color: #000;
+  }
+  
+  .button2:after {
+    content: "\bb";
+    position: relative;
+    bottom: 0;
+    display: inline-block;
+    margin-left: 1.4em;
+    vertical-align: middle;
+    font-family: "Times","Times New Roman","serif","sans-serif","EmojiSymbols";
+    font-weight: 700;
+    font-size: 100%;
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+  }
+  .button2:hover {
+    background-color: rgb(10, 46, 124);
+    color: #fff;
+    background-image:
+     linear-gradient(to left, #aaaaaa, #aaaaaa),
+     linear-gradient(to left, #c6c8d8, #c0c3db),
+     linear-gradient(#6c87d8, rgb(10, 46, 124));
+
+  }
+  .button2:active:after {
+    bottom: -1.2em;
+    transition: .3s;
+  }
+  .btn-check:checked+.btn-v3 {
+    background-color: rgba(172, 174, 180, 0.603);
+    color: rgb(5, 5, 5); 
+  }
+  .btn-v3:hover{
+    background-color: rgba(132, 138, 148, 0.233);
+    font-weight: 600;
+    color: rgb(5, 5, 5);
+  }
+
+
+  
+  

@@ -1,0 +1,90 @@
+
+
+/* ==================== */
+.about-section1 h1{
+    font-size: 40px;
+    text-shadow: 1px 1px black;
+    
+}
+
+.about-description{
+  background-color: rgba(9, 49, 105, 0.898);
+  padding: 10px 0;
+}
+.about-description h1{
+    font-size: 40px;
+    margin-top: 20px;
+}
+.about-description p{
+    margin-left: 20px;
+    margin-right: 20px;
+    font-size: 22px;
+}
+.about-solution h1{
+    font-size: 40px;
+   
+}
+.about-solution p{
+    font-size: 20px;
+    padding-left: 10px;
+   
+}
+.about-solution .form-group{
+    margin-right: 20px;
+}
+.about-btn{
+   min-width: 200px;
+    border: 2px solid rgb(252, 253, 254);
+    color: white;
+}
+
+#section-contact ul{
+    padding-left: 5px;
+}
+#section-contact li{
+    font-size:var(--font-size-default);
+    line-height: 35px;
+}
+#section-contact .container{
+    min-height: 300px;
+    
+}
+#section-contact .card{
+    margin-top: 40px;
+    background-color: rgb(9, 49, 105);
+    color: white;
+    height: auto;
+    min-width: 350px;
+    cursor: pointer;
+    transition: transform 0.3s ease, font-size 0.3s ease;
+}
+#section-contact .card:hover{
+    transform: scale(1.05);
+    font-size: 2rem;
+}
+
+#section-contact .card-header h4{
+    font-family: var(--font-primary);
+    
+}
+#companyModal h4{
+    color: white;
+}
+.about-modal .card{
+    background-color: rgb(9, 49, 105);
+    color: white;
+    height: auto;
+    box-shadow: none;
+    border: none;  
+}
+.about .modal {
+    background-color:transparent;
+}
+@media screen and (max-width: 1023px){
+    .about-description p{
+       
+        font-size: 18px;
+    }
+}
+
+

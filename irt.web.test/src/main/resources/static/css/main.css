@@ -1,0 +1,294 @@
+ @import "./about.css";
+ @import "./banner.css";
+ @import "./button.css";
+ @import "./button-spec.css";
+ @import "./carousel.css";
+ @import "./card.css";
+ @import "./current_filter.css";
+ @import "./detail.css";
+ @import "./font/font.css";
+ @import "./footer.css";
+ @import "./modal.css";
+ @import "./maybe/maybe.css";
+ @import "./nav.css";
+ @import "./var2.css";
+
+  h1{
+   font-family: var(--font-primary);
+  }
+  h2, h3, h4, h5,h5 p{
+    font-family: var(--font-secondary);
+   }
+  
+ .pre-line{
+	white-space: pre-line;
+}
+  
+  .container .card{
+    height: 400px;
+  }
+  @media (max-width: 768px) {
+    .container .card{
+       
+        height: auto;
+      }   
+  }
+  .container{
+    position: relative;
+    min-height: 1000px;
+  }
+  .title-product{
+    font-size: 24px;
+  }
+  /* .form-check-input:checked{
+    background-color: #dc3545;
+    border-color: #dc3545;
+    border-radius: 20px;
+    
+  }
+  .form-check-input:checked[type=checkbox] {
+    --bs-form-check-bg-image:red;
+  } */
+  .form-check-input[type="checkbox"] {
+    position: absolute;
+    left: -9999px;
+  }
+  .checkbox-custom {
+    position: relative;
+    display: inline-block;
+    
+    vertical-align: middle;
+    
+    
+  }
+  .checkbox-custom::before {
+    content: "";
+    position: absolute; 
+  }
+
+  .checkbox-custom::after {
+    content: "✓";
+    transform: translate(-50%, -50%);
+    font-size: 16px;
+    color: #15508f;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+
+  .form-check-input:checked ~ .checkbox-custom::after {
+    opacity: 1;
+  }
+  
+  
+
+  /* detail product */
+  .carousel-control-prev{
+    margin-left: -20px;
+  }
+  .carousel-img{
+    width: 400px;
+  }
+  
+  
+  
+
+  /* filter form */
+  .filter{
+    font-family: var(--font-primary);
+    margin-bottom: 100px;
+  }
+  .filter h6{
+    font-weight: 600;
+  }
+  .filter .brand{
+    height: auto;
+  }
+
+  /* card-filtre */
+  /* .card-header {
+    border-top: var(--bs-card-border-width) solid var(--bs-card-border-color);
+  } */
+  @media (max-width: 992px) {
+    .filter h6{
+      font-size: 14px;
+    }
+}
+
+@media (max-width: 768px) {
+  .filter h6{
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 576px) {
+  .filter h6{
+    font-size: 12px;
+  }
+  .filter label{
+    font-size: 10px;
+    padding: 0px;
+  }
+  .filter .card-body{
+    padding: 5px;
+  }
+  .filter .form-control{
+    padding: 0px 5px ;
+  }
+}
+  
+
+
+  
+
+  @media screen and (max-width: 1600px) {
+    .form-check {
+      padding: 5px 10px;
+      max-width: 200px;
+      font-size: 12px;
+    }
+    .nav-link{
+      font-size: 16px;
+    }
+    .slogan, .btn-oval, .btn-diamond, .dropdown-item{
+      font-size:10px ;
+    }
+  }
+ 
+ 
+/* menu-var3 */
+.bord{
+  border-right: 1px solid rgb(189, 188, 188);  
+}
+
+
+.matte,
+.matte-1{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.matte{
+  background-color: rgba(177, 190, 206, 0.63);
+  z-index: 999;
+  display: none;  
+}
+.matte.active{
+  display: block;
+}
+
+.matte-1{
+  background-color: rgba(177, 190, 206, 0.63);
+  z-index: 1;
+  visibility: hidden;
+  transition: opacity 2.0s ease;
+  opacity: 0; 
+}
+.matte-1.load{
+  visibility: visible;
+  opacity: 1;
+}
+.matte h5{
+  font-size: 28px;
+  color: #080808;
+  text-shadow: 1px 1px rgb(250, 249, 249);
+}
+
+#nothing-found {
+ display: flex;
+ justify-content: center;
+ height: 100vh;
+}
+.dnone{
+  display: none;
+}
+
+
+/* =================icon search=========== */
+.form-group {
+  position: relative;
+}
+
+.form-group input {
+  padding-right: 40px; 
+}
+
+.form-group svg {
+  position: absolute;
+  top: 70%;
+  right: 10px;
+  transform: translateY(-50%);
+}
+
+/* ==========form contact us========== */
+.about-solution .container {
+  margin-top: 50px;
+}
+.form-label {
+  font-weight: bold;
+}
+.form-group {
+  margin-bottom: 20px;
+}
+#section-contact .form-control{
+  background-color: #f6f6fadf;
+  padding: 10px 15px;
+  border-radius: 10px;
+  color: #080808;
+}
+.form-btn{
+  min-width: 200px; 
+  background-color: #f4f4fbe5;
+  padding: 10px 15px;
+  color: #080808;
+  text-align: start;
+  border-radius: 10px;
+  border: 1px solid #f1f1f2ca;
+}
+
+
+   
+  
+@media (max-width: 567px) {
+  .filter-section.hidden {
+    display: none;
+  }
+   .filter .shine-button {
+    font-size: 12px;
+    min-width: 100px;
+  }
+  .filter-toggle.active .arrow {
+    transform: rotate(180deg);
+  } 
+  .filter{
+    margin-bottom: 0px;
+  }
+}
+
+@media (min-width: 568px) {
+  .filter-toggle {
+    display: none;
+  }
+}
+  
+
+  
+
+
+ 
+   
+   
+   
+   
+   
+   
+   
+   
+
+
+
+
+

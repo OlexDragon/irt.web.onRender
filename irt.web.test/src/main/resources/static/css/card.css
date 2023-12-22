@@ -1,0 +1,67 @@
+.card{
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    
+}
+.our-product .card-title{
+    font-size: 16px;
+    line-height: 1.2; 
+}
+.card-text {
+    font-size: 14px;
+    line-height: 1.4;
+}
+.our-product .card{
+    cursor: pointer;
+    max-height: 350px;
+    transition: transform 0.3s ease;
+  }
+
+  
+  .our-product .card:hover{
+    transform: scale(1.05);
+    
+}
+
+  
+
+@media (max-width: 992px) {
+    .card .card-title{
+        font-size: 16px;
+        line-height: 1.2; 
+    }
+
+    .card-text {
+        font-size: 14px;
+        line-height: 1.4;
+    }
+}
+
+@media (max-width: 768px) {
+    .card-title {
+        font-size: 18px;
+        line-height: 1.2;
+    }
+
+    .card-text {
+        font-size: 14px;
+        line-height: 1.4;
+    }
+}
+
+@media (max-width: 576px) {
+    .container .card{
+       
+        height: auto;
+      }
+      
+    
+    .card-title {
+        font-size: 16px;
+        line-height: 1.2;
+    }
+
+    .card-text {
+        font-size: 14px;
+        line-height: 1.4;
+    }
+}

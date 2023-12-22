@@ -1,0 +1,27 @@
+:root {
+    --font-primary: 'Raleway', sans-serif;
+    --font-secondary:'Arial, Helvetica, sans-serif';
+
+    --font-size-default: 1rem;
+    --font-size-xx-small: 0.625rem;
+    --font-size-x-small: 0.75rem;
+    --font-size-small:0.875rem;
+    --font-size-regular: 1.25rem;
+    --font-size-medium: 1.5rem;
+    --font-size-large: 1.875rem;
+    --font-size-x-large: 2.25rem;
+  
+    --font-weight-default: 300;
+    --font-weight-medium: 400;
+    --font-weight-heavy: 600;
+    --font-weight-bold: 700;
+  
+    --letter-spacing-large: 0.02em;
+    --letter-spacing-xlarge: 0.08em;
+  
+    --line-height-default: 1;
+    --line-height-small: 1.2;
+    --line-height-normal: 1.4;
+    --line-height-medium: 1.6;
+    --line-height-large: 1.8;
+}
