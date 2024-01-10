@@ -25,7 +25,8 @@
     </Appenders>
 
     <Loggers>
-		<logger name="irt.web.IrtWebController" level="all" />
+<!-- 		<logger name="irt.web.IrtTestWebController" level="all" /> -->
+<!-- 		<logger name="irt.web.IrtTestRestController" level="all" /> -->
 
         <Root level="info">
             <AppenderRef ref="ConsoleAppender" />

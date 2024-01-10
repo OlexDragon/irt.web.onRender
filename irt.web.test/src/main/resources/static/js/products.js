@@ -5,7 +5,6 @@ let href = window.location.href.split('?')[0];
 let filterValue = {};
 filterValue.filter = [];
 let selectedFilters = [];
-let size = 8;
 let array = getFiltersFromUrl();
 let $productsContent = $('#products_content');
 
@@ -77,8 +76,7 @@ function filter() {
         //==================load============
 
 		let f = array.slice();
-		f.push(`size=${size}`);
-		f.push('start=0');
+		f.push('page=0');
 		let url = '/products/search?' +  f.join('&');
         $productsContent.load(url, function(data) {
 
@@ -90,7 +88,7 @@ function filter() {
                     $('#ipb').modal('show');
             });
             let load = $(data).length;
-            if (load < size){
+            if (load < pageSize){
             	doScroll=false;
                 return;
             }
@@ -118,22 +116,28 @@ function getFiltersFromUrl(){
     return array;
   }
 
-
+let start = -1;
 function loadMore() {
 
     if (!isVisible())
 	    return;
  
- 	let start = $('.product').length;
-	console.log(`${start} cards on the page`);
- 
- 	if(start<size)
+ 	let s = $('.product').length;
+ 	if(s == start)	// so as not to repeat
  		return;
+	start = s;
+
+	console.log(`${start} cards on the page`);
+
+	if(start%pageSize){
+		console.log('The number of products does not mapch to the "pageSize".');
+		return;
+	}
 
 	//=================get============
+	let pageNumber = start/pageSize;
 	let f = array.slice();
-	f.push(`size=${size}`);
-	f.push(`start=${start}`);
+	f.push(`page=${pageNumber}`);
 	let url = '/products/search?' + f.join('&');
 	$.get(url, function(data) {
 
@@ -148,7 +152,7 @@ function loadMore() {
 		$productsContent.append(data);
 		addImage($card);
 
-		if ($card.length < size){
+		if ($card.length < pageSize){
 			doScroll = false;
 			return;
 		}
@@ -163,7 +167,7 @@ function isVisible(){
     let cc = $(window).height()
 	return aa >= bb - cc;
 }
-$(window).on('resize scroll', function() { 
+$(window).on('resize scroll', e=>{ 
     if(doScroll)
     	loadMore();
   });

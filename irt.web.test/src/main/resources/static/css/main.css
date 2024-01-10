@@ -273,9 +273,10 @@
     display: none;
   }
 }
-  
 
-  
+.pre-line{
+	white-space: pre-line;
+}
 
 
  
