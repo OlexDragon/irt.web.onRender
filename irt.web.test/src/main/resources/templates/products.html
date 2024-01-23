@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - IRT Technologies Inc</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,300;0,500;1,100&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous" th:replace="home :: bsCSS">
+    <link rel="stylesheet" href="../static/css/main.css" th:href="@{'/css/main.css'}">
+    
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary" th:replace="home :: irt_menu">
+    <div class="container-fluid">
+        <a class="navbar-brand ms-3" href="#">
+            <img src="../static/images/logo.png" alt="logo-IRT Technologies" th:src="${'/images/logo.png'}">
+        </a>
+        <small class="text-uppercase slogan mt-4">Connecting the world together</small>
+        <button class="navbar-toggler expand" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-5">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="home.html" th:href="@{'/'}">Home</a>
+                </li>
+                <!-- <li class="nav-item dropdown"> -->
+                <li class="nav-item dropdown-var">    
+                    <a class="nav-link dropdown-toggle has-checkbox" href="#"  data-bs-toggle="dropdown" aria-expanded="false">
+                        Products
+                    </a>
+                <!-- Products Menu -->
+                    <form class="dropdown-menu w-100 m_products  " >
+                        <div class="row" th:remove="all-but-first">
+                            <div class="mb-3 m_brend col bord" th:each="menu : ${menus}">
+                                <a href="#" class="text-uppercase dropdown-link"  th:href="@{'/products' + ${menu.getFilterUrl()}}" th:text="${menu.name}"> Environment </a>
+                                <!-- <a  class="text-uppercase" th:text="${menu.name}" href="#"  th:href="@{'/products'}">Environment </a> -->
+                                <th:block th:remove="all-but-first">
+                                  <div class="col sous-link" th:each="submenu : ${menu.submenus}">
+                                      <a class="btn  product_od form-control btn-v3" href="#" th:href="@{'/products' + ${submenu.getFilterUrl()}}" data-environment="Od" id="outdoor" th:text="${submenu.name}">Outdoor
+                                       </a>
+                                  </div>
+                                  <div class="col sous-link">
+                                      <a class="btn  product_id form-control btn-v3" href="#" data-environment="Ind" id="indoor">Indoor
+                                      </a>
+                                  </div>
+                </th:block>
+                            </div>
+                            
+                            <div class="mb-3 m-type col bord">
+                                <p class="text-uppercase ">Product Family</p>
+                                <div class="col sous-link ">
+                                    <a class="btn product_id form-control btn-v3" href="#" data-family="antbuc" id="antbuc">Antbuc
+                                    </a>
+                                </div>
+                                <div class="col sous-link">
+                                    <a class="btn product_id form-control btn-v3" href="#" data-family="picobuc" id="picobuc">Picobuc
+                                    </a>
+                                </div>
+                                <div class="col sous-link">
+                                    <a class="btn product_id form-control btn-v3" href="#" data-family="femotobuc" id="femotobuc">Femotobuc
+                                    </a>
+                                </div>
+                                <div class="col sous-link">
+                                    <a class="btn product_id form-control btn-v3" href="#" data-family="rack" id="rack">Rack mount
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="mb-3 m-type col bord">
+                                <p class="text-uppercase ">Product Type</p>
+                                <div class="col sous-link ">
+                                    <a class="btn product_id form-control btn-v3" href="#" data-type="sspa" id="sspa">SSPA
+                                    </a>
+                                </div>
+                                <div class="col sous-link">
+                                    <a class="btn product_id form-control btn-v3" href="products" data-type="sspb" id="sspb">SSPB
+                                    </a>
+                                </div>
+                                <div class="col sous-link">
+                                    <a class="btn product_id form-control btn-v3" href="products" data-type="buc" id="buc">BUC
+                                    </a>
+                                </div>
+                                <div class="col sous-link">
+                                    <a class="btn product_id form-control btn-v3" href="products" data-type="lnb" id="lnb">LNB
+                                    </a>
+                                </div>
+                                <div class="col sous-link">
+                                    <a class="btn product_id form-control btn-v3" href="products" data-type="frequency" id="frequency">Frequency Converter
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3 m-type col bord">
+                                <p class="text-uppercase">Input Frequency</p>
+                                <div class="col sous-link">
+                                    <a class="btn product_id form-control btn-v3" href="products" data-type="ku" id="ku-band">Ku-Band
+                                    </a>
+                                </div>
+                                <div class="col sous-link">
+                                    <a class="btn product_id form-control btn-v3" href="products" data-type="lku" id="l-ku-band">Low Ku-Band
+                                    </a>
+                                </div>
+                                <div class="col sous-link">
+                                    <a class="btn product_id form-control btn-v3" href="products" data-type="cb" id="c-band">C-Band
+                                    </a>
+                                </div>
+                                <div class="col sous-link">
+                                    <a class="btn product_id form-control btn-v3" href="products" data-type="lcb" id="l-c-band">Low C-Band
+                                    </a>
+                                </div>
+                                <div class="col sous-link">
+                                    <a class="btn product_id form-control btn-v3" href="products" data-type="lband" id="l-band">L-Band
+                                    </a>
+                                </div>
+                                <div class="col sous-link">
+                                    <a class="btn product_id form-control btn-v3" href="products" data-type="if" id="if">IF (70/140 MHz)
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="mb-3 m-type col bord">
+                                <p class="text-uppercase ">Output Frequency</p>
+                                <div class="col sous-link">
+                                    <a class="btn product_id form-control btn-v3" href="products" data-type="out-ka" id="out-kuband">Ka-Band
+                                    </a>
+                                </div>
+                                <div class="col sous-link">
+                                    <a class="btn product_id form-control btn-v3" href="products" data-type="out-ku" id="out-kuband">Ku-Band
+                                    </a>
+                                </div>
+                                <div class="col sous-link">
+                                    <a class="btn product_id form-control btn-v3" href="products" data-type="eku" id="e-ku-band">Ext. Ku-Band
+                                    </a>
+                                </div>
+                                <div class="col sous-link">
+                                    <a class="btn product_id form-control btn-v3" href="products" data-type="out-cb" id="out-cband">C-Band
+                                    </a>
+                                </div>
+                                <div class="col sous-link">
+                                    <a class="btn product_id form-control btn-v3" href="products" data-type="ecb" id="e-c-band">Ext. C-Band
+                                    </a>
+                                </div>
+                                <div class="col sous-link">
+                                    <a class="btn product_id form-control btn-v3" href="products" data-type="out-lband" id="out-lband">L-Band
+                                    </a>
+                                </div>
+                                <div class="col sous-link">
+                                    <a class="btn product_id form-control btn-v3" href="products" data-type="out-if" id="out-if">IF (70/140 MHz)
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3  m_power col bord">
+                                <p class="text-uppercase ">Output Power</p>
+                                <div class="col sous-link">
+                                    <a class="btn product_id form-control btn-v3" href="#" data-power="100w" id="m_100w">Less 100W
+                                    </a>
+                                </div>
+                                <div class="col sous-link">
+                                    <a class="btn product_id form-control btn-v3" href="#" data-power="400w" id="m_400w">100W - 400W
+                                    </a>
+                                </div>
+                                <div class="col sous-link">
+                                    <a class="btn product_id form-control btn-v3" href="#" data-power="900w" id="m_900w">500W - 900W
+                                    </a>
+                                </div>
+                                <div class="col sous-link">
+                                    <a class="btn product_id form-control btn-v3" href="#" data-power="1kw" id="m_1kw">More 1KW
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="mb-3  m_power col bord">
+                                
+                                <p class="text-uppercase ">Supply Voltage</p>
+                                <div class="col sous-link ">
+                                    <a class="btn product_id form-control btn-v3" href="#" data-voltage="ac" id="ac">AC
+                                    </a>
+                                </div>
+                                <div class="col sous-link">
+                                    <a class="btn product_id form-control btn-v3" href="products" data-voltage="dc" id="dc">DC
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="mb-3  m_power col bord">
+                                <p class="text-uppercase ">Output Device</p>
+                                <div class="col sous-link">
+                                    <a class="btn product_id form-control btn-v3" href="products" data-device="gaas" id="gaas">GaAs
+                                    </a>
+                                </div>
+                                <div class="col sous-link">
+                                    <a class="btn product_id form-control btn-v3" href="products" data-device="gan" id="gan">GaN
+                                    </a>
+                                </div>
+                            </div>   
+                        </div>
+                        
+                    </form>
+                </li>
+                <li class="nav-item" >
+                    <a class="nav-link" href="news-events.html">News &amp; Events</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="about.html">About Us</a>
+                </li>
+                <!-- <li class="nav-item" th:remove="all">
+                    <a class="nav-link " href="products.html">GridProducts</a>
+                </li>
+                <li class="nav-item" th:remove="all">
+                    <a class="nav-link" href="home.html">Next</a>
+                </li>
+                 -->
+            </ul>
+            <div class="d-flex me-5 contact" role="search" th:remove="all">
+            
+                <a href="about.html#section-contact"  class="btn  menu-contact-us button-v1" >Contact Us</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+
+    <div class="container-fluid irtprod">
+      <div class="col-auto"></div>
+      <div class="row">
+        <div class="col-lg-2 col-md-3 filter py-4">
+            <!-- filter-->
+          <!-- ========================================================================== -->
+          <button class="filter-toggle btn shine-button">Filter <span class="arrow">&#9660;</span></button>
+            <div class="card brand border-0 filter-section hidden ">
+                <div class="card-body ">
+                  
+                    <form >
+                      <div class=" form-group">
+                        <label for="filter-name">Search by Description</label>
+                        <div>
+
+                          <input type="text" class="form-control" id="filter-name" data-product-name="name" th:value="${search}" >
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                          </svg>
+                        </div>
+                      </div>
+                    </form>
+                </div>
+                <div class="filter-family " th:each="filter: ${filters}">
+                  <h6 class="card-header border-0"  th:text="${filter.name}">
+                    Environment
+                  </h6>
+                  <div class="card-body" th:remove="all-but-first">
+                    <div class="form-group" th:remove="all-but-first" th:each="f: ${filter.subFilters}">
+                      <div>
+                         <label class="form-label w-100 bg-body-tertiary text-start btn btn-sm" for="f_od" th:for="'fID' + ${f.id}">
+                         	<input 
+                              class="form-check-input mx-2 visually-hidden"	
+                              type="checkbox" 
+                        			id="f_od" 
+                        			value="1" 
+                        			th:id="'fID' + ${f.id}" 
+                        			th:name="'fName' + ${filter.id}" 
+                        			th:value="${f.id}" 
+                        			th:type="${f.radio} ? 'radio' : 'checkbox'"
+                        			th:checked="${f.selected}">
+                              <span class="checkbox-custom"></span>
+                            [[${f.name}]]
+                        </label>
+                      </div>
+                      <div >
+                        <label for="f_ind" class="form-label w-100 bg-body-tertiary text-start btn btn-sm" >
+                          <input class="form-check-input mx-2 visually-hidden" type="checkbox" id="f_ind" data-environment="Ind" value="Indoor" >
+                          <span class="checkbox-custom"></span>
+                          Indoor
+                        </label>
+                      </div>
+                    </div>
+                    
+
+                  </div>
+                </div>
+    <th:block th:remove="all">
+                <div class="filter-family">
+                  <h6 class="card-header border-0" >
+                    Product Family
+                  </h6>
+                  <div class="card-body">
+                      <div class="form-group">
+                        <div >
+                          <label class="form-label w-100 bg-body-tertiary text-start btn btn-sm" for="f_antbuc">
+                            <input class="form-check-input mx-2 visually-hidden" type="radio" id="f_antbuc"  data-family="antbuc" name="pr-family" value="antbuc">
+                            <span class="checkbox-custom"></span>
+                            Antbuc
+                          </label>
+                        </div>
+                        <div >
+                          <label class="form-label w-100 bg-body-tertiary text-start btn btn-sm"  for="f_picobuc">
+                            <input class="form-check-input mx-2 visually-hidden" type="radio" id="f_picobuc" data-family="picobuc" name="pr-family" value="picobuc">
+                            <span class="checkbox-custom"></span>
+                            Picobuc
+                          </label>
+                        </div>
+                        <div >
+                          <label class="form-label w-100 bg-body-tertiary text-start btn btn-sm" for="f_femotobuc">
+                            <input class="form-check-input mx-2 visually-hidden" type="radio"id="f_femotobuc" data-family="femotobuc" name="pr-family" value="femotobuc">
+                            <span class="checkbox-custom"></span>
+                            Femotobuc
+                          </label>
+                        </div>
+                        <div >
+                          <label class="form-label w-100 bg-body-tertiary text-start btn btn-sm"  for="f_rack">
+                            <input class="form-check-input mx-2 visually-hidden" type="radio" id="f_rack" data-family="rack"  name="pr-family" value="rack">
+                            <span class="checkbox-custom"></span>
+                            Rack mount
+                          </label>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+                <div class="filter-family">
+                  <h6 class="card-header border-0">
+                    Product Type
+                  </h6>
+                  <div class="card-body">
+                    <form>
+                      <div class="form-group">
+                        <div >
+                          <label class="form-label w-100 bg-body-tertiary text-start btn btn-sm" for="f_sspa">
+                            <input class="form-check-input mx-2 visually-hidden" type="checkbox" id="f_sspa"  data-type="sspa" value="sspa" >
+                            <span class="checkbox-custom"></span>
+                            SSPA
+                          </label>
+                        </div>
+                       
+                        
+                        <div >
+                          <label class="form-label w-100 bg-body-tertiary text-start btn btn-sm" for="f_sspb">
+                            <input class="form-check-input mx-2 visually-hidden" type="checkbox" id="f_sspb" data-type="sspb" value="sspb" >
+                            <span class="checkbox-custom"></span>
+                            SSPB
+                          </label>
+                        </div>
+                        <div >
+                          <label class="form-label w-100 bg-body-tertiary text-start btn btn-sm" for="f_buc">
+                            <input class="form-check-input mx-2 visually-hidden" type="checkbox" id="f_buc" data-type="buc" value="buc" >
+                            <span class="checkbox-custom"></span>
+                            BUC
+                          </label>
+                        </div>
+                        <div >
+                          <label class="form-label w-100 bg-body-tertiary text-start btn btn-sm" for="f_lnb">
+                            <input class="form-check-input mx-2" type="checkbox" id="f_lnb" data-type="lnb" value="lnb">
+                            <span class="checkbox-custom"></span>
+                            LNB
+                          </label>
+                        </div>
+                        <div >
+                          <label class="form-label w-100 bg-body-tertiary text-start btn btn-sm" for="f_frequency">
+                            <input class="form-check-input mx-2" type="checkbox" id="f_frequency" value="frequency" data-type="frequency">
+                            <span class="checkbox-custom"></span>
+                            Frequency Converter
+                          </label>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+                <div class="filter-family">
+
+                  <h6 class="card-header border-0">
+                    Input Frequency
+                  </h6>
+                  <div class="card-body">
+                    
+                      <div class="form-group">
+                        <div>
+                          <label class="form-label w-100 bg-body-tertiary text-start btn btn-sm" for="f_ku">
+                            <input class="form-check-input mx-2" type="checkbox" id="f_ku" value="ku-band"  data-type="ku" >
+                            <span class="checkbox-custom"></span>
+                            Ku-Band
+                          </label>
+                        </div>
+                        <div>
+                          <label class="form-label w-100 bg-body-tertiary text-start btn btn-sm" for="f_lku">
+                            <input class="form-check-input mx-2" type="checkbox" id="f_lku" value="low-ku-band" data-type="lku" >
+                            <span class="checkbox-custom"></span>
+                            Low Ku-Band
+                          </label>
+                        </div>
+                        <div >
+                          <label class="form-label w-100 bg-body-tertiary text-start btn btn-sm" for="f_cb">
+                            <input class="form-check-input mx-2" type="checkbox" id="f_cb" value="c-band" data-type="cb" >
+                            <span class="checkbox-custom"></span>
+                            C-Band
+                          </label>
+                        </div>
+                        <div>
+                          <label class="form-label w-100 bg-body-tertiary text-start btn btn-sm" for="f_lcb">
+                            <input class="form-check-input mx-2" type="checkbox" id="f_lcb" value="low-c-band" data-type="lcb">
+                            <span class="checkbox-custom"></span>
+                            Low C-Band
+                          </label>
+                        </div>
+                        <div >
+                          <label class="form-label w-100 bg-body-tertiary text-start btn btn-sm" for="f_lband">
+                            <input class="form-check-input mx-2" type="checkbox" id="f_lband" value="l-band" data-type="lband">
+                            <span class="checkbox-custom"></span>
+                            L-Band
+                          </label>
+                        </div>
+                        <div >
+                          <label class="form-label w-100 bg-body-tertiary text-start btn btn-sm" for="f_if">
+                            <input class="form-check-input mx-2" type="checkbox" id="f_if" value="if" data-type="if">
+                            <span class="checkbox-custom"></span>
+                            IF (70/140 MHz)
+                          </label>
+                        </div>
+                      </div>
+                    
+                  </div>
+                </div>
+                <div class="filter-family">
+                  <h6 class="card-header border-0">
+                    Output Frequency
+                  </h6>
+                  <div class="card-body">
+                    <form>
+                      <div class="form-group">
+                        <div >
+                          <label class="form-label w-100 bg-body-tertiary text-start btn btn-sm" for="f_out-ka">
+                            <input class="form-check-input mx-2" type="checkbox" id="f_out-ka" value="out-ka-band"  data-type="out-ka" >
+                            <span class="checkbox-custom"></span>
+                            Ka-Band
+                          </label>
+                        </div>
+                        <div >
+                          <label class="form-label w-100 bg-body-tertiary text-start btn btn-sm" for="f_out-ku">
+                            <input class="form-check-input mx-2" type="checkbox" id="f_out-ku" value="out-ku-band"  data-type="out-ku" >
+                            <span class="checkbox-custom"></span>
+                            Ku-Band
+                          </label>
+                        </div>
+                        <div >
+                          <label class="form-label w-100 bg-body-tertiary text-start btn btn-sm" for="f_eku">
+                            <input class="form-check-input mx-2" type="checkbox" id="f_eku" value="ext-ku-band" data-type="eku" >
+                            <span class="checkbox-custom"></span>
+                            Ext. Ku-Band
+                          </label>
+                        </div>
+                        <div>
+                          <label class="form-label w-100 bg-body-tertiary text-start btn btn-sm" for="f_out-cb">
+                            <input class="form-check-input mx-2" type="checkbox" id="f_out-cb" value="out-c-band" data-type="out-cb" >
+                            <span class="checkbox-custom"></span>
+                            C-Band
+                          </label>
+                        </div>
+                        <div >
+                          <label class="form-label w-100 bg-body-tertiary text-start btn btn-sm" for="f_ecb">
+                            <input class="form-check-input mx-2" type="checkbox" id="f_ecb" value="ex-c-band" data-type="ecb">
+                            <span class="checkbox-custom"></span>
+                            Ext. C-Band
+                          </label>
+                        </div>
+                        <div >
+                          <label class="form-label w-100 bg-body-tertiary text-start btn btn-sm" for="f_out-lband">
+                            <input class="form-check-input mx-2" type="checkbox" id="f_out-lband" value="out-l-band" data-type="out-lband">
+                            <span class="checkbox-custom"></span>
+                            L-Band
+                          </label>
+                        </div>
+                        <div >
+                          <label class="form-label w-100 bg-body-tertiary text-start btn btn-sm" for="f_out-if">
+                            <input class="form-check-input mx-2" type="checkbox" id="f_out-if" value="out-if" data-type="out-if">
+                            <span class="checkbox-custom"></span>
+                            IF (70/140 MHz)
+                          </label>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+                <div class="filter-family">
+                   <!-- W-filter -->
+                   <h6 class="card-header border-0">
+                     Output Power
+                   </h6>
+                   <div class="card-body">
+                     <form>
+                       <div class="form-group">
+                         <div >
+                           <label class="form-label w-100 bg-body-tertiary text-start btn btn-sm" for="f_100w">
+                             <input class="form-check-input mx-2" type="checkbox" id="f_100w" value="100w" data-power="100w">
+                             <span class="checkbox-custom"></span>
+                             Less 100W
+                           </label>
+                         </div>
+                         <div >
+                           <label class="form-label w-100 bg-body-tertiary text-start btn btn-sm" for="f_200w">
+                             <input class="form-check-input mx-2" type="checkbox" id="f_400w" value="400w" data-power="400w">
+                             <span class="checkbox-custom"></span>
+                             100W - 400W
+                           </label>
+                         </div>
+                         <div >
+                           <label class="form-label w-100 bg-body-tertiary text-start btn btn-sm" for="f_300w">
+                             <input class="form-check-input mx-2" type="checkbox" id="f_900w" value="900w" data-power="900w">
+                             <span class="checkbox-custom"></span>
+                             500W - 900W
+                           </label>
+                         </div>
+                         <div >
+                           <label class="form-label w-100 bg-body-tertiary text-start btn btn-sm" for="f_1000w">
+                               <input class="form-check-input mx-2" type="checkbox" id="f_1kw" value="1kw" data-power="1kw">
+                               <span class="checkbox-custom"></span>
+                               More 1KW
+                             </label>
+                         </div>
+                       </div>
+                      
+                     </form>
+                   </div>
+                </div>
+               
+            
+              
+    </th:block>
+            </div>
+            
+        </div>
+        <!-- Card product -->
+
+        <div class="col-lg-10 col-md-9 ">
+          <div id="filters-selected"   >
+            <div class="filters-current  my-3 d-flex p-1  align-items-center" >
+              
+              <div class="selected-filter-wrapper">
+                <h2 class="filters-title">Selected Filter :</h2>
+                <div class="delete">
+                  <p class="delete-all-button">Delete all selected filters</p>
+                </div>
+              </div>
+              <ul class="filters-list gap-2 "   
+              >
+                <li class="filter-item "
+                
+                data-bs-toggle="tooltip" data-bs-placement="top"  
+                	data-th-each="selected: ${selectedFilters}"
+                    data-th-title="${selected.key}"    >
+                  
+                  <span class="filter-value" data-th-text="${selected.value.name}">Test </span>
+                      <span class="filter-cross"  data-th-data-value="${selected.value.id}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                      </svg></span>
+                </li>
+              </ul>
+              
+              
+            </div>
+          </div>
+
+          <h2 class="mt-4 ms-3 text-uppercase title-product">Our product</h2>
+          <div class="container py-4">
+            
+
+              <div  id="products_content" class="row our-product" th:remove="all-but-first">
+<!--/*/
+ 	<th:block th:fragment="products_content">
+ /*/-->
+                  <!-- card1 -->
+                <div class="col-md-3 mb-4 " th:each="product: ${products}">
+                  <div class="card product border-0" th:data-product-id="${product.id}">
+                    <img src="../static/images/jpeg/ipb_2U.jpg" class="img-fluid rounded" th:src="'/images/product/' + ${product.id}">
+                    <div class="card-body card-product">
+                      <h5 class="card-title fw-bold" th:text="${product.name}">Product name</h5>
+                      <p class="card-text" th:text="${product.partNumber}">Important features</p>
+
+                      <!-- <div>
+                        <a href="pdf-view.html?fileInput" target="_blank">Open PDF</a>
+                      </div> -->
+                     
+                    </div>
+                    <div class="ms-3 mb-3 invisible">
+                      	<a href="detail.html?productId=24" th:href="@{'product_detail?productId=' + ${product.id}}" target="_blank" type="button" class="btn shine-button lien">
+                        	in more detail
+						</a>  
+                    </div>
+                  </div>
+                </div>
+<!--/*/
+	</th:block>
+ /*/-->
+                <!-- card2 -->
+                <div class="col-md-3 mb-4">
+                  <div class="card product border-0">
+                    <div class="h-40 bg-body-tertiary ">
+
+                      <img  src="../static/images/jpeg/no_photo.jpg" th:src="${'/images/jpeg/dont_photo.jpg'}"  class="card-img-top my-2 img-fluid
+                       ">
+                    </div>
+                    <div class="card-body ">
+                      <h5 class="card-title fw-bold">Product name</h5>
+                      <p class="card-text">Important features</p>
+  
+                    </div>
+                    <div class="ms-3 mb-3">
+                      <button type="button" class="btn button2" data-bs-toggle="modal" data-bs-target="#lt">
+                          in more detail
+                      </button> 
+                    </div>
+                  </div>
+                </div>
+                <!-- card3 -->
+                <div class="col-md-3 mb-4">
+                  <div class="card product border-0">
+                    <div class="h-70 bg-body-tertiary ">
+
+                      <img src="../static/images/jpeg/LNB_C_band_1+1_Red_1.jpg" th:src="${'/images/jpeg/LNB_C_band_1+1_Red_1.jpg'}" class="card-img-top my-2">
+                    </div>
+                    <div class="card-body card-product">
+                      <h5 class="card-title fw-bold">Product name</h5>
+                      <p class="card-text">Important features</p>
+                    </div>
+                    <div class="ms-3 mb-3">
+                      <button type="button" class="btn button2" data-bs-toggle="modal" data-bs-target="#lt">
+                          in more detail
+                      </button> 
+                    </div>
+                  </div>
+                </div>
+                <!-- card4 -->
+                <div class="col-md-3 mb-4">
+                  <div class="card product border-0">
+                    <img src="../static/images/jpeg/LNB_C_band_1+1_Red_1.jpg" th:src="${'/images/jpeg/LNB_C_band_1+1_Red_1.jpg'}" class="card-img-top my-2">
+                    <div class="card-body card-product">
+                      <h5 class="card-title fw-bold">Product name</h5>
+                      <p class="card-text">Product description</p>
+                    </div>
+                    <div class="ms-3 mb-3">
+                      <a href="detail.html" class="btn shine-button">more...</a>
+                    </div>
+                  </div>
+                </div>
+                <!-- card5 -->
+                <div class="col-md-3 mb-4">
+                  <div class="card product border-0">
+                    <img src="../static/images/jpeg/LNB_C_band_1+1_Red_1.jpg" th:src="${'/images/jpeg/LNB_C_band_1+1_Red_1.jpg'}" class="card-img-top my-2">
+                    <div class="card-body card-product">
+                      <h5 class="card-title fw-bold">Product name</h5>
+                      <p class="card-text">Important features</p>
+                    </div>
+                    <div class="ms-3 mb-3">
+                      <a href="detail.html" class="btn shine-button">more...</a>
+                    </div>
+                  </div>
+                </div>
+                <!-- card6 -->
+                <div class="col-md-3 mb-4">
+                  <div class="card product border-0">
+                    
+                      <img src="../static/images/jpeg/LNB_C_band_1+1_Red_1.jpg" th:src="${'/images/jpeg/LNB_C_band_1+1_Red_1.jpg'}" class="card-img-top img-fluid h-300 my-2">
+                    
+                    <div class="card-body card-product">
+                      <h5 class="card-title fw-bold">Product name</h5>
+                      <p class="card-text">Important features</p>
+                    </div>
+                    <div class="ms-3 mb-3">
+                      <a href="detail.html" class="btn shine-button">more...</a>
+                    </div>
+                  </div>
+                </div>
+                       
+              </div>
+
+              <div class="matte">
+                <div class="d-flex  justify-content-center align-items-center" style="height: 100vh;" >
+                  <!-- <h5 class=" me-3">Loading</h5> -->
+                  <div class="spinner-border " role="status">
+                    <span class="visually-hidden  ">Loading...</span>
+                  </div>
+                 
+                </div>
+              </div>
+              <div class="matte-1">
+                <div class="d-flex  justify-content-center align-items-center ">
+                  <h5 class=" me-3"></h5>
+                </div>
+              </div>
+              <div id="templete-product"  class="d-none newprod text-center">
+                <h3>Templete Product</h3>  
+              </div>
+              <div id="productList"></div>
+              <div id="checkLoad"></div>
+
+             <!-- Modal -->
+            <div class="modal fade" id="ipb" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-xl">
+                <div class="modal-content" >
+                  <div class="modal-header">
+                    <h5 class="modal-title" ></h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                   
+                 
+                  <div class="container py-5">
+                      <div class="row"  >
+                        <div class="col-lg-6 col-md-12 mb-4 ms-5 carousel-img">
+                      
+                            <div id="product-carousel" class="carousel carousel-dark slide" data-bs-ride="carousel" data-bs-interval="2000">
+                              <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                  <img src="../static/images/jpeg/ipb_2U.jpg" th:src="${'/images/jpeg/ipb_2U.jpg'}" class="d-block w-100" alt="Product Image 1">
+                                </div>
+                                <div class="carousel-item">
+                                  <img src="../static/images/jpeg/ipb_2U.jpg" th:src="${'/images/jpeg/ipb_2U.jpg'}" class="d-block w-100" alt="Product Image 2">
+                                </div>
+                                
+                                <div class="carousel-item">
+                                  <img src="../static/images/jpeg/ipb_2U.jpg" th:src="${'/images/jpeg/ipb_2U.jpg'}" class="d-block w-100" alt="Product Image 3">
+                                </div>
+                              </div>
+                              <button class="carousel-control-prev" type="button" data-bs-target="#product-carousel" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                              </button>
+                              <button class="carousel-control-next" type="button" data-bs-target="#product-carousel" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                              </button>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12 mb-4">
+                          <div class="modal-title">
+                            <h2 class="card-title fw-bold">PicoBUC</h2>
+                            <h3 class="card-title fw-bold">Super Compact <br>16W/20W/25W <br> Ku-Band BUC/SSPA</h3>
+                            
+                            <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Amet, consectetur saepe numquam velit voluptatibus repudiandae nostrum voluptatum dolorem eum quis officiis ipsam minima molestiae inventore atque cumque deserunt ducimus itaque.</p>
+                          </div>
+                          <section class="features">
+                            <h4>Key Features</h4>
+                            <div class="row">
+                              <div class="col-md-6">
+                                <ul>
+                                  <li>Lorem ipsum dolor sit amet consectetur adipisicing elit. </li>
+                                  <li>Lorem ipsum dolor sit amet consectetur adipisicing elit.</li>
+                                  <li>Lorem ipsum dolor sit amet consectetur adipisicing elit.</li>
+                                </ul>
+                              </div>
+                              <div class="col-md-6">
+                                <ul>
+                                  <li>Lorem ipsum dolor sit amet consectetur adipisicing elit.</li>
+                                  <li>Lorem ipsum dolor sit amet consectetur adipisicing elit.</li>
+                                  <li>Lorem ipsum dolor sit amet consectetur adipisicing elit.</li>
+                                </ul>
+                              </div>
+                            </div>
+                          </section>
+                          <!-- <button class="btn shine-button">Add to cart
+                          </button> -->
+                        </div>
+                        <div class="d-flex justify-content-center align-items-center gap-5">
+                          <a class="btn shine-button " href="" target="_blank">Open PDF</a>
+                          <a href="detail.html" class="btn shine-button" target="_blank" th:href="@{'/product_detail?productId=1'}">Parameter</a>
+                        </div>
+                        <div class="mt-5 ms-5" id="pdfView"></div>
+                      </div>
+                    </div>
+                
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-auto"></div>
+   
+</div>
+   
+    <footer  class="footer" th:replace="home :: footer">
+      <nav class="footer__nav row">
+          <a class="footer__link col-lg"  href="#">New</a>
+          <a class="footer__link col-lg"  href="#">Delivery &amp; Returns</a>
+          <a class="footer__link col-lg"  href="#">Customer service</a>
+          <a class="footer__link col-lg"  href="#">Terms &amp; Conditions</a>
+          <a class="footer__link col-lg"  href="about.html">About Us</a>
+          
+      </nav>
+      <div class="footer-container mt-5">
+  
+          <div class="grid  footer__cols">
+              <div class="grid-item">
+                  <div class=" fullwidth">
+                      <h2 class="text-uppercase">Create an account </h2>
+                      <p>Create an account to enjoy wish lists, novelty and more...</p>
+                      <p><a class="btn shine-button" href="#">Sign Up</a></p>
+                      <p><a class="btn shine-button" href="#">Log In</a></p>
+                  </div>
+              </div>
+              <div class="grid-item">
+                  <div class="fullwidth logo-footer">
+                    <p class="text-uppercase slogan my-5">Connecting the world together</p>
+                      <span class="span-img"><img class="logo__img" src="../static/images/logo.png" alt="logo" th:src="${'/images/logo.png'}"></span>
+                  </div>
+                      
+                  </div>
+              <div class="grid-item">
+                  <div class=" fullwidth ">
+                      <h2 class="text-uppercase">Contact Us</h2>
+                      <p>08:30 am - 5:00 pm (Mon-Fri)</p>
+                      <p>  9630 Trans Canada Route
+                        Saint Laurent, QC
+                        Canada H4S 1V9</p>
+                      <p> <small>Phone:</small> +1-514-907-1161</p>
+                      <p> <small>Fax:</small>+1-514-907-1123</p>
+                      <p> <small>Email:</small> info@irttechnologies.com </p>
+                      <p><a class="btn shine-button" href="about.html#section-contact">Contact</a></p>
+                  </div>
+                  
+              </div>
+          </div>
+  
+          <div class="d-flex  mb-5 justify-content-center">
+              <a class="social__link"  href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="rgb(10, 46, 124)" class="bi bi-play-btn-fill" viewBox="0 0 16 16">
+                  <path d="M0 12V4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm6.79-6.907A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z"/>
+                </svg>
+              </a>
+              <a class="social__link"  href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="rgb(10, 46, 124)" class="bi bi-android2" viewBox="0 0 16 16">
+                  <path d="m10.213 1.471.691-1.26c.046-.083.03-.147-.048-.192-.085-.038-.15-.019-.195.058l-.7 1.27A4.832 4.832 0 0 0 8.005.941c-.688 0-1.34.135-1.956.404l-.7-1.27C5.303 0 5.239-.018 5.154.02c-.078.046-.094.11-.049.193l.691 1.259a4.25 4.25 0 0 0-1.673 1.476A3.697 3.697 0 0 0 3.5 5.02h9c0-.75-.208-1.44-.623-2.072a4.266 4.266 0 0 0-1.664-1.476ZM6.22 3.303a.367.367 0 0 1-.267.11.35.35 0 0 1-.263-.11.366.366 0 0 1-.107-.264.37.37 0 0 1 .107-.265.351.351 0 0 1 .263-.11c.103 0 .193.037.267.11a.36.36 0 0 1 .112.265.36.36 0 0 1-.112.264Zm4.101 0a.351.351 0 0 1-.262.11.366.366 0 0 1-.268-.11.358.358 0 0 1-.112-.264c0-.103.037-.191.112-.265a.367.367 0 0 1 .268-.11c.104 0 .19.037.262.11a.367.367 0 0 1 .107.265c0 .102-.035.19-.107.264ZM3.5 11.77c0 .294.104.544.311.75.208.204.46.307.76.307h.758l.01 2.182c0 .276.097.51.292.703a.961.961 0 0 0 .7.288.973.973 0 0 0 .71-.288.95.95 0 0 0 .292-.703v-2.182h1.343v2.182c0 .276.097.51.292.703a.972.972 0 0 0 .71.288.973.973 0 0 0 .71-.288.95.95 0 0 0 .292-.703v-2.182h.76c.291 0 .54-.103.749-.308.207-.205.311-.455.311-.75V5.365h-9v6.404Zm10.495-6.587a.983.983 0 0 0-.702.278.91.91 0 0 0-.293.685v4.063c0 .271.098.501.293.69a.97.97 0 0 0 .702.284c.28 0 .517-.095.712-.284a.924.924 0 0 0 .293-.69V6.146a.91.91 0 0 0-.293-.685.995.995 0 0 0-.712-.278Zm-12.702.283a.985.985 0 0 1 .712-.283c.273 0 .507.094.702.283a.913.913 0 0 1 .293.68v4.063a.932.932 0 0 1-.288.69.97.97 0 0 1-.707.284.986.986 0 0 1-.712-.284.924.924 0 0 1-.293-.69V6.146c0-.264.098-.491.293-.68Z"/>
+                </svg>
+              </a>
+              <a class="social__link"  href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="rgb(10, 46, 124)" class="bi bi-linkedin" viewBox="0 0 16 16">
+                  <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z"/>
+                </svg>
+              </a>
+              <a class="social__link"  href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="rgb(10, 46, 124)" class="bi bi-globe" viewBox="0 0 16 16">
+                  <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm7.5-6.923c-.67.204-1.335.82-1.887 1.855A7.97 7.97 0 0 0 5.145 4H7.5V1.077zM4.09 4a9.267 9.267 0 0 1 .64-1.539 6.7 6.7 0 0 1 .597-.933A7.025 7.025 0 0 0 2.255 4H4.09zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a6.958 6.958 0 0 0-.656 2.5h2.49zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5H4.847zM8.5 5v2.5h2.99a12.495 12.495 0 0 0-.337-2.5H8.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5H4.51zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5H8.5zM5.145 12c.138.386.295.744.468 1.068.552 1.035 1.218 1.65 1.887 1.855V12H5.145zm.182 2.472a6.696 6.696 0 0 1-.597-.933A9.268 9.268 0 0 1 4.09 12H2.255a7.024 7.024 0 0 0 3.072 2.472zM3.82 11a13.652 13.652 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5H3.82zm6.853 3.472A7.024 7.024 0 0 0 13.745 12H11.91a9.27 9.27 0 0 1-.64 1.539 6.688 6.688 0 0 1-.597.933zM8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855.173-.324.33-.682.468-1.068H8.5zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.65 13.65 0 0 1-.312 2.5zm2.802-3.5a6.959 6.959 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5h2.49zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7.024 7.024 0 0 0-3.072-2.472c.218.284.418.598.597.933zM10.855 4a7.966 7.966 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4h2.355z"/>
+                </svg>
+              </a>
+          </div>
+  
+          <div class="footer__sub-nav">
+              <a class="footer__sub-nav-item"  href="#">CONDITION GÉNÉRAL DE L'ACHETEUR</a>
+              <a class="footer__sub-nav-item" href="#">CONDITION GÉNÉRAL DU VENDEUR</a>
+             
+          </div>
+          <p class="text-center mt-3 pb-3">Copyright &copy; 2023 Tous les droit réservés.</p>
+      </div>
+      
+    </footer>
+ 	<script th:inline="javascript">
+		/*<![CDATA[*/
+			let pageSize = /*[[${pageSize}]]*/ 8;
+		/*]]>*/
+		//# sourceURL=products_par_page.js
+	</script>
+
+<th:block th:replace="home :: javascript">
+    <script type="application/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+</th:block>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script> 
+  
+
+    <script src="../static/js/main.js" th:src="@{'/js/main.js'}"></script>
+    <script src="../static/js/products.js" th:src="@{'/js/products.js'}"></script>   
+
+</body>
+</html>

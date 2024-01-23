@@ -12,25 +12,33 @@
             <PatternLayout pattern="${LOG_PATTERN}"/>
         </Console>
 
-		<RollingRandomAccessFile name="LogFile"
-								 fileName="${sys:user.home}/irt/irt_web.log"
-								 filePattern="${sys:user.home}/irt/irt_web-%d{yyyy-MM-dd}-%i.log.gz">
-			<PatternLayout pattern="${LOG_PATTERN}" />
+<!-- 		<RollingRandomAccessFile name="LogFile" -->
+<!-- 								 fileName="${sys:user.home}/irt/irt_web.log" -->
+<!-- 								 filePattern="${sys:user.home}/irt/irt_web-%d{yyyy-MM-dd}-%i.log.gz"> -->
+<!-- 			<PatternLayout pattern="${LOG_PATTERN}" /> -->
 
-			<Policies>
-				<SizeBasedTriggeringPolicy size="20 MB" />
-			</Policies>
-			<DefaultRolloverStrategy max="10" />
-		</RollingRandomAccessFile>
+<!-- 			<Policies> -->
+<!-- 				<SizeBasedTriggeringPolicy size="20 MB" /> -->
+<!-- 			</Policies> -->
+<!-- 			<DefaultRolloverStrategy max="10" /> -->
+<!-- 		</RollingRandomAccessFile> -->
     </Appenders>
 
     <Loggers>
 <!-- 		<logger name="irt.web.IrtTestWebController" level="all" /> -->
-<!-- 		<logger name="irt.web.IrtTestRestController" level="all" /> -->
+<!-- 		<logger name="irt.web.ImagesTestController" level="all" /> -->
+
+<!-- 		<logger name="irt.web.ImagesController" level="all" /> -->
+<!-- 		<logger name="irt.web.hidden.ImagesHiddenController" level="all" /> -->
+
+<!-- 		<logger name="irt.web.PdfController" level="all" /> -->
+<!-- 		<logger name="irt.web.hidden.PdfHiddenController" level="all" /> -->
+
+<!-- 		<logger name="irt.web.hidden.ProductHiddenController" level="all" /> -->
 
         <Root level="info">
             <AppenderRef ref="ConsoleAppender" />
-			<AppenderRef ref="LogFile" />
+<!-- 			<AppenderRef ref="LogFile" /> -->
         </Root>
     </Loggers>
 

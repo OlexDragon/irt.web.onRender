@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Your Email Template</title>
+  <style>
+    /* CSS styles for your email template */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #F5F5F5;
+    }
+    .header {
+      background-color: #E9E9E9;
+      padding: 10px;
+      text-align: center;
+    }
+    .content {
+      padding: 20px;
+    }
+    .footer {
+      background-color: #E9E9E9;
+      padding: 10px;
+      text-align: center;
+    }
+    .left{
+    	text-align: right;
+    }
+    th, td {
+		padding: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Web Email</h1>
+  </div>
+  <div class="content">
+
+  <table>
+
+  	<tbody>
+  		<tr>
+  			<td class="left">First name:</td>
+  			<th>%s</th>
+  			<td class="left">Last name:</td>
+  			<th>%s</th>
+  		</tr>
+  		<tr>
+  			<td class="left">Phone:</td>
+  			<th>%s</th>
+  			<td class="left">Email:</td>
+  			<th>%s</th>
+  		</tr>
+  		<tr>
+  			<td class="left">Company:</td>
+  			<th>%s</th>
+  			<td class="left">Industry:</td>
+  			<th>%s</th>
+  		</tr>
+  	</tbody>
+
+  	<tfoot>
+  		<tr>
+  			<th colspan="4">%s</th>
+  		</tr>
+  	</tfoot>
+
+  </table>
+  </div>
+
+  <div class="footer">
+    <p>© 2024 IRT Technologies inc. All rights reserved.</p>
+  </div>
+</body>
+</html>

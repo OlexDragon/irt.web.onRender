@@ -5,6 +5,7 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -32,7 +33,6 @@ import irt.web.bean.jpa.Filter;
 import irt.web.bean.jpa.FilterRepository;
 import irt.web.bean.jpa.Product;
 import irt.web.bean.jpa.ProductFilter;
-import irt.web.bean.jpa.ProductRepository;
 import irt.web.bean.jpa.WebMenu;
 import irt.web.bean.jpa.WebMenuRepository;
 
@@ -48,7 +48,6 @@ public class IrtTestController implements ErrorController {
 
 	@Autowired private WebMenuRepository	menuRepository;
 	@Autowired private FilterRepository		filterRepository;
-	@Autowired private ProductRepository	productRepository;
 
 	@GetMapping
     String get(Model model) throws UnknownHostException {
@@ -152,27 +151,38 @@ public class IrtTestController implements ErrorController {
 
 		final Root<ProductFilter> productFilterRoot = criteriaQuery.from(ProductFilter.class);
 
+		// JOIN Product
+		final Join<ProductFilter, Product> filterJoin = productFilterRoot.join("product");
+
 		//  WHERE filter ID equals
+		final AtomicReference<Predicate> where = new AtomicReference<>();
 		final Optional<List<Long>> oFilters = Optional.ofNullable(filterIDs).filter(ids->!ids.isEmpty());
 		oFilters.ifPresent(
 				ids->{
 					final List<Predicate> predicates = new ArrayList<>();
 					filterIDs.forEach(id -> predicates.add(criteriaBuilder.equal(productFilterRoot.get("filterId"), id)));
 					final Predicate[] array = predicates.toArray(new Predicate[predicates.size()]);
-					Predicate where = criteriaBuilder.or(array);
-					criteriaQuery.where(where);
+					where.set(criteriaBuilder.or(array));
 				});
-
-		// JOIN Product
-		final Join<ProductFilter, Product> filterJoin = productFilterRoot.join("product");
 
 		//  WHERE search LIKE
 		Optional.ofNullable(search).filter(s->!s.isEmpty())
 		.ifPresent(
 				s->{
-					final Predicate likePredicate = criteriaBuilder.like(filterJoin.get("name"), '%' + search + "%");
-					criteriaQuery.where(likePredicate);
+					final Predicate like = criteriaBuilder.like(criteriaBuilder.lower(filterJoin.get("name")), '%' + search.toLowerCase() + '%');
+					final Predicate predicate = where.get();
+
+					if(predicate==null)
+						where.set(like);
+
+					else
+						where.set(criteriaBuilder.and(like, predicate));
 				});
+
+		final Predicate predicate = where.get();
+
+		if(predicate!=null)
+			criteriaQuery.where(predicate);
 
 		final CriteriaQuery<Product> groupBy = criteriaQuery.groupBy(filterJoin.get("id"));
 		oFilters.ifPresent(

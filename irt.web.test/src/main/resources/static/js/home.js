@@ -1,4 +1,4 @@
-
+$('#navHome').addClass('active');
 /* -------------------Fill Nodes-------------------- */
 getDataFromDB();
 function getDataFromDB(){
