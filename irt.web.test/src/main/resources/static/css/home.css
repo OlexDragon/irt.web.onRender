@@ -1,0 +1,14 @@
+@import "./main.css";
+@import "./banner.css";
+@import "./button.css";
+@import "./font/font.css";
+@import "./footer.css";
+@import "./nav.css";
+@import "./carousel.css";
+.home-btn{
+  min-width: 320px;
+}
+.home-solution .shine-button{ 
+  color: white;
+  border: 2px solid white;
+}

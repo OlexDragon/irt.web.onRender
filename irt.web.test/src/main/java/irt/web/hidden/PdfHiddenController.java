@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -27,18 +26,19 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import irt.web.bean.jpa.RemoteAddress;
-import irt.web.bean.jpa.RemoteAddress.TrustStatus;
-import irt.web.bean.jpa.RemoteAddressRepository;
+import irt.web.bean.TrustStatus;
+import irt.web.bean.jpa.IpAddress;
+import irt.web.service.IpService;
 
 @RestController
 @RequestMapping("pdf/hidden")
 public class PdfHiddenController {
 	private final static Logger logger = LogManager.getLogger();
 
-	@Autowired private RemoteAddressRepository	 remoteAddressRepository;
+	@Autowired private IpService ipService;
 
-	private String home = System.getProperty("user.home");
+	@Value("${irt.web.root.path}")
+	private String root;
 
 	@Value("${irt.web.product.pdf.path}")
 	private String productPdfPath;
@@ -48,7 +48,7 @@ public class PdfHiddenController {
 	@PostConstruct
 	public void postConstruct() {
 
-		pdfFolder = Paths.get(home, productPdfPath);
+		pdfFolder = Paths.get(root, productPdfPath);
 	}
 
 	@PostMapping("product/list")
@@ -74,10 +74,12 @@ public class PdfHiddenController {
 	public String addPDF(@CookieValue(required = false) String clientIP, @RequestParam Long productId, @RequestPart MultipartFile file) {
 		logger.traceEntry("clientIP: {}; productId: {};", clientIP, productId);
 
-		final Optional<RemoteAddress> oRemoteAddress = Optional.ofNullable(clientIP).map(this::getRemoteAddress);
+		final Optional<IpAddress> oRemoteAddress = ipService.getIpAddress(clientIP);
 
-		if(!oRemoteAddress.isPresent() || oRemoteAddress.get().getTrustStatus()!=TrustStatus.IRT) 
-			return "You are not authorized to perform this action.";
+		if(!oRemoteAddress.isPresent() || oRemoteAddress.get().getTrustStatus()!=TrustStatus.IRT) {
+			logger.info("You are not authorized to perform this action.");
+			return "You are not authorized to perform this action. (80)";
+		}
 
 		try {
 
@@ -96,10 +98,12 @@ public class PdfHiddenController {
 	public String deletePDF(@CookieValue(required = false) String clientIP, @RequestParam Path path) throws IOException{
 		logger.traceEntry("path: {};", path);
 
-		final Optional<RemoteAddress> oRemoteAddress = Optional.ofNullable(clientIP).map(this::getRemoteAddress);
+		final Optional<IpAddress> oRemoteAddress = ipService.getIpAddress(clientIP);
 
-		if(!oRemoteAddress.isPresent() || oRemoteAddress.get().getTrustStatus()!=TrustStatus.IRT) 
-			return "You are not authorized to perform this action.";
+		if(!oRemoteAddress.isPresent() || oRemoteAddress.get().getTrustStatus()!=TrustStatus.IRT) {
+			logger.info("You are not authorized to perform this action.");
+			return "You are not authorized to perform this action. (102)";
+		}
 
 		Path p = pdfFolder.resolve(path);
 		logger.error(p);
@@ -127,23 +131,5 @@ public class PdfHiddenController {
 		path = Paths.get(path.toString(), originalFilename);
 
 		mpFile.transferTo(path);
-	}
-
-	private RemoteAddress getRemoteAddress(final String remoteAddr) {
-
-		return remoteAddressRepository.findById(remoteAddr)
-
-				.map(
-						ra->{
-							final LocalDateTime now = LocalDateTime.now();
-							ra.setConnectionCount(ra.getConnectionCount()+1);
-							ra.setLastConnection(now);
-							return remoteAddressRepository.save(ra);
-						})
-				.orElseGet(
-						()->{
-							final LocalDateTime now = LocalDateTime.now();
-							return remoteAddressRepository.save(new RemoteAddress(remoteAddr, now, now, 1, TrustStatus.UNKNOWN));
-						});
 	}
 }

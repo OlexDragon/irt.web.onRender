@@ -1,0 +1,61 @@
+@import "./main.css";
+@import "./banner.css";
+@import "./button.css";
+@import "./font/font.css";
+@import "./footer.css";
+@import "./nav.css";
+
+body {
+	background-image: url("/images/jpeg/satellite2.jpg");
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-size: cover;
+/* 	background-color: rgba(255,255,255,0.85); */
+/* 	background-blend-mode: lighten; */
+}
+input.form-control, input.form-control:focus{
+    color: white;
+    background-color: #00000000;
+}
+.form-floating>.form-control:placeholder-shown~label, .form-floating>.form-control:not(:placeholder-shown)~label, .form-floating>.form-control:not(:placeholder-shown)~label::after, .form-floating>.form-control:placeholder-shown~label::after{
+    color: #676ad6;
+    background-color: #00000000;
+}
+.form-floating label{
+    color: #aaabe8;
+}
+.card-header h4{
+	color: #ffc107;
+}
+/* ==================== */
+.quote{
+  background-color: rgba(9, 49, 105, 0.898);
+  padding: 1rem;
+}
+.card{
+	height: 23rem;
+	margin: 1rem;
+	box-shadow: 0 .3rem 1rem #000000;
+}
+.container .card{
+  background-color: rgba(9, 49, 105, 0.898);
+}
+.btn.btn-outline-success{
+	color: #198754;
+}
+.btn.btn-outline-success:hover, .card-body{
+	color: white;
+}
+.card-body label{
+	font-size: 1.2rem;
+    cursor: pointer;
+}
+.checkbox-custom::after:not('nav') {
+    color: white;
+}
+.quote .done{
+	background-color: #13ec1820;
+}
+.container .done{
+	background-color: #12434bb3;
+}

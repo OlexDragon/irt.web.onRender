@@ -1,4 +1,4 @@
-$('#navHome').addClass('active');
+
 /* -------------------Fill Nodes-------------------- */
 getDataFromDB();
 function getDataFromDB(){
@@ -21,30 +21,49 @@ function getDataFromDB(){
 	});
 }
 
-
 /* -------------------carousel-------------------- */
 let $slider = $('.slider');
+let $sliderParent = $slider.parent();
 let $slide = $('.slide');
-let slideWidth = $slide.outerWidth();//.outerWidth() utilisé pour obtenir la largeur de l’élément avec les padding и border
 
 function moveSlider() {
-	$slider.animate({'margin-left': -slideWidth-10}, "slow", function() {
+
+	if(!$slide.length)
+		return;
+
+	let slide = $slide[0];
+	let style = slide.currentStyle || window.getComputedStyle(slide);
+	let slideWidth = slide.offsetWidth + parseInt(style.marginLeft) + parseInt(style.marginRight);	//.outerWidth() utilisé pour obtenir la largeur de l’élément avec les padding и border
+
+	let sum = slideWidth * $slider.children().length;	// The sum of all card width
+
+	if($sliderParent.width() < sum)
+
+		$slider.animate({'margin-left': -slideWidth}, "slow", ()=> {
+
 			$slider.css({marginLeft: 0});
 			$slider.find('.slide:first').appendTo($slider);
-	});
+		});
 }
 
-var interval = setInterval(moveSlider, 3000);
+let intervalTime = 3000;
+let interval = setInterval(moveSlider, intervalTime);
+//$slide.hover(
+//	()=>{
+//		clearInterval(interval); //Arrêtez carousel 
+//	},
+//	()=>{
+//		clearInterval(interval);
+//		interval = setInterval(moveSlider, intervalTime); //Reprendre carousel
+//	}
+//);
+$(document).on('visibilitychange', ()=>{
 
-$slide
-.hover(
-	function() {
+    if(document.visibilityState == 'hidden')
 		clearInterval(interval); //Arrêtez carousel 
-	},
-	function() {
-		interval = setInterval(moveSlider, 3000); //Reprendre carousel
-	}
-);
-$(window).on('resize',e=>{
-	slideWidth = $slide.outerWidth()
+    else {
+		clearInterval(interval);
+		interval = setInterval(moveSlider, intervalTime); //Reprendre carousel
+    }
+    console.log(document.visibilityState);
 });

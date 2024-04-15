@@ -1,4 +1,7 @@
-$('#navAbout').addClass('active');
+
+let clientIP = Cookies.get('clientIP');
+if(!clientIP)
+	$.getJSON('https://ipapi.co/json/', data=>Cookies.set('clientIP', data.ip));
 
 let $first = $('#first');
 let $last = $('#last');
@@ -18,12 +21,12 @@ let $send = $('#send')
 	let toSend = {};
 
 	toSend.firstName = $first.prop('readonly', true).val().trim();
-	toSend.lastName = $last.prop('readonly', true).val().trim();
-	toSend.phone = $phone.prop('readonly', true).val().trim();
-	toSend.email = $email.prop('readonly', true).val().trim();
-	toSend.company = $company.prop('readonly', true).val().trim();
-	toSend.industry = $industry.prop('readonly', true).val().trim();
-	toSend.message = $toSend.prop('readonly', true).val().trim();
+	toSend.lastName	 = $last.prop('readonly', true).val().trim();
+	toSend.phone	 = $phone.prop('readonly', true).val().trim();
+	toSend.email	 = $email.prop('readonly', true).val().trim();
+	toSend.company	 = $company.prop('readonly', true).val().trim();
+	toSend.industry	 = $industry.prop('readonly', true).val().trim();
+	toSend.message	 = $toSend.prop('readonly', true).val().trim();
 	$send.prop('disabled', true);
 	sent = true;
 
@@ -72,7 +75,7 @@ $first.parents('.container').find('input, textarea')
 
 $send.parent().mouseenter(e=>{
 
-	if(!onFocus)
+	if(!onFocus && !($first.val().length>0 && $email.val().length>0 && $toSend.val().length>0))
 		return;
 
 	validate();
@@ -176,7 +179,7 @@ function validate(){
 }
 function showToast(title, message, headerClass){
 
-	let $toast = $('<div>', {class: 'toast', role: 'alert', 'aria-live': 'assertive', 'aria-atomic': true})
+	let $toast = $('<div>', {class: 'toast', role: 'alert', 'aria-live': 'assertive', 'aria-atomic': true, 'data-bs-delay': 25*1000})
 		.append(
 			$('<div>', {class: 'toast-header'})
 			.append(

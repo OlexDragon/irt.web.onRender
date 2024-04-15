@@ -1,14 +1,16 @@
-$('#vavProducts').addClass('active');
+const agent = navigator.userAgent.toLowerCase();
+if(agent.search('firefox')>0 || agent.search('fxios')>0 || agent.search('focus')>0)
+	$('body').css({ 'background-color' : 'rgb(0,0,0,0)'});
 
-let $productsContent = $('#products_content');
-let $filterName = $('#filter-name');
+const $productsContent = $('#products_content');
+const $filterName = $('#filter-name');
+const href = window.location.href.split('?')[0];
 
 let timer = null;
-let doScroll=true;
-let href = window.location.href.split('?')[0];
+let doLoadMore=true;
 let filterValue = getFilterValues();
 let selectedFilters = [];
-let array = getFiltersFromUrl();
+let filters = getFiltersFromUrl();
 let pushState = true;
 
 let $filterInput = $('.filter input').on('input', ()=>{
@@ -16,12 +18,14 @@ let $filterInput = $('.filter input').on('input', ()=>{
 });
 $('.filter').click(e=>{
 
-	if(e.target.localName=='input')
+//	console.log(e.target.localName);
+	if(!(e.target.localName=='label' || e.target.localName=='span'))
 		return;
 
-	if(e.target.children[0].checked){
+	let input = e.target.localName=='label' ? e.target.children[0] : e.target.previousElementSibling;
+	if(input.checked){
 		e.preventDefault();
-		e.target.children[0].checked = false;
+		input.checked = false;
 		filter();
 	}
 });
@@ -61,18 +65,15 @@ window.addEventListener('popstate', function(){
 	filter();
 });
 
+const $matte = $('.matte');
+const $matteLoad = $('.matte-1');
 function filter() {
-    let $matte = $('.matte');
-    let $matteLoad = $('.matte-1');
-    $matte.removeClass('active');
-    $matteLoad.removeClass('load');
-    // const nothingFound = document.querySelector('#nothing-found');
-    let ourProduct = $('.our-product');
-    ourProduct.removeClass('dnone');
 
-	if (timer !== null) 
-		clearTimeout(timer);
+	disableFilters();
 
+	clearTimeout(timer);
+	$matte.removeClass('active');
+	$matteLoad.removeClass('load');
 
 	let newFilterValue = getFilterValues();
 
@@ -88,52 +89,51 @@ function filter() {
 		()=> {
 			$matte.addClass('active').show();
 
-			let array = []
+			filters = []
 			if (newFilterValue.search)
-            	array.push('search=' + encodeURIComponent(newFilterValue.search));
+            	filters.push('search=' + encodeURIComponent(newFilterValue.search));
 
 			if (newFilterValue.filter.length > 0) {
-				newFilterValue.filter.forEach(
-					function(idAndText) {
-                		array.push('filter=' + encodeURIComponent(idAndText.checkboxId));
-            		});
-        }
+				newFilterValue.filter.forEach(function(idAndText) {
+                	filters.push('filter=' + encodeURIComponent(idAndText.checkboxId));
+            	});
+			}
 
-        filterValue = newFilterValue;
+			filterValue = newFilterValue;
 
-        //==================load============
+			//==================load============
 
-		let f = array.slice();
-		f.push('page=0');
-		let url = '/products/search?' +  f.join('&');
-        $productsContent.load(
-			url,
-        	function(data) {
-//            addImage($('.our-product .card'));
-				$matte.fadeOut();
+			let f = filters.slice();
+			f.push('page=0');
+			let url = '/products/search?' +  f.join('&');
+			$productsContent.load(
+				url,
+				function(data) {
 
-				$('.product').click(function(e){ productClick(e, $(this)); return false; });
+					start = -1;
+					$matte.fadeOut();
 
-				let load = $(data).length;
-				if (load < pageSize){
-            		doScroll=false;
-					return;
-				}
+					$('.product').click(function(e){ productClick(e, $(this)); return false; });
 
-				doScroll=true;
-				loadMore();
+					let load = $(data).length;
+					if (load < pageSize){
+            			doLoadMore=false;
+						return;
+					}
+
+					doLoadMore=true;
+					loadMore();
 			});
         
-		url = href + (array.length ? '?' + array.join('&') : array.join('&'));
-//    	window.location = url;
+			url = href + (filters.length ? '?' + filters.join('&') : '');
 
-		if(pushState)
-        	history.pushState(null, '', url);
-		else
-        	pushState = true;
+			if(pushState)
+        		history.pushState(null, '', url);
+			else
+				pushState = true;
 
-		$matteLoad.removeClass('load');
-		window.scrollTo(0, 0);
+			$matteLoad.removeClass('load');
+			window.scrollTo(0, 0);
 
     }, 2000);
 
@@ -166,13 +166,13 @@ function getFilterValues(){
 
 function getFiltersFromUrl(){
 
-	let array = [];
+	let filters = [];
     let params = new URLSearchParams(window.location.search);
     params.forEach(
 		function(value, key) { 
-    		array.push(`${key}=${value}`);    
+    		filters.push(`${key}=${value}`);    
 		});
-    return array;
+    return filters;
   }
 
 let start = -1;
@@ -187,33 +187,36 @@ function loadMore() {
 
 	start = s;
 
-	console.log(`${start} cards on the page`);
+//	console.log(`${start} cards on the page`);
 
 	if(start%pageSize){
-		console.log('The number of products does not mapch to the "pageSize".');
+//		console.log('The number of products does not mapch to the "pageSize".');
 		return;
 	}
 
 	//=================get============
 	let pageNumber = start/pageSize;
-	let f = array.slice();
+	let f = filters.slice();
 	f.push(`page=${pageNumber}`);
 	let url = '/products/search?' + f.join('&');
 	$.get(url, function(data) {
 
-		let $card = $(data).find('.card');
-		console.log(`${$card.length} cards returned`);
+		const $data = $(data);
+		let $card = $data.find('.card');
+//		console.log(`${$card.length} cards returned`);
 
 		if (!$card.length){
-			doScroll = false;
+			doLoadMore = false;
 			return;
 		}
 
-		$productsContent.append(data);
+		$card.click(function(e){productClick(e, $(this));return false;});
+
+		$productsContent.append($data);
 //		addImage($card);
 
 		if ($card.length < pageSize){
-			doScroll = false;
+			doLoadMore = false;
 			return;
 		}
 
@@ -228,14 +231,14 @@ function isVisible(){
 	return aa >= bb - cc;
 }
 $(window).on('resize scroll', ()=>{ 
-    if(doScroll)
+    if(doLoadMore)
     	loadMore();
   });
 
 function isEqual(newFilterValue) {
 
     if(newFilterValue.search != filterValue.search)
-    return false;
+    	return false;
  
     let valueNewFilter1 = $.map(
 
@@ -259,6 +262,7 @@ function isEqual(newFilterValue) {
 //gestionnaire du click sur la croix du current filtres
 $("#filters-selected").on("click", ".filter-cross", function() {
 
+	$('.tooltip ').remove();
     let currenVal=this.dataset.value;
     const filterValue = $(this).parent(".filter-item").find(".filter-value").text().trim();
     // supprimer le filtre sélectionné du tableau
@@ -271,54 +275,51 @@ $("#filters-selected").on("click", ".filter-cross", function() {
     this.parentElement.remove();
 });
 
+$('.filter-item').each(function(){
+        new bootstrap.Tooltip(this);
+});
 
+let $filtersList = $(".filters-list");
 // fonction pour mettre à jour les current filtres  dans le balisage
+$('.filter-cross').hover(function(){
+            $(this).parents(".filter-item ").addClass('active');
+        }, function(){
+            $(this).parents(".filter-item ").removeClass('active');
+        });
 function UpdateCurrentFilters(filter) {
 
-    $(".filters-list").empty();
+    $filtersList.empty();
+
     filter.forEach((idAndText) => {
-        let $filterItem = $("<li>", {
-            'class': "filter-item "
+        let $filterItem = $("<li>", {class: "filter-item ", title: idAndText.family,'data-bs-toggle': "tooltip",'data-bs-placement': "bottom"});
+        new bootstrap.Tooltip($filterItem);
+        let $filterValue = $("<span>", {class: "filter-value", tabindex: "0", text: idAndText.checkboxtext});
+        let $filterCross = $("<span>", {class: "filter-cross", 'data-value':idAndText.checkboxId, text: " \u2715"})
+
+        .hover(function(){
+            $(this).parents(".filter-item ").addClass('active');
+        }, function(){
+            $(this).parents(".filter-item ").removeClass('active');
         });
-        const $filterValue = $("<span>", {
-            'class': "filter-value",
-            'title': idAndText.family,
-            'data-toggle': "tooltip",
-            'data-placement': "top",
-            'tabindex': "0"
-        }).text(idAndText.checkboxtext);
-        const $filterCross = $("<span>", {
-            class: "filter-cross",
-            'data-value':idAndText.checkboxId 
-        }).text(" \u2715").hover(function() {
-            $(this).toggleClass('active')
-            var $filterValue = $(this).parent(".filter-item").find(".filter-value");
-            $filterValue.css('color', 'red');
-        }, function() {
-            var $filterValue = $(this).parent(".filter-item").find(".filter-value");
-            $filterValue.css('color', '#0f4178');
-        });
+ 
         $filterItem.append( $filterValue, $filterCross);
 
-        $(".filters-list").append($filterItem);
-        $filterValue.tooltip();
+        $filtersList.append($filterItem);
     });
-
 }
 
 $(".selected-filter-wrapper").hover(function() {
-    let del = $(this).find(".delete");
-      if($(".filter-item").length > 0 || del.is(":visible")){
+	let del = $(this).find(".delete");
+	if($(".filter-item").length > 0 || del.is(":visible"))
             del.toggle();
-        }
-        });
-      
-      $(".delete-all-button").click(function() {
-        console.log(this);
-        let filterCurrentItem=$('.filter-item');
-        filterCurrentItem.remove();
-        $filterInput.prop("checked", false);
-      });
+});
+
+$(".delete-all-button").click(function() {
+	let filterCurrentItem=$('.filter-item');
+	filterCurrentItem.remove();
+	$filterInput.prop("checked", false);
+	filter();
+});
 
 //pour desactiver modal pendent le click sur un boutton detail
 	$('.product').click(function(e) {
@@ -397,8 +398,11 @@ function productClick(e, $product){
 
 //==============filter-toggle====================
 // clic btn filter
-$('.filter-toggle').click(function() {
-	$('.filter-section').toggleClass('hidden'); 
+
+const $filterToggle = $('.filter-toggle');
+const $filterSction = $('.filter-section');
+$filterToggle.click(function() {
+	$filterSction.toggleClass('hidden'); 
 	$(this).toggleClass('active');
 	var arrow = $(this).find('.arrow');
 	if ($(this).hasClass('active')) 
@@ -410,8 +414,8 @@ $('.filter-toggle').click(function() {
 
 // clic sur input
 $('.filter-section input').click(function() {
-	$('.filter-section').addClass('hidden'); 
-	$('.filter-toggle').removeClass('active'); 
+	$filterSction.addClass('hidden'); 
+	$filterToggle.removeClass('active'); 
 	$('.filter-toggle .arrow').html('&#9660;');
 });
 
@@ -430,5 +434,14 @@ $('.carousel-control-prev').click(function() {
 
 loadMore();
 
+const $cbFilter = $('.filter-section input');
+disableFilters();
+function disableFilters(){
 
+	$cbFilter.parent().addClass('disabled');
+	let toSend = $cbFilter.filter((i,el)=>el.checked).map((i,el)=>el.value).get();
+
+	$.post('/rest/filter/accessible', { filterIDs: toSend })
+	.done(data=>data.forEach(id=>$cbFilter.filter((i,el)=>parseInt(el.value)===id).parent().removeClass('disabled')));
+}
       

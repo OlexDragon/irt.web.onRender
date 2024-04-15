@@ -18,6 +18,11 @@ public class IrtEMailData {
 	private String clientId;
 	private String objectId;
 	private String tenantId;
+	private String secretId;
+	private String clientSecret;	// id: 56a62c42-8e27-4ec4-ad02-e0bac1923743; Client Secret: p4-8Q~XNgXRbe-m0dcja9wRUrybeNmwlNR-a1aCt; Expires: 1/31/2026;
+									// Client Secret: p4-8Q~XNgXRbe-m0dcja9wRUrybeNmwlNR-a1aCt;
+									// Expires: 1/31/2026;
+									// link to renew: https://entra.microsoft.com/#view/Microsoft_AAD_RegisteredApps/ApplicationMenuBlade/~/Credentials/appId/697654a8-3939-4eac-b85a-8f6336ec1cc6/isMSAApp~/false
 
 	public IrtEMailData(List<WebContent> webContents) {
 
@@ -30,11 +35,11 @@ public class IrtEMailData {
 					switch (c.getNodeId()) {
 
 					case "emailTo":
-						to = Encoder.decode(c.getValue());
+						to = c.getValue();
 						break;
 
 					case "emailFrom":
-						from = Encoder.decode(c.getValue());
+						from = c.getValue();
 						break;
 
 					case "emailPassword":
@@ -42,15 +47,23 @@ public class IrtEMailData {
 						break;
 
 					case "clientId":
-						clientId = Encoder.decode(c.getValue());
+						clientId = c.getValue();
 						break;
 
 					case "objectId":
-						objectId = Encoder.decode(c.getValue());
+						objectId = c.getValue();
 						break;
 
 					case "tenantId":
-						tenantId = Encoder.decode(c.getValue());
+						tenantId = c.getValue();
+						break;
+
+					case "secretId":
+						secretId = c.getValue();
+						break;
+
+					case "clientSecret":
+						clientSecret = c.getValue();
 						break;
 					}
 				});
@@ -63,6 +76,8 @@ public class IrtEMailData {
 				Optional.ofNullable(password).filter(v->!v.isEmpty()).isPresent() &&
 				Optional.ofNullable(clientId).filter(v->!v.isEmpty()).isPresent() &&
 				Optional.ofNullable(objectId).filter(v->!v.isEmpty()).isPresent() &&
-				Optional.ofNullable(tenantId).filter(v->!v.isEmpty()).isPresent();
+				Optional.ofNullable(tenantId).filter(v->!v.isEmpty()).isPresent() &&
+				Optional.ofNullable(secretId).filter(v->!v.isEmpty()).isPresent() &&
+				Optional.ofNullable(clientSecret).filter(v->!v.isEmpty()).isPresent();
 	}
 }

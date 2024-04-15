@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -14,12 +13,14 @@ import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,28 +28,40 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import irt.web.bean.jpa.RemoteAddress;
-import irt.web.bean.jpa.RemoteAddress.TrustStatus;
-import irt.web.bean.jpa.RemoteAddressRepository;
+import irt.web.bean.FileWorker;
+import irt.web.bean.TrustStatus;
+import irt.web.bean.jpa.IpAddress;
+import irt.web.service.IpService;
 
 @RestController
 @RequestMapping("images/hidden")
-public class ImagesHiddenController {
+public class ImagesHiddenController extends FileWorker {
 	private final static Logger logger = LogManager.getLogger();
 
-	@Autowired private RemoteAddressRepository	 remoteAddressRepository;
+	@Autowired private IpService ipService;
 
-	private String home = System.getProperty("user.home");
+	@Value("${irt.web.root.path}")
+	private String root;
 
 	@Value("${irt.web.product.images.path}")
 	private String productImagesPath;
 
+	@Value("${irt.web.home.slider.images.path}")
+	private String sliderImagesPath;
+
+	@Value("${irt.web.event.images.path}")
+	private String eventImagesPath;
+
 	private Path imagesFolder;
+	private Path sliderFolder;
+	private Path eventrFolder;
 
 	@PostConstruct
 	public void postConstruct() {
 
-		imagesFolder = Paths.get(home, productImagesPath);
+		imagesFolder = Paths.get(root, productImagesPath);
+		sliderFolder = Paths.get(root, sliderImagesPath);
+		eventrFolder = Paths.get(root, eventImagesPath);
 	}
 
 	@PostMapping("product/list")
@@ -70,18 +83,21 @@ public class ImagesHiddenController {
 		return new ArrayList<>();
 	}
 
-	@PostMapping(path="/product/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PostMapping(path="product/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public String addOneImages(@CookieValue(required = false) String clientIP, @RequestParam Long productId, @RequestPart MultipartFile file) {
 		logger.traceEntry("clientIP: {}; productId: {};", clientIP, productId);
 
-		final Optional<RemoteAddress> oRemoteAddress = Optional.ofNullable(clientIP).map(this::getRemoteAddress);
+		final Optional<IpAddress> oRemoteAddress = ipService.getIpAddress(clientIP);
 
-		if(!oRemoteAddress.isPresent() || oRemoteAddress.get().getTrustStatus()!=TrustStatus.IRT) 
-			return "You are not authorized to perform this action.";
+		if(!oRemoteAddress.isPresent() || oRemoteAddress.get().getTrustStatus()!=TrustStatus.IRT) {
+			logger.info("You are not authorized to perform this action.");
+			return "You are not authorized to perform this action. (93)";
+		}
 
 		try {
-
-			saveImage(productId, file, Long.toString(System.currentTimeMillis()));
+			
+			final Path folder = imagesFolder.resolve(Paths.get(productId.toString(), Long.toString(System.currentTimeMillis())));
+			saveFile(folder, file);
 
 
 		} catch (IllegalStateException | IOException e) {
@@ -96,13 +112,15 @@ public class ImagesHiddenController {
 	public String deleteImage(@CookieValue(required = false) String clientIP, @RequestParam Path path) throws IOException{
 		logger.traceEntry("path: {};", path);
 
-		final Optional<RemoteAddress> oRemoteAddress = Optional.ofNullable(clientIP).map(this::getRemoteAddress);
+		final Optional<IpAddress> oRemoteAddress = ipService.getIpAddress(clientIP);
 
-		if(!oRemoteAddress.isPresent() || oRemoteAddress.get().getTrustStatus()!=TrustStatus.IRT) 
-			return "You are not authorized to perform this action.";
+		if(!oRemoteAddress.isPresent() || oRemoteAddress.get().getTrustStatus()!=TrustStatus.IRT) {
+			logger.info("You are not authorized to perform this action.");
+			return "You are not authorized to perform this action. (116)";
+		}
 
 		Path p = imagesFolder.resolve(path);
-		logger.error(p);
+		logger.debug(p);
 
 		final File file = p.toFile();
 
@@ -115,35 +133,79 @@ public class ImagesHiddenController {
 			return "Failed to delete the file.";
 	}
 
-	private void saveImage(Long productId, MultipartFile mpFile, String subfolderName) throws IllegalStateException, IOException {
+	@PostMapping(path="carousel/card/add/{cardId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public String setCarouselImage(
 
-		String originalFilename = mpFile.getOriginalFilename();
-		Path path = imagesFolder.resolve(Paths.get(productId.toString(), subfolderName));
+			@CookieValue(required = false) String clientIP,
+			@PathVariable Long cardId,
+			@RequestPart MultipartFile file) {
 
-		logger.trace("productId: {}; path: {}", productId, path);
+		logger.traceEntry("cardId: {}; clientIP: {}", cardId, clientIP);
 
-		path.toFile().mkdirs();	//create a directories
+		final Optional<IpAddress> oRemoteAddress = ipService.getIpAddress(clientIP);
 
-		path = Paths.get(path.toString(), originalFilename);
+		if(!oRemoteAddress.isPresent() || oRemoteAddress.get().getTrustStatus()!=TrustStatus.IRT) {
+			logger.info("You are not authorized to perform this action.");
+			return "You are not authorized to perform this action. (144)";
+		}
 
-		mpFile.transferTo(path);
+		final Path path = sliderFolder.resolve(cardId.toString());
+		logger.debug(path);
+
+		final File directory = path.toFile();
+
+		try {
+
+			if(!directory.mkdirs())
+				FileUtils.cleanDirectory(directory);
+
+			String originalFilename = file.getOriginalFilename();
+			final Path p = path.resolve(originalFilename);
+			file.transferTo(p);
+
+		} catch (IllegalStateException | IOException e) {
+			 logger.catching(e); 
+			 return e.getLocalizedMessage();
+		}
+
+		return "Done";
 	}
 
-	private RemoteAddress getRemoteAddress(final String remoteAddr) {
+	@PostMapping(path="event/add/{eventId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public String setEventImage(
 
-		return remoteAddressRepository.findById(remoteAddr)
+			@CookieValue(required = false) String clientIP,
+			@PathVariable Long eventId,
+			@RequestPart MultipartFile file) {
 
-				.map(
-						ra->{
-							final LocalDateTime now = LocalDateTime.now();
-							ra.setConnectionCount(ra.getConnectionCount()+1);
-							ra.setLastConnection(now);
-							return remoteAddressRepository.save(ra);
-						})
-				.orElseGet(
-						()->{
-							final LocalDateTime now = LocalDateTime.now();
-							return remoteAddressRepository.save(new RemoteAddress(remoteAddr, now, now, 1, TrustStatus.UNKNOWN));
-						});
+		logger.traceEntry("cardId: {}; clientIP: {}", eventId, clientIP);
+
+		final Optional<IpAddress> oRemoteAddress = ipService.getIpAddress(clientIP);
+
+		if(!oRemoteAddress.isPresent() || oRemoteAddress.get().getTrustStatus()!=TrustStatus.IRT) {
+			logger.info("You are not authorized to perform this action.");
+			return "You are not authorized to perform this action. (180)";
+		}
+
+		final Path path = eventrFolder.resolve(eventId.toString());
+		logger.debug(path);
+
+		final File directory = path.toFile();
+
+		try {
+
+			if(!directory.mkdirs())
+				FileUtils.cleanDirectory(directory);
+
+			String originalFilename = file.getOriginalFilename();
+			final Path p = path.resolve(originalFilename);
+			file.transferTo(p);
+
+		} catch (IllegalStateException | IOException e) {
+			 logger.catching(e); 
+			 return e.getLocalizedMessage();
+		}
+
+		return "Done";
 	}
 }

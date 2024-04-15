@@ -1,40 +1,52 @@
 package irt.web.hidden;
 
-import java.time.LocalDateTime;
-import java.util.Enumeration;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import irt.web.bean.jpa.Product;
-import irt.web.bean.jpa.ProductRepository;
-import irt.web.bean.jpa.RemoteAddress;
-import irt.web.bean.jpa.RemoteAddress.TrustStatus;
-import irt.web.bean.jpa.RemoteAddressRepository;
+import irt.web.bean.SliderCard;
+import irt.web.bean.TrustStatus;
+import irt.web.bean.jpa.IpAddress;
+import irt.web.bean.jpa.WebContent;
+import irt.web.bean.jpa.WebContentRepository;
+import irt.web.service.IpService;
 
 @Controller
-@RequestMapping("hidden/home")
+@RequestMapping("hidden")
 public class HomeHiddenController implements ErrorController {
-	private final Logger logger = LogManager.getLogger();
+	private final static Logger logger = LogManager.getLogger();
 
-	private String home = System.getProperty("user.home");
+	@Value("${irt.web.root.path}")
+	private String root;
 
-	@Autowired private ProductRepository	productRepository;
-	@Autowired private RemoteAddressRepository	 remoteAddressRepository;
+	@Autowired private WebContentRepository	webRepository;
+	@Autowired private IpService ipService;
 
 	@GetMapping
 	public String products(@CookieValue(required = false) String clientIP, Model model) {
+
+		final Optional<IpAddress> oRemoteAddress = ipService.getIpAddress(clientIP);
+
+		if(!oRemoteAddress.isPresent() || oRemoteAddress.get().getTrustStatus()!=TrustStatus.IRT) {
+			model.addAttribute("errorCode", clientIP);
+			logger.info("{} redirected to error page", oRemoteAddress);
+			return "error";
+		}
+
+		final List<WebContent> sliderCardFields = webRepository.findByPageName("home_slider");
+		final Map<Integer, SliderCard> fieldsToCards = SliderCard.fieldsToCards(sliderCardFields);
+		model.addAttribute("cards", fieldsToCards);
 
 		return "hidden/home";
 	}

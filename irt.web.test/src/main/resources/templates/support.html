@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support - IRT Technologies Inc.</title>
+    <th:block th:replace="home :: links">
+    	<link rel="preconnect" href="https://fonts.googleapis.com">
+    	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    	<link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,300;0,500;1,100&display=swap" rel="stylesheet">
+    	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    </th:block>
+    <link rel="stylesheet" href="../static/css/support.css" th:href="@{'/css/support.css'}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary" th:replace="home :: irt_menu('support')">
+    </nav>
+
+<section class="support-section">
+    <div id="toastContaner" class="toast-container position-fixed end-0 p-3"></div>  
+    <div class="section">
+      
+      <div class="content support text-banner mt-5">
+        <h1 class="text-uppercase">Support</h1>
+        <div class="row justify-content-md-center text-center">
+        	<div class="col-md-2" data-name="download"><h4>GUI Download</h4></div>
+			<div class="col-md-2" data-name="faq"><h4>FAQ</h4></div>
+			<div class="col-md-2" data-name="rma"><h4>Get RMA Number</h4></div>
+        </div>
+      </div>
+      <div class="overlay"></div>
+    </div>
+    <div id="gui-download" class="section gui gui-download">
+		<h1>IRT GUI Download</h1>
+		<div class="content">
+        <p class="pre-line" th:utext="${guiText}">   IRT Technologies, an acronym for Intelligent RF Telecom technologies, designs, develops and manufactures advanced satellite RF systems and products for real time voice, data and multimedia delivery anywhere in the world.
+
+   IRT products are revolutionary innovative, super compact, efficient and reliable, serving both commercial and government sectors.
+
+   IRT satellite solutions shapes the next-generation communication equipment with its breakthrough technology, vanguard research and development, state of the art engineering design, and product innovation.   
+        </p>
+      </div>
+     
+    </div>
+    <div class="section faq">
+		<div class="text-center" >
+			<h1>Frequently Asked Questions</h1>
+			<div class="content row text-start">
+				<div class="col col-lg-7 mx-5">
+					<div class="container" th:remove="all-but-first">
+						<h4 class="mb-3 text-warning" th:each="faq: ${allFAQs}" data-th-data-id="${faq.id}" th:text="${faq.question}">If you have any questions about our Products or Solutions.</h4>
+						<h4 class="mb-3">If you have any questions about our Products or Solutions, please fill in the form below.</h4>
+						<h4 class="mb-3">If you have any questions about our Products or Solutions, please fill in the form below.</h4>
+						<h4 class="mb-3">If you have any questions about our Products</h4>
+						<h4 class="mb-3">If you have any questions about our Products or Solutions, please fill in the form below.</h4>
+					</div>
+				</div>
+			</div>
+		</div>
+      <div class="overlay"></div>
+	</div>
+
+<div id="modalFaq" class="modal fade support-modal" tabindex="-1" role="dialog" aria-labelledby="Answer" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content  ">
+        <div class="modal-header">
+          <h5 class="modal-title text-warning"></h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body row">
+          <p class="pre-line">
+          </p>
+         </div>
+      </div>
+    </div>
+  </div>
+
+<div id="modalAnswer" class="modal fade support-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="Show RMA Number" aria-hidden="true">
+ 	<div class="modal-dialog modal-xl" role="document">
+		<div class="modal-content  ">
+			<div class="modal-header">
+				<h5 class="modal-title text-warning"></h5>
+				<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+		<div class="modal-body row">
+			<p class="pre-line"></p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+			<button id="btnCopy" type="button" class="btn btn-primary">Copy Content</button>
+		</div>
+		</div>
+	</div>
+</div>
+
+<div id="modalRMA" class="modal fade support-modal" tabindex="-1" role="dialog" aria-labelledby="Create RMA" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content  ">
+        <div class="modal-header">
+          <h5 class="modal-title text-warning">You contact info:</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body row">
+        	<div class="col-sm-4">
+				<div class="row-cols-1">
+					<div class="col-sm">
+						<div class="form-floating mb-3">
+							<input id="rmaName" type="text" class="form-control" placeholder="Name">
+							<label for="rmaName">Name</label>
+						</div>
+					</div>
+					<div class="col-sm">
+						<div class="form-floating mb-3">
+							<input id="rmaEmail" type="email" class="form-control" placeholder="Email">
+							<label for="rmaEmail">Email address</label>
+						</div>
+					</div>
+					<div class="col-sm">
+						<div class="form-floating mb-3">
+							<input id="rmaSN" type="text" class="form-control" placeholder="Unit Serial Number">
+							<label for="rmaSN">Unit Serial Number</label>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm">
+				<div class="form-floating mb-3">
+					<textarea id="rmaCause" rows="9" class="form-control" placeholder="Description of the malfunction."></textarea>
+					<label for="rmaCause">Description of the malfunction.</label>
+				</div>
+			</div>
+         </div>
+		<div class="modal-footer">
+			<button id="btnCreateRMA" type="button" class="btn btn-outline-light form-control" disabled>Click here to get RMA number</button>
+		</div>
+      </div>
+    </div>
+  </div>
+</section>
+	<footer  class="footer" th:replace="home :: footer"></footer>
+
+<th:block th:replace="home :: javascript">
+    <script type="application/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script type="application/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+</th:block>
+
+<script type="application/javascript" src="../static/js/support.js" th:src="@{'/js/support.js'}"></script>
+</body>
+</html>

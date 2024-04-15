@@ -33,12 +33,13 @@ public class WebContent{
 	private VariableContent variableContent;
 
 	public WebContentId getId() {
-		return new WebContentId(pageName, nodeId);
+		return new WebContentId(pageName, nodeId, valueType);
 	}
 
 	public enum ValueType{
 		VALUE,
 		TEXT,
-		CLASS;
+		CLASS,
+		HREF;
 	}
 }

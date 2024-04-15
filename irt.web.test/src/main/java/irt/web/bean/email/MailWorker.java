@@ -1,8 +1,9 @@
 package irt.web.bean.email;
 
-import com.microsoft.graph.models.BodyType;
+import irt.web.controllers.OnRenderRestController.ResponseMessage;
 
 public interface MailWorker {
 
-	void sendEmail(String from, String subject, String body, BodyType bodyType, String... to);
+	ResponseMessage sendEmail(WebEmail webEmail);
+
 }

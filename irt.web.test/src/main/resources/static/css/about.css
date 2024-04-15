@@ -1,28 +1,25 @@
+@import "./main.css";
+@import "./banner.css";
+@import "./button.css";
+@import "./font/font.css";
+@import "./footer.css";
+@import "./nav.css";
+
+body {
+	background-image: url("/images/jpeg/satellite2.jpg");
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-size: cover;
+}
 
 
 /* ==================== */
-.about-section1 h1{
-    font-size: 40px;
-    text-shadow: 1px 1px black;
-    
-}
-
 .about-description{
   background-color: rgba(9, 49, 105, 0.898);
   padding: 10px 0;
 }
 .about-description h1{
-    font-size: 40px;
     margin-top: 20px;
-}
-.about-description p{
-    margin-left: 20px;
-    margin-right: 20px;
-    font-size: 22px;
-}
-.about-solution h1{
-    font-size: 40px;
-   
 }
 .about-solution p{
     font-size: 20px;
@@ -31,13 +28,9 @@
 }
 .about-solution .form-group{
     margin-right: 20px;
+    margin-bottom: 20px;
+    position: relative;
 }
-.about-btn{
-   min-width: 200px;
-    border: 2px solid rgb(252, 253, 254);
-    color: white;
-}
-
 #section-contact ul{
     padding-left: 5px;
 }
@@ -85,6 +78,29 @@
        
         font-size: 18px;
     }
+}
+
+/* ==========form contact us========== */
+.about-solution .container {
+  margin-top: 50px;
+}
+.form-label {
+  font-weight: bold;
+}
+#section-contact .form-control{
+  background-color: #f6f6fadf;
+  padding: 10px 15px;
+  border-radius: 10px;
+  color: #080808;
+}
+.form-btn{
+  min-width: 200px; 
+  background-color: #f4f4fbe5;
+  padding: 10px 15px;
+  color: #080808;
+  text-align: start;
+  border-radius: 10px;
+  border: 1px solid #f1f1f2ca;
 }
 
 

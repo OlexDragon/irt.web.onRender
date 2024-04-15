@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quote - IRT Technologies Inc.</title>
+    <th:block th:replace="home :: links">
+    	<link rel="preconnect" href="https://fonts.googleapis.com">
+    	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    	<link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,300;0,500;1,100&display=swap" rel="stylesheet">
+    	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    </th:block>
+    <link rel="stylesheet" href="../static/css/quote.css" th:href="@{'/css/quote.css'}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary" th:replace="home :: irt_menu('quote')">
+    </nav>
+
+<section class="quote-section">
+    <div id="toastContaner" class="toast-container position-fixed end-0 p-3"></div>  
+    <div class="section">
+		<div class="content text-uppercase text-banner mt-5">
+			<h1>Request a Quote.</h1>
+		</div>
+		<div class="overlay"></div>
+	</div>
+    <div class="section quote row">
+    <div class="col-lg pe-0">
+    <div class="row">
+		<div class="card col-md bg-transparent border-light">
+			<div class="card-header"><h4>To send you a price quote, we need information about you.</h4></div>
+			<div class="card-body">
+        		<div class="form-floating mb-3">
+        			<input id="quoteName" type="text" class="form-control" placeholder="Name">
+        			<label for="quoteName">Name</label>
+        		</div>
+        		<div class="form-floating mb-3">
+        			<input id="quoteCompany" type="text" class="form-control" placeholder="Company Name">
+        			<label for="quoteCompany">Company Name</label>
+        		</div>
+        		<div class="form-floating mb-3">
+        			<input id="quoteEmail" type="email" class="form-control" placeholder="Email">
+        			<label for="quoteEmail">Email</label>
+        		</div>
+			</div>
+		</div>
+ 		<div class="card col-md bg-transparent border-light">
+			<div class="card-header"><h4>Are you looking for a Redundancy system?</h4></div>
+			<div class="card-body">
+				<div class="row">
+					<div class="col text-truncate">
+			      		<div class="form-check">
+   			     			<input id="redYes" name="cbRedundancy" type="radio" class="form-check-input visually-hidden" value="true">
+							<span class="checkbox-custom"></span>
+							<label for="redYes" class="form-check-label">Yes</label>
+						</div>
+					</div>
+					<div class="col text-truncate">
+		  	 			<div class="form-check">
+       						<input id="redNo" name="cbRedundancy" type="radio" class="form-check-input visually-hidden" value="false">
+							<span class="checkbox-custom"></span>
+       						<label for="redNo" class="form-check-label">No</label>
+       					</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+    <div class="col-lg ps-0">
+    <div class="row">
+    	<div class="card col-md bg-transparent border-light">
+			<div class="card-header"><h4>Select the type of product you are looking for.</h4></div>
+			<div class="card-body">
+				<div class="row row-cols-1">
+					<div class="col text-truncate">
+			      		<div class="form-check">
+							<input id="tupeOutdoor" name="cbType" type="radio" class="form-check-input visually-hidden" value="OUTDOOR">
+							<span class="checkbox-custom"></span>
+       						<label for="tupeOutdoor" class="form-check-label">Outdoor BUC/SSPA</label>
+ 						</div>
+					</div>
+					<div class="col text-truncate">
+		  	 			<div class="form-check">
+ 							<input id="tupeRackMount" name="cbType" type="radio" class="form-check-input visually-hidden" value="RACK_MOUNT">
+							<span class="checkbox-custom"></span>
+       						<label for="tupeRackMount" class="form-check-label">RackMount BUC/SSPA</label>
+        				</div>
+					</div>
+					<div class="col text-truncate">
+		  	 			<div class="form-check">
+ 							<input id="tupeConverter" name="cbType" type="radio" class="form-check-input visually-hidden" value="CONVERTER">
+							<span class="checkbox-custom"></span>
+       						<label for="tupeConverter" class="form-check-label">Frequency Converters 1RU</label>
+        				</div>
+					</div>
+					<div class="col">
+		  	 			<div class="form-check">
+ 							<input id="tupeLNB" name="cbType" type="radio" class="form-check-input visually-hidden" value="LNB">
+							<span class="checkbox-custom"></span>
+       						<label for="tupeLNB" class="form-check-label">LNB</label>
+        				</div>
+					</div>
+				</div>
+			</div>
+		</div>
+ 		<div class="card col-md bg-transparent border-light">
+			<div class="card-header"><h4>Select the Frequency you are looking for.</h4></div>
+			<div class="card-body">
+				<div class="row row-cols-1">
+					<div class="col text-truncate">
+			      		<div class="form-check">
+   			     			<input id="freqKu" name="cbFrequency" type="radio" class="form-check-input visually-hidden" value="KU">
+							<span class="checkbox-custom"></span>
+							<label for="freqKu" class="form-check-label">Ku Band</label>
+						</div>
+					</div>
+					<div class="col text-truncate">
+		  	 			<div class="form-check">
+       						<input id="freqC" name="cbFrequency" type="radio" class="form-check-input visually-hidden" value="C">
+							<span class="checkbox-custom"></span>
+       						<label for="freqC" class="form-check-label">C band</label>
+       					</div>
+					</div>
+					<div class="col text-truncate">
+		  	 			<div class="form-check">
+       						<input id="freqX" name="cbFrequency" type="radio" class="form-check-input visually-hidden" value="X">
+							<span class="checkbox-custom"></span>
+       						<label for="freqX" class="form-check-label">X band</label>
+       					</div>
+					</div>
+					<div class="col text-truncate">
+		  	 			<div class="form-check">
+       						<input id="freqKa" name="cbFrequency" type="radio" class="form-check-input visually-hidden" value="KA">
+							<span class="checkbox-custom"></span>
+       						<label for="freqKa" class="form-check-label">Ka band</label>
+       					</div>
+					</div>
+					<div class="col text-truncate">
+		  	 			<div class="form-check">
+       						<input id="freqTropo" name="cbFrequency" type="radio" class="form-check-input visually-hidden" value="TROPO">
+							<span class="checkbox-custom"></span>
+       						<label for="freqTropo" class="form-check-label">Tropo band</label>
+       					</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	</div>
+    <div class="section">
+		<div class="overlay"></div>
+		<div class="container">
+			<div class="row">
+				<div class="card col-md border-light">
+					<div class="card-header"><h4>Select the required power.</h4></div>
+					<div class="card-body">
+						<div class="row" th:each="p: ${power}">
+							<div class="col text-truncate" th:each="v: ${p}">
+        						<div class="form-check">
+      								<input id="power8" name="cbFrequency" type="radio" class="form-check-input visually-hidden" value="8" th:id="'power' + ${v}" th:value="${v}">
+									<span class="checkbox-custom"></span>
+       								<label for="power8" class="form-check-label" th:for="'power' + ${v}" th:text="${v} + 'W'">8W</label>
+        						</div>
+        					</div>
+ 						</div>
+					</div>
+					<div class="card-footer"> test</div>
+				</div>
+				<div class="card col-md-3 border-light">
+					<div class="card-header"><h4>Choose between Amplifier and BUC</h4></div>
+					<div class="card-body">
+						<div class="row row-cols-1">
+							<div class="col text-truncate">
+			      				<div class="form-check">
+									<input id="tupeSSPB" name="cbBUC" type="radio" class="form-check-input visually-hidden" value="SSPB">
+									<span class="checkbox-custom"></span>
+       								<label for="tupeSSPB" class="form-check-label">SSPB</label>
+ 								</div>
+			      				<div class="form-check">
+									<input id="tupeSSPA" name="cbBUC" type="radio" class="form-check-input visually-hidden" value="SSPA">
+									<span class="checkbox-custom"></span>
+       								<label for="tupeSSPA" class="form-check-label">SSPA</label>
+ 								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="card col-md-3 border-light">
+					<div class="card-header"><h4>Select a reference clock.</h4></div>
+					<div class="card-body">
+						<div class="row row-cols-1">
+							<div class="col text-truncate">
+			      				<div class="form-check">
+									<input id="refAuto" name="cbREF" type="radio" class="form-check-input visually-hidden" value="AUTO">
+									<span class="checkbox-custom"></span>
+       								<label for="refAuto" class="form-check-label">Auto</label>
+ 								</div>
+			      				<div class="form-check">
+									<input id="refExt" name="cbREF" type="radio" class="form-check-input visually-hidden" value="EXTERNAL">
+									<span class="checkbox-custom"></span>
+       								<label for="refExt" class="form-check-label">External</label>
+ 								</div>
+			      				<div class="form-check">
+									<input id="refInt" name="cbREF" type="radio" class="form-check-input visually-hidden" value="INTERNAL">
+									<span class="checkbox-custom"></span>
+       								<label for="refInt" class="form-check-label">Internal</label>
+ 								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+    <div class="section quote row">
+		<div class="row">
+			<div class="card col-md bg-transparent border-light">
+				<div class="card-header"><h4>Add more details.</h4></div>
+				<div class="card-body">
+					<textarea rows="11" class="form-control"></textarea>
+				</div>
+			</div>
+		</div>
+    </div>
+    <div class="section">
+		<div class="overlay"></div>
+		<div class="container section-white">
+			<button class="form-control btn home-btn shine-button ">Send the Quote</button>
+		</div>
+	</div>
+<div class="modal fade quote-modal" tabindex="-1" role="dialog" aria-labelledby="Answer" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content  ">
+        <div class="modal-header">
+          <h5 class="modal-title text-warning"></h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body row">
+          <p class="pre-line">
+          </p>
+         </div>
+      </div>
+    </div>
+  </div>
+</section>
+   <footer  class="footer" th:replace="home :: footer">  
+  </footer>
+
+<th:block th:replace="home :: javascript">
+    <script type="application/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script type="application/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+</th:block>
+
+<script type="application/javascript" src="../static/js/quote.js" th:src="@{'/js/quote.js'}"></script>
+</body>
+</html>

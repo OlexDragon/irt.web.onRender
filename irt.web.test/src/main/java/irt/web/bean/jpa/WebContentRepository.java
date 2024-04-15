@@ -7,4 +7,5 @@ import org.springframework.data.repository.CrudRepository;
 public interface WebContentRepository extends CrudRepository<WebContent, WebContentId> {
 
 	List<WebContent> findByPageName(String webPage);
+	List<WebContent> findByPageNameAndNodeId(String webPage, String nodeId);
 }

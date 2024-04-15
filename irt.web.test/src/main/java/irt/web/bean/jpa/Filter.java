@@ -16,13 +16,15 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 @Entity
 @Table
-@Getter @Setter @ToString(exclude = "mainFilter")
+@Getter @Setter @ToString(exclude = {"mainFilter", "productFilters"})
 public class Filter implements Serializable{
 	private static final long serialVersionUID = 6315117908794414784L;
 
@@ -47,5 +49,9 @@ public class Filter implements Serializable{
 
     @OneToMany(mappedBy="mainFilter", fetch = FetchType.LAZY)
 	@OrderBy("filterOrder")
-	private List<Filter> subFilters;
+	private List<Filter> children;
+
+    @JsonIgnore
+    @OneToMany(mappedBy="filter", fetch = FetchType.LAZY)
+	private List<ProductFilter> productFilters;
 }

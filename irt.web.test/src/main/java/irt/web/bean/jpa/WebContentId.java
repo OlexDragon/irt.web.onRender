@@ -4,8 +4,11 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 
+import irt.web.bean.jpa.WebContent.ValueType;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -20,4 +23,9 @@ public class WebContentId implements Serializable{
 
 	@Id  @Column(updatable = false, insertable = false) private String	pageName;
 	@Id  @Column(updatable = false, insertable = false) private String	nodeId;
+
+	@Id
+	@Enumerated(EnumType.ORDINAL)
+	@Column(updatable = false, insertable = false)
+	private ValueType valueType;
 }

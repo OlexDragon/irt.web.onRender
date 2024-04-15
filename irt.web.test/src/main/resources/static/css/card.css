@@ -4,7 +4,8 @@
 }
 .our-product .card-title{
     font-size: 16px;
-    line-height: 1.2; 
+    line-height: 1.2;
+    text-shadow: none;
 }
 .card-text {
     font-size: 14px;
@@ -14,15 +15,10 @@
     cursor: pointer;
     max-height: 350px;
     transition: transform 0.3s ease;
-  }
-
-  
-  .our-product .card:hover{
-    transform: scale(1.05);
-    
 }
-
-  
+.our-product .card:hover{
+	transform: scale(1.05);
+}
 
 @media (max-width: 992px) {
     .card .card-title{

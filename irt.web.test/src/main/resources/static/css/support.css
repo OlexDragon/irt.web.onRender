@@ -1,0 +1,106 @@
+@import "./main.css";
+@import "./banner.css";
+@import "./button.css";
+@import "./font/font.css";
+@import "./footer.css";
+@import "./nav.css";
+
+body {
+	background-image: url("/images/jpeg/satellite2.jpg");
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-size: cover;
+/* 	background-color: rgba(255,255,255,0.85); */
+/* 	background-blend-mode: lighten; */
+}
+
+/* ==================== */
+.gui{
+  background-color: rgba(9, 49, 105, 0.898);
+  padding: 10px 0;
+}
+.gui h1{
+    margin-top: 20px;
+}
+.gui p{
+    margin-left: 20px;
+    margin-right: 20px;
+    font-size: 22px;
+}
+.faq p{
+    font-size: 20px;
+    padding-left: 10px;
+   
+}
+.faq .form-group{
+    margin-right: 20px;
+    margin-bottom: 20px;
+    position: relative;
+}
+#section-contact ul{
+    padding-left: 5px;
+}
+.faq h4:hover{
+    transform: scale(1.03);
+    cursor: pointer;
+}
+#companyModal h4{
+    color: white;
+}
+.modal-content{
+    background-color: rgb(9, 49, 105);
+    color: white;
+}
+
+.justify-content-md-center div:hover{
+	cursor: pointer;
+	color: var(--bs-warning);
+}
+input.form-control, input.form-control:focus{
+    color: white;
+    background-color: #00000000;
+}
+.form-floating>.form-control:valid:placeholder-shown~label{
+    color: yellow;
+}
+.form-floating>.form-control:not(:placeholder-shown)~label{
+    color: #676ad6;;
+}
+.form-floating>.form-control:not(:placeholder-shown)~label::after,
+.form-floating>.form-control:placeholder-shown~label::after{
+    background-color: #00000000;
+}
+.form-floating label{
+    color: #aaabe8;
+}
+.form-floating>textarea.form-control{
+	height: 100%;
+	color: white;
+    background-color: #00000000;
+}
+.btn-outline-light{
+	color: white;
+}
+.btn-outline-light:hover{
+    background-color: #5798f094;
+}
+.blink{ 
+	-webkit-animation: blink 1s step-end infinite;    
+	animation: blink 1s step-end infinite;    
+}
+@-webkit-keyframes blink {    
+    from, to {    
+        color: transparent    
+    }    
+    50% {    
+        color: yellow;  
+    }    
+}    
+@keyframes blink {    
+    from, to {    
+        color: transparent    
+    }    
+    50% {    
+        color: yellow;  
+    }    
+}    
