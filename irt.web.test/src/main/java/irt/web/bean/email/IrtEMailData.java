@@ -19,10 +19,7 @@ public class IrtEMailData {
 	private String objectId;
 	private String tenantId;
 	private String secretId;
-	private String clientSecret;	// id: 56a62c42-8e27-4ec4-ad02-e0bac1923743; Client Secret: p4-8Q~XNgXRbe-m0dcja9wRUrybeNmwlNR-a1aCt; Expires: 1/31/2026;
-									// Client Secret: p4-8Q~XNgXRbe-m0dcja9wRUrybeNmwlNR-a1aCt;
-									// Expires: 1/31/2026;
-									// link to renew: https://entra.microsoft.com/#view/Microsoft_AAD_RegisteredApps/ApplicationMenuBlade/~/Credentials/appId/697654a8-3939-4eac-b85a-8f6336ec1cc6/isMSAApp~/false
+	private String clientSecret;
 
 	public IrtEMailData(List<WebContent> webContents) {
 
