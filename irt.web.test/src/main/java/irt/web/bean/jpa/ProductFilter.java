@@ -3,17 +3,17 @@ package irt.web.bean.jpa;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import jakarta.persistence.Id;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.IdClass;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -35,9 +35,4 @@ public class ProductFilter implements Serializable{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="productId", referencedColumnName = "id", insertable = false, updatable = false)
     private Product product;
-
-    @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name="productId", referencedColumnName = "productId", insertable = false, updatable = false)
-	private List<ProductFilter> productFilters;
 }

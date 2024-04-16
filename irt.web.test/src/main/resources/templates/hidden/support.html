@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Support Page Editor</title>
-    <th:block th:replace="home :: links">
+    <th:block th:replace="~{home :: links}">
     	<link rel="preconnect" href="https://fonts.googleapis.com">
     	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     	<link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,300;0,500;1,100&display=swap" rel="stylesheet">
@@ -22,7 +22,7 @@
     	</div>
     </div>
 <div id="hpToast" class="toast-container fixed-bottom"></div>
-<th:block th:replace="home :: javascript">
+<th:block th:replace="~{home :: javascript}">
 </th:block>
     <script src="../../static/js/hidden/support.js" th:src="@{'/js/hidden/support.js'}"></script>
 </body>

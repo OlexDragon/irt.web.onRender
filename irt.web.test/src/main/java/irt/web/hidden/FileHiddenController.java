@@ -5,8 +5,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +21,7 @@ import irt.web.bean.FileWorker;
 import irt.web.bean.TrustStatus;
 import irt.web.bean.jpa.IpAddress;
 import irt.web.service.IpService;
+import jakarta.annotation.PostConstruct;
 
 @RestController
 @RequestMapping("hidden/files")

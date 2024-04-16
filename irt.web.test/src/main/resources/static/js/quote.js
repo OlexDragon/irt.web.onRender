@@ -47,6 +47,7 @@ function checkCard(){
 }
 function filled($card){
 	let $inputs = $card.find('input');
+	let byName = {};
 	let $filter = $inputs.filter((i,el)=>{
 
 						if(el.type == 'email')
@@ -54,6 +55,17 @@ function filled($card){
 
 						if(el.type == 'number')
 							return parseInt(el.value) > 0;
+
+						if(el.type == 'radio'){
+							
+							if(!byName[el.name])
+								byName[el.name] = [];
+
+							if(el.checked)
+								byName[el.name].push(el);
+
+							return true;
+						}
 
 						return el.value;
 					});

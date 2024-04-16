@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -28,6 +27,7 @@ import irt.web.bean.jpa.WebContent;
 import irt.web.bean.jpa.WebContentRepository;
 import irt.web.controllers.OnRenderRestController.BootstapClass;
 import irt.web.controllers.OnRenderRestController.ResponseMessage;
+import jakarta.annotation.PostConstruct;
 
 //@Service
 public class IrtMailWorker implements MailWorker {

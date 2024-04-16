@@ -17,6 +17,9 @@ input.form-control, input.form-control:focus{
     color: white;
     background-color: #00000000;
 }
+.form-floating>.form-control:valid:placeholder-shown~label{
+    color: yellow;
+}
 .form-floating>.form-control:placeholder-shown~label, .form-floating>.form-control:not(:placeholder-shown)~label, .form-floating>.form-control:not(:placeholder-shown)~label::after, .form-floating>.form-control:placeholder-shown~label::after{
     color: #676ad6;
     background-color: #00000000;

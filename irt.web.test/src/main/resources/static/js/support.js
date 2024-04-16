@@ -49,6 +49,9 @@ $('.justify-content-md-center div').click(e=>{
 
 			$modalRMA.modal('show');
 			break;
+
+		case "warr":
+			window.open('/pdf/IRT%20WARRANTY.pdf');
 	}
 });
 

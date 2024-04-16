@@ -3,13 +3,11 @@ package irt.web.bean.email;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -20,6 +18,7 @@ import irt.web.bean.jpa.WebContent;
 import irt.web.bean.jpa.WebContentRepository;
 import irt.web.controllers.OnRenderRestController.BootstapClass;
 import irt.web.controllers.OnRenderRestController.ResponseMessage;
+import jakarta.annotation.PostConstruct;
 
 //@Service
 public class SpringMailWorker implements MailWorker {
@@ -63,7 +62,7 @@ public class SpringMailWorker implements MailWorker {
 						.with("client_secret", irtEMailData.getClientSecret())
 						.with("grant_type", "client_credentials"))
 				.retrieve()
-				.onStatus(HttpStatus::isError, response -> response.bodyToMono(String.class).map(Exception::new))
+				.onStatus(HttpStatusCode::isError, response -> response.bodyToMono(String.class).map(Exception::new))
 				.bodyToMono(AccessToken.class)
 				.block();
 
@@ -87,8 +86,8 @@ public class SpringMailWorker implements MailWorker {
 				.header("Authorization", accessToken.getAccess_token())
 				.body(BodyInserters.fromValue(body))
 				.retrieve()
-				.onStatus(HttpStatus::is2xxSuccessful, response -> { sent.set(true); return response.bodyToMono(String.class).map(Exception::new);})
-				.onStatus(HttpStatus::isError, response -> response.bodyToMono(String.class).map(Exception::new))
+				.onStatus(HttpStatusCode::is2xxSuccessful, response -> { sent.set(true); return response.bodyToMono(String.class).map(Exception::new);})
+				.onStatus(HttpStatusCode::isError, response -> response.bodyToMono(String.class).map(Exception::new))
 				.bodyToMono(Void.class)
 				.block();
 

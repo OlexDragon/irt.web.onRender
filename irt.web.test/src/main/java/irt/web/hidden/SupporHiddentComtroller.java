@@ -11,8 +11,6 @@ import java.util.Scanner;
 import java.util.stream.Stream;
 import java.util.zip.ZipFile;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import irt.web.bean.TrustStatus;
 import irt.web.bean.jpa.IpAddress;
 import irt.web.service.IpService;
+import jakarta.annotation.PostConstruct;
 
 @Controller
 @RequestMapping("hidden/support")

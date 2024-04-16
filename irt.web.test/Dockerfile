@@ -1,4 +1,4 @@
-FROM eclipse-temurin:8-jdk-alpine
+FROM eclipse-temurin:22-jre-alpine
 RUN apk --no-cache add curl
 VOLUME /tmp
 COPY target/*.jar app.jar

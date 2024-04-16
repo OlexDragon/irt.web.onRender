@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Support - IRT Technologies Inc.</title>
-    <th:block th:replace="home :: links">
+    <th:block th:replace="~{home :: links}">
     	<link rel="preconnect" href="https://fonts.googleapis.com">
     	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     	<link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,300;0,500;1,100&display=swap" rel="stylesheet">
@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="../static/css/support.css" th:href="@{'/css/support.css'}">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary" th:replace="home :: irt_menu('support')">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary" th:replace="~{home :: irt_menu('support')}">
     </nav>
 
 <section class="support-section">
@@ -25,7 +25,8 @@
         <h1 class="text-uppercase">Support</h1>
         <div class="row justify-content-md-center text-center">
         	<div class="col-md-2" data-name="download"><h4>GUI Download</h4></div>
-			<div class="col-md-2" data-name="faq"><h4>FAQ</h4></div>
+			<div class="col-md-1" data-name="faq"><h4>FAQ</h4></div>
+			<div class="col-md-2" data-name="warr"><h4>IRT Warranty Policy</h4></div>
 			<div class="col-md-2" data-name="rma"><h4>Get RMA Number</h4></div>
         </div>
       </div>
@@ -138,9 +139,9 @@
     </div>
   </div>
 </section>
-	<footer  class="footer" th:replace="home :: footer"></footer>
+	<footer  class="footer" th:replace="~{home :: footer}"></footer>
 
-<th:block th:replace="home :: javascript">
+<th:block th:replace="~{home :: javascript}">
     <script type="application/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
     <script type="application/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 </th:block>

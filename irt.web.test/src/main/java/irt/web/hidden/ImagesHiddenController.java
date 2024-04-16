@@ -11,8 +11,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,6 +30,7 @@ import irt.web.bean.FileWorker;
 import irt.web.bean.TrustStatus;
 import irt.web.bean.jpa.IpAddress;
 import irt.web.service.IpService;
+import jakarta.annotation.PostConstruct;
 
 @RestController
 @RequestMapping("images/hidden")

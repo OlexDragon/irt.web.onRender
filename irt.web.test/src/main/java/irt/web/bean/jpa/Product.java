@@ -5,21 +5,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Getter @Setter @ToString(exclude = {"filters"})
+@Getter @Setter @ToString
 public class Product{
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,9 +26,6 @@ public class Product{
 	private String 	name;
 	@Column(insertable = false, columnDefinition = "default true")
 	private boolean active;
-
-	@OneToMany(targetEntity = ProductFilter.class, mappedBy = "filter", fetch = FetchType.LAZY)
-	List<Filter> filters;
 
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "productId")

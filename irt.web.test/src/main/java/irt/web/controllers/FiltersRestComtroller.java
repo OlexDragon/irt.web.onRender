@@ -5,13 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import javax.persistence.criteria.Subquery;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 import irt.web.bean.jpa.Filter;
 import irt.web.bean.jpa.FilterRepository;
 import irt.web.bean.jpa.ProductFilter;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.Subquery;
 
 @RestController
 @RequestMapping("rest/filter")
@@ -52,7 +51,7 @@ public class FiltersRestComtroller {
 		final Root<ProductFilter> root = sq.from(ProductFilter.class);
 		final List<Predicate> predicates = new ArrayList<>();
 
-		final Predicate predicate = cb.greaterThanOrEqualTo(cb.count(root.get("productId")), new Long(filterIDs.length));
+		final Predicate predicate = cb.greaterThanOrEqualTo(cb.count(root.get("productId")), Long.valueOf(filterIDs.length));
 		sq.groupBy(root.get("productId")).having(predicate);
 
 		root.alias("productId");

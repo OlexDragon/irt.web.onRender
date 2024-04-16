@@ -11,8 +11,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import irt.web.bean.TrustStatus;
 import irt.web.bean.jpa.IpAddress;
 import irt.web.service.IpService;
+import jakarta.annotation.PostConstruct;
 
 @RestController
 @RequestMapping("pdf/hidden")
