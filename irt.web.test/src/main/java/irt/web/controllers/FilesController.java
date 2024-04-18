@@ -1,8 +1,11 @@
 package irt.web.controllers;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +26,12 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.HandlerMapping;
 
 import irt.web.bean.ConnectTo;
 import irt.web.bean.TrustStatus;
@@ -33,6 +39,7 @@ import irt.web.bean.jpa.IpAddress;
 import irt.web.bean.jpa.IpConnection;
 import irt.web.service.IpService;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("files")
@@ -52,6 +59,40 @@ public class FilesController {
 	@PostConstruct
 	public void postConstruct() {
 		filesFolder = Paths.get(root, filesPath);
+	}
+
+	@GetMapping("get/**")
+	public ResponseEntity<InputStreamResource> get(HttpServletRequest request) throws FileNotFoundException {
+
+		final String pathFromUrl = ((String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE)).replaceFirst("/files/get/", "");
+		final String decoded = URLDecoder.decode(pathFromUrl, StandardCharsets.UTF_8);
+
+		HttpHeaders headers = new HttpHeaders();
+		Path filePath = filesFolder.resolve(decoded);
+		final String fileName = filePath.getFileName().toString();
+		headers.add("Content-Disposition", "inline; filename=\"" + fileName + "\"");
+
+		final InputStream is = new FileInputStream(filePath.toFile());
+
+		final BodyBuilder bodyBuilder = ResponseEntity.ok().headers(headers);
+
+
+		final String extension = FilenameUtils.getExtension(fileName);
+		final BodyBuilder contentType;
+		logger.error(extension);
+
+		switch(extension) {
+
+		case "pdf":
+			contentType = bodyBuilder.contentType(MediaType.APPLICATION_PDF);
+			break;
+
+		default:
+			contentType = bodyBuilder.contentType(MediaType.APPLICATION_OCTET_STREAM);
+		}
+
+		return contentType
+				.body(new InputStreamResource(is));
 	}
 
 	@GetMapping("gui")

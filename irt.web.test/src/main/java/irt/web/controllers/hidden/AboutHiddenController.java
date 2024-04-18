@@ -1,4 +1,4 @@
-package irt.web.hidden;
+package irt.web.controllers.hidden;
 
 import java.util.Optional;
 
@@ -12,18 +12,22 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import irt.web.bean.AboutPage;
 import irt.web.bean.TrustStatus;
 import irt.web.bean.jpa.IpAddress;
+import irt.web.bean.jpa.WebContent;
+import irt.web.bean.jpa.WebContentRepository;
 import irt.web.service.IpService;
 
 @Controller
 @RequestMapping("/hidden")
-public class EventHiddenController implements ErrorController {
+public class AboutHiddenController implements ErrorController {
 	private final Logger logger = LogManager.getLogger();
 
+	@Autowired private WebContentRepository	webRepository;
 	@Autowired private IpService ipService;
 
-	@GetMapping("news-events")
+	@GetMapping("about")
 	public String products(@CookieValue(required = false) String clientIP, Model model) {
 		logger.traceEntry("clientIP: '{}'", clientIP);
 
@@ -35,6 +39,10 @@ public class EventHiddenController implements ErrorController {
 			return "error";
 		}
 
-		return "hidden/news-events";
+		final Iterable<WebContent> aboutContent = webRepository.findByPageName("about");
+		AboutPage aboutPage = new AboutPage(aboutContent);
+		model.addAttribute("aboutPage", aboutPage);
+
+		return "hidden/about";
 	}
 }

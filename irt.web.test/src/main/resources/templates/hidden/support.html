@@ -21,7 +21,80 @@
     		</div>
     	</div>
     </div>
+    <div class="container mt-5" th:with="keySet=${docs.keySet()}">
+    	<div class="row">
+    		<div class="col">
+    			<h4>Documentation:</h4>
+    		</div>
+    		<div class="col-auto">
+    			<button id="btnAddDoc" class="btn btn-outline-primary">Add</button>
+    		</div>
+    	</div>
+     	<div class="row border m-2 p-2" th:each="description : ${keySet}" th:with="fileNames=${docs.get(description)}">
+    		<div class="col">
+    			<div class="row">
+	   				<div class="col" th:text="${description}"></div>
+ 					<button class="rename btn btn-sm btn-outline-info col-auto ms-1" th:data-name="${description}">Rename</button>
+  					<button class="delete btn btn-sm btn-outline-danger col-auto ms-1" th:if="${fileNames.isEmpty()}" th:data-url="@{'/hidden/files/delete/docs/' + ${description}}">Delete</button>
+ 	   				<div class="col">
+	   					<div class="row p-1 grid" th:each="fileName : ${fileNames}">
+	   						<div class="col"><a th:href="@{'/files/get/docs/' + ${description} + '/' + ${fileName}}" th:text="${fileName}" target="_blank"></a></div>
+							<button class="rename btn btn-sm btn-outline-info col-auto ms-1" th:data-name="${fileName}" th:data-parent="${description}">Rename</button>
+  					 		<button class="delete btn btn-sm btn-outline-danger col-auto ms-1" th:data-url="@{'/hidden/files/delete/docs/' + ${description} + '/' + ${fileName}}">Delete</button>
+	   					</div>
+	   				</div>
+    			</div>
+    		</div>
+    	</div>
+    </div>
 <div id="hpToast" class="toast-container fixed-bottom"></div>
+
+<div id="modalAddDoc" class="modal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Add/Replace Documentation file</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="form-floating">
+					<input id="docDescription" type="text" class="form-control" placeholder="Enter Doc Description">
+					<label for="docDescription">Enter Doc Description</label>
+				</div>
+				<div class="row mt-3">
+					<input id="docFile" type="file" class="form-control" style="display:none">
+					<label for="docFile" class="btn btn-outline-secondary">Select Doc File</label>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+				<button id="btmSaveFile" type="button" class="btn btn-outline-primary" disabled>Save File</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="modalRename" class="modal" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Rename</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="form-floating">
+					<input id="renameField" type="text" class="form-control" placeholder="Type new Name">
+					<label for="renameField">Type new Name</label>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+				<button id="btnRename" type="button" class="btn btn-outline-primary">Rename</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 <th:block th:replace="~{home :: javascript}">
 </th:block>
     <script src="../../static/js/hidden/support.js" th:src="@{'/js/hidden/support.js'}"></script>

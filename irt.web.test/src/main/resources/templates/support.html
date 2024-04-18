@@ -26,13 +26,13 @@
         <div class="row justify-content-md-center text-center">
         	<div class="col-md-2" data-name="download"><h4>GUI Download</h4></div>
 			<div class="col-md-1" data-name="faq"><h4>FAQ</h4></div>
-			<div class="col-md-2" data-name="warr"><h4>IRT Warranty Policy</h4></div>
+			<div class="col-md-2" data-name="docs"><h4>Documentation</h4></div>
 			<div class="col-md-2" data-name="rma"><h4>Get RMA Number</h4></div>
         </div>
       </div>
       <div class="overlay"></div>
     </div>
-    <div id="gui-download" class="section gui gui-download">
+    <div class="section gui gui-download">
 		<h1>IRT GUI Download</h1>
 		<div class="content">
         <p class="pre-line" th:utext="${guiText}">   IRT Technologies, an acronym for Intelligent RF Telecom technologies, designs, develops and manufactures advanced satellite RF systems and products for real time voice, data and multimedia delivery anywhere in the world.
@@ -61,6 +61,25 @@
 		</div>
       <div class="overlay"></div>
 	</div>
+	<div class="section docs">
+		<h1>IRT Documentation</h1>
+     	<div class="container mt-5" th:with="keySet=${docs.keySet()}">
+    		<div class="row m-2 p-2" th:each="description, stat : ${keySet}" th:classappend="${stat.odd} ? 'odd'" th:with="fileNames=${docs.get(description)}">
+    			<div class="col">
+    				<div class="row">
+	 		  			<p class="col" th:text="${description}"></p>
+  	 		  			<div class="col">
+	 		  				<div class="row p-1 grid" th:each="fileName : ${fileNames}">
+	 		  					<p class="col"><a class="link-warning link-underline link-underline-opacity-0" th:href="@{'/files/get/docs/' + ${description} + '/' + ${fileName}}" th:text="${fileName}" target="_blank"></a></p>
+			   				</div>
+			   			</div>
+    				</div>
+    			</div>
+    		</div>
+		</div>
+ 	</div>
+   <div class="section">
+   </div>
 
 <div id="modalFaq" class="modal fade support-modal" tabindex="-1" role="dialog" aria-labelledby="Answer" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">

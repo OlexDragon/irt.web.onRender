@@ -29,21 +29,21 @@
 <!-- 		<logger name="irt.web.ImagesTestController" level="all" /> -->
 
 <!-- 		<logger name="irt.web.ImagesTestController" level="all" /> -->
-<!-- 		<logger name="irt.web.hidden.ImagesHiddenController" level="all" /> -->
+<!-- 		<logger name="irt.web.controllers.hidden.ImagesHiddenController" level="all" /> -->
 
 <!-- 		<logger name="irt.web.controllers.SupporComtroller" level="all" /> -->
 <!-- 		<logger name="irt.web.controllers.PdfController" level="all" /> -->
-<!-- 		<logger name="irt.web.hidden.PdfHiddenController" level="all" /> -->
+<!-- 		<logger name="irt.web.controllers.hidden.PdfHiddenController" level="all" /> -->
 
-<!-- 		<logger name="irt.web.hidden.ProductHiddenController" level="all" /> -->
+<!-- 		<logger name="irt.web.controllers.hidden.ProductHiddenController" level="all" /> -->
 <!-- 		<logger name="irt.web.bean.email.IrtMailWorker" level="all" /> -->
 <!-- 		<logger name="irt.web.bean.email.SpringMailWorker" level="all" /> -->
 <!-- 		<logger name="irt.web.bean.email.CurlMailWorker" level="all" /> -->
 
 <!-- 		<logger name="irt.web.controllers.FilesController" level="all" /> -->
-<!-- 		<logger name="irt.web.hidden.FileHiddenController" level="all" /> -->
-
 <!-- 		<logger name="irt.web.controllers.FiltersRestComtroller" level="all" /> -->
+<!-- 		<logger name="irt.web.controllers.hidden.FileHiddenController" level="all" /> -->
+
 
         <Root level="info">
             <AppenderRef ref="ConsoleAppender" />

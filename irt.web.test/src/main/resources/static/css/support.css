@@ -15,17 +15,20 @@ body {
 }
 
 /* ==================== */
-.gui{
+.gui, .docs{
   background-color: rgba(9, 49, 105, 0.898);
   padding: 10px 0;
 }
 .gui h1{
     margin-top: 20px;
 }
-.gui p{
+.odd{
+    background-color: rgb(255, 255, 255, .08);
+}
+p{
     margin-left: 20px;
     margin-right: 20px;
-    font-size: 22px;
+    font-size: 1.5rem;
 }
 .faq p{
     font-size: 20px;
@@ -51,7 +54,10 @@ body {
     background-color: rgb(9, 49, 105);
     color: white;
 }
-
+.docs .container{
+	border-style: solid;
+	border-color: rgb(255, 255, 255, .08);
+}
 .justify-content-md-center div:hover{
 	cursor: pointer;
 	color: var(--bs-warning);

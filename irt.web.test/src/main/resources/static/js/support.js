@@ -23,6 +23,7 @@ $('.faq h4').click(e=>{
 const $nav = $('.navbar');
 const $guiDownload = $('.gui-download');
 const $faq = $('.faq');
+const $docs = $('.docs');
 const $modalRMA = $('#modalRMA');
 
 $('.justify-content-md-center div').click(e=>{
@@ -50,8 +51,10 @@ $('.justify-content-md-center div').click(e=>{
 			$modalRMA.modal('show');
 			break;
 
-		case "warr":
-			window.open('/pdf/IRT%20WARRANTY.pdf');
+		case "docs":
+			offset = $docs.offset();
+			window.scrollTo({ top: offset.top - height , behavior: 'smooth'});
+			break;
 	}
 });
 

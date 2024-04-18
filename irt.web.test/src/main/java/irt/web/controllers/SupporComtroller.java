@@ -36,6 +36,7 @@ import irt.web.bean.jpa.Faq;
 import irt.web.bean.jpa.FaqRepository;
 import irt.web.bean.jpa.WebContent;
 import irt.web.bean.jpa.WebContent.ValueType;
+import irt.web.service.DocumentsService;
 import irt.web.bean.jpa.WebContentId;
 import irt.web.bean.jpa.WebContentRepository;
 import irt.web.bean.jpa.WebMenuRepository;
@@ -59,8 +60,9 @@ public class SupporComtroller {
 	private String filesPath;
 
 	@Autowired private WebMenuRepository	menuRepository;
-	@Autowired private WebContentRepository	 webContentRepository;
-	@Autowired private FaqRepository	 	 faqRepository;
+	@Autowired private WebContentRepository	webContentRepository;
+	@Autowired private FaqRepository	 	faqRepository;
+	@Autowired private DocumentsService		docService;
 
 	@ModelAttribute("menus")
 	public List<ProductMenu> menus() {
@@ -113,6 +115,9 @@ public class SupporComtroller {
 		final Iterable<Faq> all = faqRepository.findAll();
 		logger.trace(all);
 		model.addAttribute("allFAQs", all);
+
+		// Documentation
+		docService.addDocuments(model);
 
 		return "support";
     }

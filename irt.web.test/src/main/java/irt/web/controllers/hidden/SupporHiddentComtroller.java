@@ -1,4 +1,4 @@
-package irt.web.hidden;
+package irt.web.controllers.hidden;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import irt.web.bean.TrustStatus;
 import irt.web.bean.jpa.IpAddress;
+import irt.web.service.DocumentsService;
 import irt.web.service.IpService;
 import jakarta.annotation.PostConstruct;
 
@@ -37,6 +38,7 @@ public class SupporHiddentComtroller {
 	private String filesPath;
 
 	@Autowired private IpService ipService;
+	@Autowired private DocumentsService docService;
 
 	private Path filesFolder;
 
@@ -93,6 +95,9 @@ public class SupporHiddentComtroller {
 							logger.catching(e);
 						}
 					});
+
+		// Documentation
+		docService.addDocuments(model);
 
 		return "hidden/support";
     }

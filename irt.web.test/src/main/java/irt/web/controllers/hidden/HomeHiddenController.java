@@ -1,4 +1,4 @@
-package irt.web.hidden;
+package irt.web.controllers.hidden;
 
 import java.util.List;
 import java.util.Map;

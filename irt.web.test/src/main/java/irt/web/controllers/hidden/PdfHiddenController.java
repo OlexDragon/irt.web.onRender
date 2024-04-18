@@ -1,4 +1,4 @@
-package irt.web.hidden;
+package irt.web.controllers.hidden;
 
 import java.io.File;
 import java.io.IOException;
