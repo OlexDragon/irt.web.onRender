@@ -87,7 +87,6 @@ public class OnRenderRestController {
 
 	@PostMapping("email/send")
     ResponseMessage emailSend(@CookieValue(required = false) String clientIP, @RequestBody WebEmail webEmail) {
-		logger.traceEntry("webEmail{}", webEmail);
 		logger.info("Client IP: {}", clientIP);
 
 		final LocalDateTime now = LocalDateTime.now(ZoneId.of("Canada/Eastern"));
@@ -142,7 +141,14 @@ public class OnRenderRestController {
 			return getMessage(message, BootstapClass.TXT_BG_WARNING);
 		}
 
-		return sendEmail(webEmail);
+		try {
+
+			return sendEmail(webEmail);
+
+		} catch (IOException e) {
+			logger.catching(e);
+			return getMessage(e.getLocalizedMessage(), BootstapClass.TXT_BG_DANGER);
+		}
     }
 
 	public static ResponseMessage getMessage(final String message, BootstapClass bootstapClass) {
@@ -153,7 +159,7 @@ public class OnRenderRestController {
 
 	private static LocalDateTime dateTime = LocalDateTime.now(ZoneId.of("Canada/Eastern")); 
 
-	private ResponseMessage sendEmail(WebEmail webEmail) {
+	private ResponseMessage sendEmail(WebEmail webEmail) throws IOException {
 
 		final List<WebContent> byPageName = webContentRepository.findByPageName("email");
 		final IrtEMailData irtEMailData = new IrtEMailData(byPageName);

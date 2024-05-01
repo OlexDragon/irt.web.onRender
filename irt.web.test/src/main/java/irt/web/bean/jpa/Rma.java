@@ -78,6 +78,8 @@ public class Rma{
 		READY,
 		CREATED,
 		CLOSED,
-		FIXED;
+		FIXED,
+		WAITTING,
+		FINALIZED;
 	}
 }

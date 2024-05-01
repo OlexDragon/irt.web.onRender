@@ -2,6 +2,8 @@ package irt.web.controllers.hidden;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -109,7 +111,8 @@ public class FileHiddenController extends FileWorker {
 		}
 
 		final String pathFromUrl = ((String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE)).replaceFirst("/hidden/files/rename/", "");
-		final Path pOriginal = filesFolder.resolve(pathFromUrl);
+		final String decoded = URLDecoder.decode(pathFromUrl, StandardCharsets.UTF_8);
+		final Path pOriginal = filesFolder.resolve(decoded);
 		final File fOriginal = pOriginal.toFile();
 
 		if(!fOriginal.exists()) 
@@ -138,7 +141,8 @@ public class FileHiddenController extends FileWorker {
 		}
 
 		final String pathFromUrl = ((String) request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE)).replaceFirst("/hidden/files/delete/", "");
-		final Path pOriginal = filesFolder.resolve(pathFromUrl);
+		final String decoded = URLDecoder.decode(pathFromUrl, StandardCharsets.UTF_8);
+		final Path pOriginal = filesFolder.resolve(decoded);
 
 		Files.delete(pOriginal);
 

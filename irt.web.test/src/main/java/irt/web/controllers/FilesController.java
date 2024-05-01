@@ -1,5 +1,7 @@
 package irt.web.controllers;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -70,16 +72,31 @@ public class FilesController {
 		HttpHeaders headers = new HttpHeaders();
 		Path filePath = filesFolder.resolve(decoded);
 		final String fileName = filePath.getFileName().toString();
-		headers.add("Content-Disposition", "inline; filename=\"" + fileName + "\"");
 
-		final InputStream is = new FileInputStream(filePath.toFile());
+		final File file = filePath.toFile();
+		final InputStream is;
+		final String extension;
+
+		if(file.exists()) {
+
+			is = new FileInputStream(file);
+			extension = FilenameUtils.getExtension(fileName);
+			headers.add("Content-Disposition", "inline; filename=\"" + fileName + "\"");
+
+		}else {
+
+			final String string = "The file " + fileName + " does not exist.";
+			is = new ByteArrayInputStream(string.getBytes());
+			extension = "txt";
+			final String baseName = FilenameUtils.getBaseName(fileName);
+			headers.add("Content-Disposition", "inline; filename=\"" + baseName + ".txt\"");
+			logger.warn(string);
+		}
 
 		final BodyBuilder bodyBuilder = ResponseEntity.ok().headers(headers);
 
 
-		final String extension = FilenameUtils.getExtension(fileName);
 		final BodyBuilder contentType;
-		logger.error(extension);
 
 		switch(extension) {
 
@@ -87,12 +104,15 @@ public class FilesController {
 			contentType = bodyBuilder.contentType(MediaType.APPLICATION_PDF);
 			break;
 
+		case "txt":
+			contentType = bodyBuilder.contentType(MediaType.TEXT_PLAIN);
+			break;
+
 		default:
 			contentType = bodyBuilder.contentType(MediaType.APPLICATION_OCTET_STREAM);
 		}
 
-		return contentType
-				.body(new InputStreamResource(is));
+		return contentType.body(new InputStreamResource(is));
 	}
 
 	@GetMapping("gui")

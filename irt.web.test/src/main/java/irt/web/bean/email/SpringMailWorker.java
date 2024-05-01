@@ -1,5 +1,6 @@
 package irt.web.bean.email;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -40,7 +41,7 @@ public class SpringMailWorker implements MailWorker {
     }
 
 	@Override
-	public ResponseMessage sendEmail(WebEmail webEmail) {
+	public ResponseMessage sendEmail(WebEmail webEmail) throws IOException {
 		logger.traceEntry("{}", webEmail);
 
 		final String tenantId = irtEMailData.getTenantId();

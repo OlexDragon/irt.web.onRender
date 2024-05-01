@@ -1,6 +1,7 @@
 package irt.web.bean.email;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -29,14 +30,16 @@ public class WebEmail {
 	private String industry;
 	private String message;
 
-	public String getHtml() {
+	public String getHtml() throws IOException {
 
 		final InputStream resourceAsStream = getClass().getResourceAsStream("/static/webEmail.html");
 		final String toSend = Optional.ofNullable(message).map(m->m.split("\n")).map(Arrays::stream).map(s->s.collect(Collectors.joining("<br/>"))).orElse("");
-		final String result = new BufferedReader(new InputStreamReader(resourceAsStream)).lines().collect(Collectors.joining());
+		try(final InputStreamReader is = new InputStreamReader(resourceAsStream);){
+			final String result = new BufferedReader(is).lines().collect(Collectors.joining());
 
-		final String format = String.format(result, firstName, lastName, phone, email, company, industry, toSend);
-		return format;
+			final String format = String.format(result, firstName, lastName, phone, email, company, industry, toSend);
+			return format;
+		}
 	}
 
 	public String getText() {
@@ -53,7 +56,7 @@ public class WebEmail {
 		return sb.toString();
 	}
 
-	public String toMimeHtml(String subject, String to) {
+	public String toMimeHtml(String subject, String to) throws IOException {
 
 		final StringBuilder sb = new StringBuilder();
 		sb.append("MIME-Version: 1.0").append('\n');
@@ -89,7 +92,7 @@ public class WebEmail {
 		return Base64.getMimeEncoder().encodeToString(string.getBytes());
 	}
 
-	public String toJSon(String subject, String to) {
+	public String toJSon(String subject, String to) throws IOException {
 
 		final String html = getHtml();
 		final Encoder mimeEncoder = Base64.getMimeEncoder();
@@ -119,7 +122,7 @@ public class WebEmail {
 			+ "}";
 	}
 
-	public WebEmailRequestBody toWebEmailRequestBody(String subject, String to) {
+	public WebEmailRequestBody toWebEmailRequestBody(String subject, String to) throws IOException {
 
 		List<WebEmailAddress> emails = new ArrayList<>();
 		emails.add(
