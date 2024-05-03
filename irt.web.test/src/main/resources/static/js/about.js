@@ -1,7 +1,12 @@
 
-let clientIP = Cookies.get('clientIP');
-if(!clientIP)
-	$.getJSON('https://ipapi.co/json/', data=>Cookies.set('clientIP', data.ip));
+
+let clientData = Cookies.get('clientData');
+//if(!clientData)
+	$.getJSON('https://ipapi.co/json/',
+		data=>{
+			const d = JSON.stringify(data);
+			Cookies.set('clientData', d);
+		});
 
 let $first = $('#first');
 let $last = $('#last');
@@ -12,46 +17,46 @@ let $industry= $('#industry');
 let $toSend = $('#toSend');
 let $toastContaner = $('#toastContaner');
 let sent = false;
-let $send = $('#send')
-.click(e=>{
+let $send = $('#send').click(
+	e=>{
 
-	if(sent || !validate() || 	$send.prop('disabled'))
-		return;
+		if(sent || !validate() || 	$send.prop('disabled'))
+			return;
 
-	let toSend = {};
+		let toSend = {};
 
-	toSend.firstName = $first.prop('readonly', true).val().trim();
-	toSend.lastName	 = $last.prop('readonly', true).val().trim();
-	toSend.phone	 = $phone.prop('readonly', true).val().trim();
-	toSend.email	 = $email.prop('readonly', true).val().trim();
-	toSend.company	 = $company.prop('readonly', true).val().trim();
-	toSend.industry	 = $industry.prop('readonly', true).val().trim();
-	toSend.message	 = $toSend.prop('readonly', true).val().trim();
-	$send.prop('disabled', true);
-	sent = true;
+		toSend.firstName = $first.prop('readonly', true).val().trim();
+		toSend.lastName	 = $last.prop('readonly', true).val().trim();
+		toSend.phone	 = $phone.prop('readonly', true).val().trim();
+		toSend.email	 = $email.prop('readonly', true).val().trim();
+		toSend.company	 = $company.prop('readonly', true).val().trim();
+		toSend.industry	 = $industry.prop('readonly', true).val().trim();
+		toSend.message	 = $toSend.prop('readonly', true).val().trim();
+		$send.prop('disabled', true);
+		sent = true;
 
-	var json = JSON.stringify(toSend);
+		var json = JSON.stringify(toSend);
 
-	$.ajax({
-		url: '/rest/email/send',
-		type: 'POST',
-		contentType: "application/json",
-		data: json,
-        dataType: 'json'
-    })
-	.done(function(data){
-		showToast('Response', data.message, data.cssClass);
-	})
-	.fail(function(error) {
+		$.ajax({
+			url: '/rest/email/send',
+			type: 'POST',
+			contentType: "application/json",
+			data: json,
+     	   dataType: 'json'
+		})
+		.done(function(data){
+			showToast('Response', data.message, data.cssClass);
+		})
+		.fail(function(error) {
 
-		if(error.statusText!='abort'){
-			if(error.responseText)
-				showToast('Error', error.responseText, 'text-bg-danger');
-			else
-				showToast('Error', "Server error. Status = " + error.status, 'text-bg-danger');
-		}
+			if(error.statusText!='abort'){
+				if(error.responseText)
+					showToast('Error', error.responseText, 'text-bg-danger');
+				else
+					showToast('Error', "Server error. Status = " + error.status, 'text-bg-danger');
+			}
+		});
 	});
-});
 
 let onFocus = false;
 $first.parents('.container').find('input, textarea')

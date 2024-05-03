@@ -6,20 +6,16 @@ import java.io.InputStreamReader;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import irt.web.bean.jpa.WebContent;
-import irt.web.bean.jpa.WebContentRepository;
 import irt.web.controllers.OnRenderRestController.BootstapClass;
 import irt.web.controllers.OnRenderRestController.ResponseMessage;
 
@@ -31,20 +27,14 @@ public class CurlMailWorker implements MailWorker {
 	private final String urlToSend	 = "https://graph.microsoft.com/v1.0/users/%s/sendMail";
 	private final String data		 = "client_id=%s&scope=%s&client_secret=%s&grant_type=client_credentials";
 
-	@Autowired private WebContentRepository	 		webContentRepository;
-
 	@Value("${app.graphUserScopes}")
 	private String graphUserScopes;
 
 	@Override
-	public ResponseMessage sendEmail(WebEmail webEmail) {
+	public ResponseMessage sendEmail(final WebEmail webEmail, final IrtEMailData irtEMailData) {
 		logger.info("{}", webEmail);
 
-   		final List<WebContent> webContents = webContentRepository.findByPageName("email");
-   		final IrtEMailData irtEMailData = new IrtEMailData(webContents);
-
 		try {
-
 
 			String authorization;
 

@@ -6,6 +6,6 @@ import irt.web.controllers.OnRenderRestController.ResponseMessage;
 
 public interface MailWorker {
 
-	ResponseMessage sendEmail(WebEmail webEmail) throws IOException;
+	ResponseMessage sendEmail(WebEmail webEmail, IrtEMailData irtEMailData) throws IOException;
 
 }

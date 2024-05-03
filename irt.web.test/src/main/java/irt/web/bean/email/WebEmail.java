@@ -12,15 +12,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import irt.web.bean.IpData;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @NoArgsConstructor @Getter @Setter @ToString
 public class WebEmail {
+	private final static Logger logger = LogManager.getLogger();
 
 	private String firstName;
 	private String lastName;
@@ -30,15 +35,31 @@ public class WebEmail {
 	private String industry;
 	private String message;
 
-	public String getHtml() throws IOException {
+	@NonNull
+	private Optional<IpData> ipData = Optional.empty();
+
+	public String toHtml() throws IOException {
 
 		final InputStream resourceAsStream = getClass().getResourceAsStream("/static/webEmail.html");
 		final String toSend = Optional.ofNullable(message).map(m->m.split("\n")).map(Arrays::stream).map(s->s.collect(Collectors.joining("<br/>"))).orElse("");
 		try(final InputStreamReader is = new InputStreamReader(resourceAsStream);){
-			final String result = new BufferedReader(is).lines().collect(Collectors.joining());
 
-			final String format = String.format(result, firstName, lastName, phone, email, company, industry, toSend);
-			return format;
+			String result;
+			String ipD;
+			result = new BufferedReader(is).lines().collect(Collectors.joining());
+			ipD = ipData.map(
+					t -> {
+							try {
+
+								return t.toHtml();
+
+							} catch (IOException e) {
+								logger.catching(e);
+								return "";
+							}
+						}).orElse("");
+
+			return String.format(result, firstName, lastName, phone, email, company, industry, toSend, ipD);
 		}
 	}
 
@@ -67,7 +88,7 @@ public class WebEmail {
 		sb.append("Content-Type: text/html; charset=UTF-8").append('\n');
 		sb.append("Content-Disposition: inline").append('\n');
 		sb.append("Content-Transfer-Encoding: quoted-printable").append("\n\n");
-		sb.append(getHtml()).append('\n');
+		sb.append(toHtml()).append('\n');
 
 		final String string = sb.toString();
 
@@ -94,7 +115,7 @@ public class WebEmail {
 
 	public String toJSon(String subject, String to) throws IOException {
 
-		final String html = getHtml();
+		final String html = toHtml();
 		final Encoder mimeEncoder = Base64.getMimeEncoder();
 		final String jSon = toJSon(subject, to, html);
 
@@ -131,7 +152,7 @@ public class WebEmail {
 
 		final WebEmailBody body = new WebEmailBody();
 		body.setContentType("HTML");
-		body.setContent(getHtml());
+		body.setContent(toHtml());
 
 		final WebEmailMessage webEmailMessage = new WebEmailMessage();
 		webEmailMessage.setSubject(subject);

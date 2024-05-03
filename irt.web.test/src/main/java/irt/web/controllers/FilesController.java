@@ -90,7 +90,7 @@ public class FilesController {
 			extension = "txt";
 			final String baseName = FilenameUtils.getBaseName(fileName);
 			headers.add("Content-Disposition", "inline; filename=\"" + baseName + ".txt\"");
-			logger.warn(string);
+			logger.warn("The file '" + file + "' does not exist.");
 		}
 
 		final BodyBuilder bodyBuilder = ResponseEntity.ok().headers(headers);

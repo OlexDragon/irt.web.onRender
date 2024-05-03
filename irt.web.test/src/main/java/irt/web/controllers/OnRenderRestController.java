@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
+import irt.web.bean.IpData;
 import irt.web.bean.ConnectTo;
 import irt.web.bean.TrustStatus;
 import irt.web.bean.email.IrtEMailData;
@@ -86,13 +87,13 @@ public class OnRenderRestController {
     }
 
 	@PostMapping("email/send")
-    ResponseMessage emailSend(@CookieValue(required = false) String clientIP, @RequestBody WebEmail webEmail) {
-		logger.info("Client IP: {}", clientIP);
+    ResponseMessage emailSend(@CookieValue(required = false) Optional<IpData> ipData, @RequestBody WebEmail webEmail) {
+		logger.info("Client IP: {}", ipData);
 
 		final LocalDateTime now = LocalDateTime.now(ZoneId.of("Canada/Eastern"));
 
 		// Check IP address
-		final Optional<IpAddress> oIpAddress = ipService.getIpAddress(clientIP);
+		final Optional<IpAddress> oIpAddress = Optional.empty(); //TODO ipService.getIpAddress(ipData);
 
 		// No clientIP or NOT_TRUSTED
 		if(!oIpAddress.filter(ra->ra.getTrustStatus()!=TrustStatus.NOT_TRUSTED).isPresent()) {
@@ -143,6 +144,7 @@ public class OnRenderRestController {
 
 		try {
 
+			webEmail.setIpData(ipData);
 			return sendEmail(webEmail);
 
 		} catch (IOException e) {
@@ -173,7 +175,7 @@ public class OnRenderRestController {
 				}
 				dateTime = LocalDateTime.now(ZoneId.of("Canada/Eastern"));
 
-				final ResponseMessage status = mailWorker.sendEmail(webEmail);
+				final ResponseMessage status = mailWorker.sendEmail(webEmail, irtEMailData);
 
 				return status;
 			}
