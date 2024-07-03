@@ -13,7 +13,6 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,10 +49,11 @@ public class FileHiddenController extends FileWorker {
 	}
 
 	@PostMapping(path="upload/gui", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public String uploadGui(@CookieValue(required = false) String clientIP, @RequestParam String folder, @RequestPart MultipartFile file){
-		logger.traceEntry("clientIP: {}; folder: {};", clientIP, folder);
+	public String uploadGui(HttpServletRequest request, @RequestParam String folder, @RequestPart MultipartFile file){
+		final String remoteAddr = request.getRemoteAddr();
+		logger.traceEntry("clientIP: {}; folder: {};", remoteAddr, folder);
 
-		final Optional<IpAddress> oIpAddress = ipService.getIpAddress(clientIP);
+		final Optional<IpAddress> oIpAddress = ipService.getIpAddress(remoteAddr);
 
 		if(!oIpAddress.filter(addr->addr.getTrustStatus()==TrustStatus.IRT).isPresent()) {
 			logger.warn("Not authorized to upload: {}", oIpAddress);
@@ -75,10 +75,11 @@ public class FileHiddenController extends FileWorker {
 	}
 
 	@PostMapping(path="upload/doc", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public String uploadDoc(@CookieValue(required = false) String clientIP, @RequestParam String folder, @RequestParam String subfolder, @RequestPart MultipartFile file){
-		logger.traceEntry("clientIP: {}; folder: {}; subfolder: {}", clientIP, folder, subfolder);
+	public String uploadDoc(HttpServletRequest request, @RequestParam String folder, @RequestParam String subfolder, @RequestPart MultipartFile file){
+		final String remoteAddr = request.getRemoteAddr();
+		logger.traceEntry("clientIP: {}; folder: {}; subfolder: {}", remoteAddr, folder, subfolder);
 
-		final Optional<IpAddress> oIpAddress = ipService.getIpAddress(clientIP);
+		final Optional<IpAddress> oIpAddress = ipService.getIpAddress(remoteAddr);
 
 		if(!oIpAddress.filter(addr->addr.getTrustStatus()==TrustStatus.IRT).isPresent()) {
 			logger.warn("Not authorized to upload: {}", oIpAddress);
@@ -100,10 +101,11 @@ public class FileHiddenController extends FileWorker {
 	}
 
 	@PostMapping(path="rename/**")
-	public String rename(@CookieValue(required = false) String clientIP, @RequestParam String renameTo, HttpServletRequest request) throws IOException{
-		logger.traceEntry("clientIP: {}; renameTo: {};", clientIP, renameTo);
+	public String rename(@RequestParam String renameTo, HttpServletRequest request) throws IOException{
+		final String remoteAddr = request.getRemoteAddr();
+		logger.traceEntry("clientIP: {}; renameTo: {};", remoteAddr, renameTo);
 
-		final Optional<IpAddress> oIpAddress = ipService.getIpAddress(clientIP);
+		final Optional<IpAddress> oIpAddress = ipService.getIpAddress(remoteAddr);
 
 		if(!oIpAddress.filter(addr->addr.getTrustStatus()==TrustStatus.IRT).isPresent()) {
 			logger.warn("Not authorized to upload: {}", oIpAddress);
@@ -130,10 +132,11 @@ public class FileHiddenController extends FileWorker {
 	}
 
 	@DeleteMapping(path="delete/**")
-	public String delete(@CookieValue(required = false) String clientIP, HttpServletRequest request) throws IOException{
-		logger.traceEntry("clientIP: {};", clientIP);
+	public String delete(HttpServletRequest request) throws IOException{
+		final String remoteAddr = request.getRemoteAddr();
+		logger.traceEntry("clientIP: {};", remoteAddr);
 
-		final Optional<IpAddress> oIpAddress = ipService.getIpAddress(clientIP);
+		final Optional<IpAddress> oIpAddress = ipService.getIpAddress(remoteAddr);
 
 		if(!oIpAddress.filter(addr->addr.getTrustStatus()==TrustStatus.IRT).isPresent()) {
 			logger.warn("Not authorized to upload: {}", oIpAddress);

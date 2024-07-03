@@ -17,7 +17,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +30,7 @@ import irt.web.bean.TrustStatus;
 import irt.web.bean.jpa.IpAddress;
 import irt.web.service.IpService;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("images/hidden")
@@ -83,10 +83,11 @@ public class ImagesHiddenController extends FileWorker {
 	}
 
 	@PostMapping(path="product/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public String addOneImages(@CookieValue(required = false) String clientIP, @RequestParam Long productId, @RequestPart MultipartFile file) {
-		logger.traceEntry("clientIP: {}; productId: {};", clientIP, productId);
+	public String addOneImages(HttpServletRequest request, @RequestParam Long productId, @RequestPart MultipartFile file) {
+		final String remoteAddr = request.getRemoteAddr();
+		logger.traceEntry("clientIP: {}; productId: {};", remoteAddr, productId);
 
-		final Optional<IpAddress> oRemoteAddress = ipService.getIpAddress(clientIP);
+		final Optional<IpAddress> oRemoteAddress = ipService.getIpAddress(remoteAddr);
 
 		if(!oRemoteAddress.isPresent() || oRemoteAddress.get().getTrustStatus()!=TrustStatus.IRT) {
 			logger.info("You are not authorized to perform this action.");
@@ -108,10 +109,11 @@ public class ImagesHiddenController extends FileWorker {
 	}
 
 	@PostMapping("delete")
-	public String deleteImage(@CookieValue(required = false) String clientIP, @RequestParam Path path) throws IOException{
-		logger.traceEntry("path: {};", path);
+	public String deleteImage(HttpServletRequest request, @RequestParam Path path) throws IOException{
+		final String remoteAddr = request.getRemoteAddr();
+		logger.traceEntry("remoteAddr: {}; path: {};", path);
 
-		final Optional<IpAddress> oRemoteAddress = ipService.getIpAddress(clientIP);
+		final Optional<IpAddress> oRemoteAddress = ipService.getIpAddress(remoteAddr);
 
 		if(!oRemoteAddress.isPresent() || oRemoteAddress.get().getTrustStatus()!=TrustStatus.IRT) {
 			logger.info("You are not authorized to perform this action.");
@@ -135,13 +137,14 @@ public class ImagesHiddenController extends FileWorker {
 	@PostMapping(path="carousel/card/add/{cardId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public String setCarouselImage(
 
-			@CookieValue(required = false) String clientIP,
+			HttpServletRequest request,
 			@PathVariable Long cardId,
 			@RequestPart MultipartFile file) {
+		final String remoteAddr = request.getRemoteAddr();
 
-		logger.traceEntry("cardId: {}; clientIP: {}", cardId, clientIP);
+		logger.traceEntry("cardId: {}; clientIP: {}", cardId, remoteAddr);
 
-		final Optional<IpAddress> oRemoteAddress = ipService.getIpAddress(clientIP);
+		final Optional<IpAddress> oRemoteAddress = ipService.getIpAddress(remoteAddr);
 
 		if(!oRemoteAddress.isPresent() || oRemoteAddress.get().getTrustStatus()!=TrustStatus.IRT) {
 			logger.info("You are not authorized to perform this action.");
@@ -173,13 +176,14 @@ public class ImagesHiddenController extends FileWorker {
 	@PostMapping(path="event/add/{eventId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public String setEventImage(
 
-			@CookieValue(required = false) String clientIP,
+			HttpServletRequest request,
 			@PathVariable Long eventId,
 			@RequestPart MultipartFile file) {
+		final String remoteAddr = request.getRemoteAddr();
 
-		logger.traceEntry("cardId: {}; clientIP: {}", eventId, clientIP);
+		logger.traceEntry("cardId: {}; clientIP: {}", eventId, remoteAddr);
 
-		final Optional<IpAddress> oRemoteAddress = ipService.getIpAddress(clientIP);
+		final Optional<IpAddress> oRemoteAddress = ipService.getIpAddress(remoteAddr);
 
 		if(!oRemoteAddress.isPresent() || oRemoteAddress.get().getTrustStatus()!=TrustStatus.IRT) {
 			logger.info("You are not authorized to perform this action.");

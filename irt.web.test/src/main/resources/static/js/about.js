@@ -5,7 +5,7 @@ let clientData = Cookies.get('clientData');
 	$.getJSON('https://ipapi.co/json/',
 		data=>{
 			const d = JSON.stringify(data);
-			Cookies.set('clientData', d);
+			Cookies.set('clientData', d, { path: window.location.pathname });
 		});
 
 let $first = $('#first');

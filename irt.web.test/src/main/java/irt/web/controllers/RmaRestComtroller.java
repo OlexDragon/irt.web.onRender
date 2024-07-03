@@ -20,7 +20,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -57,6 +56,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.NonNull;
 
@@ -241,16 +241,17 @@ public class RmaRestComtroller {
 	}
 
 	@PostMapping("create") @Transactional
-    ResponseMessage createRma(@CookieValue(required = false) String clientIP, @RequestBody RmaRequest rmaRequest){
-		logger.traceEntry("IP: {}; rmaRequest: {}", clientIP, rmaRequest);
+    ResponseMessage createRma(HttpServletRequest request, @RequestBody RmaRequest rmaRequest){
+		final String remoteAddr = request.getRemoteAddr();
+		logger.traceEntry("IP: {}; rmaRequest: {}", remoteAddr, rmaRequest);
 
 		// Check IP address
-		final Optional<IpAddress> oIpAddress = ipService.getIpAddress(clientIP);
+		final Optional<IpAddress> oIpAddress = ipService.getIpAddress(remoteAddr);
 
 		// No clientIP or NOT_TRUSTED
 		if(!oIpAddress.filter(ra->ra.getTrustStatus()!=TrustStatus.NOT_TRUSTED).isPresent()) {
-			final String message = "You are on the blacklist. ( #" + clientIP + " )";
-			logger.warn(message);
+			final String message = "You are on the blacklist. ( #" + remoteAddr + " )";
+			logger.warn(message + "\n\t" + rmaRequest);
 			return getMessage(message, BootstapClass.TXT_BG_DANGER);
 		}
 
@@ -317,15 +318,16 @@ public class RmaRestComtroller {
 		}
 	}
 	@PostMapping("change/status")
-    boolean changeStatus(@CookieValue(required = false) String clientIP, @RequestParam Long rmaId, @RequestParam Rma.Status status){
-		logger.traceEntry("clientIP: {}; rmaId: {}; status: {}", clientIP, rmaId, status);
+    boolean changeStatus(HttpServletRequest request, @RequestParam Long rmaId, @RequestParam Rma.Status status){
+		final String remoteAddr = request.getRemoteAddr();
+		logger.traceEntry("clientIP: {}; rmaId: {}; status: {}", remoteAddr, rmaId, status);
 
 		// Check IP address
-		final Optional<IpAddress> oIpAddress = ipService.getIpAddress(clientIP);
+		final Optional<IpAddress> oIpAddress = ipService.getIpAddress(remoteAddr);
 
 		// No clientIP or NOT_TRUSTED
 		if(!oIpAddress.filter(ra->ra.getTrustStatus()!=TrustStatus.NOT_TRUSTED).isPresent()) {
-			logger.warn("Not Trasted IP: {}", clientIP);
+			logger.warn("Not Trasted IP: {}", remoteAddr);
 			return false;
 		}
 

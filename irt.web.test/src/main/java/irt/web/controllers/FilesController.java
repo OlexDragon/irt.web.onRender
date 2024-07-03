@@ -26,10 +26,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseEntity.BodyBuilder;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -76,12 +77,14 @@ public class FilesController {
 		final File file = filePath.toFile();
 		final InputStream is;
 		final String extension;
+		final BodyBuilder bodyBuilder;
 
 		if(file.exists()) {
 
 			is = new FileInputStream(file);
 			extension = FilenameUtils.getExtension(fileName);
 			headers.add("Content-Disposition", "inline; filename=\"" + fileName + "\"");
+			bodyBuilder = ResponseEntity.ok().headers(headers);
 
 		}else {
 
@@ -91,9 +94,8 @@ public class FilesController {
 			final String baseName = FilenameUtils.getBaseName(fileName);
 			headers.add("Content-Disposition", "inline; filename=\"" + baseName + ".txt\"");
 			logger.warn("The file '" + file + "' does not exist.");
+			bodyBuilder = ResponseEntity.status(HttpStatus.NOT_FOUND).headers(headers);
 		}
-
-		final BodyBuilder bodyBuilder = ResponseEntity.ok().headers(headers);
 
 
 		final BodyBuilder contentType;
@@ -116,14 +118,15 @@ public class FilesController {
 	}
 
 	@GetMapping("gui")
-	public Object getGui(@CookieValue(required = false) String clientIP) throws IOException{
-		logger.traceEntry("clientIP: {};", clientIP);
+	public ResponseEntity<InputStreamResource> getGui(HttpServletRequest request) throws IOException{
+		final String remoteAddr = request.getRemoteAddr();
+		logger.info("RemoteAddre: {}", remoteAddr);
 
-		final Optional<IpAddress> oIpAddress = ipService.getIpAddress(clientIP).filter(ip->ip.getTrustStatus()!=TrustStatus.NOT_TRUSTED);
+		final Optional<IpAddress> oIpAddress = ipService.getIpAddress(remoteAddr).filter(ip->ip.getTrustStatus()!=TrustStatus.NOT_TRUSTED);
 
 		if(!oIpAddress.isPresent()) {
-			logger.warn("{} - Downloading is prohibited. You are blacklisted.", clientIP);
-			return "Downloading is prohibited. You are blacklisted.";
+			logger.warn("{} - Downloading is prohibited. You are blacklisted.", remoteAddr);
+			return downloadProhibited("Downloading is prohibited. You are blacklisted.", HttpStatus.BAD_REQUEST);
 		}
 
 		final LocalDateTime now = LocalDateTime.now(ZoneId.of("Canada/Eastern"));
@@ -131,18 +134,19 @@ public class FilesController {
 
 		final IpAddress ipAddress = oIpAddress.get();
 		final List<IpConnection> connections = ipService.getConnections(ipAddress.getId(), ConnectTo.GUI, monthAgo);
+		final InputStream is;
 
 		if(connections.size()>100 && ipAddress.getTrustStatus()==TrustStatus.UNKNOWN) {
 
-			logger.warn("{} - Downloading is prohibited. You are blacklisted.", clientIP);
+			logger.warn("{} - Downloading is prohibited. You are blacklisted.", remoteAddr);
 			ipAddress.setTrustStatus(TrustStatus.NOT_TRUSTED);
 			ipService.save(ipAddress);
-			return "Downloading is prohibited. You are blacklisted.";
+			return downloadProhibited("Downloading is prohibited. You are blacklisted.", HttpStatus.BAD_REQUEST);
 		}
 
 		final Optional<Long> oWait = connections.parallelStream().max(Comparator.comparing(IpConnection::getDate)).map(ic->ChronoUnit.MINUTES.between(ic.getDate(), now)).filter(l->l<15).map(l->15-l);
 		if(oWait.isPresent())
-			return "The next download can be done in " + oWait.get() + " minutes.";
+			return downloadProhibited("The next download can be done in " + oWait.get() + " minutes.", HttpStatus.LOCKED);
 
 		try(final Stream<Path> stream = Files.walk(filesFolder.resolve("gui")).filter(Files::isRegularFile);){
 
@@ -156,7 +160,7 @@ public class FilesController {
 				HttpHeaders headers = new HttpHeaders();
 				headers.add("Content-Disposition", "attachment; filename=\"" + filePath.getFileName() + "\"");
 
-				final InputStream is = new FileInputStream(filePath.toFile());
+				is = new FileInputStream(filePath.toFile());
 
 				return ResponseEntity.ok()
 
@@ -166,6 +170,14 @@ public class FilesController {
 			}
 		}
 
-		return "Sorry, GUI file not found.";
+		return downloadProhibited("Sorry, GUI file not found.", HttpStatus.NOT_FOUND);
+	}
+
+	private ResponseEntity<InputStreamResource> downloadProhibited(final String string, HttpStatusCode status) {
+		final InputStream is;
+		is = new ByteArrayInputStream(string.getBytes());
+		final HttpHeaders headers = new HttpHeaders();
+		headers.add("Content-Disposition", "inline; filename=\"gui.txt\"");
+		return ResponseEntity.status(status).headers(headers).contentType(MediaType.TEXT_PLAIN).body(new InputStreamResource(is));
 	}
 }

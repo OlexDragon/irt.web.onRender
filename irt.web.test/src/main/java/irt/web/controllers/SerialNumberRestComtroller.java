@@ -7,7 +7,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +19,8 @@ import irt.web.bean.jpa.PartNumber;
 import irt.web.bean.jpa.PartNumberRepository;
 import irt.web.bean.jpa.SerialNumber;
 import irt.web.bean.jpa.SerialNumberRepository;
-import irt.web.service.IpService; 
+import irt.web.service.IpService;
+import jakarta.servlet.http.HttpServletRequest; 
 
 @RestController
 @RequestMapping("rest/serial-number")
@@ -43,10 +43,11 @@ public class SerialNumberRestComtroller {
 	}
 
 	@PostMapping("save")
-    boolean save(@CookieValue(required = false) String clientIP, @RequestParam String sn, @RequestParam String pn, @RequestParam String descr){
+    boolean save(HttpServletRequest request, @RequestParam String sn, @RequestParam String pn, @RequestParam String descr){
+		final String remoteAddr = request.getRemoteAddr();
 
 		// Check IP address
-		final Optional<IpAddress> oIpAddress = ipService.getIpAddress(clientIP);
+		final Optional<IpAddress> oIpAddress = ipService.getIpAddress(remoteAddr);
 
 		// No clientIP or NOT_TRUSTED
 		if(!oIpAddress.filter(ra->ra.getTrustStatus()==TrustStatus.IRT).isPresent()) {

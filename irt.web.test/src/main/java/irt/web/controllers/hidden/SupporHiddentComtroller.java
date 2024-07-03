@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -26,6 +25,7 @@ import irt.web.bean.jpa.IpAddress;
 import irt.web.service.DocumentsService;
 import irt.web.service.IpService;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("hidden/support")
@@ -48,12 +48,12 @@ public class SupporHiddentComtroller {
 	}
 
 	@GetMapping
-    String support(@CookieValue(required = false) String clientIP, Model model){
+    String support(HttpServletRequest request, Model model){
+		final String remoteAddr = request.getRemoteAddr();
 
-		final Optional<IpAddress> oIpAddress = ipService.getIpAddress(clientIP);
+		final Optional<IpAddress> oIpAddress = ipService.getIpAddress(remoteAddr);
 
 		if(!oIpAddress.filter(addr->addr.getTrustStatus()==TrustStatus.IRT).isPresent()) {
-			model.addAttribute("errorCode", clientIP);
 			logger.info("{} redirected to error page", oIpAddress);
 			return "error";
 		}

@@ -42,6 +42,7 @@ import irt.web.bean.jpa.VariableContent;
 import irt.web.bean.jpa.WebContent;
 import irt.web.bean.jpa.WebContentRepository;
 import irt.web.service.IpService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
@@ -87,18 +88,19 @@ public class OnRenderRestController {
     }
 
 	@PostMapping("email/send")
-    ResponseMessage emailSend(@CookieValue(required = false) Optional<IpData> ipData, @RequestBody WebEmail webEmail) {
-		logger.info("Client IP: {}", ipData);
+    ResponseMessage emailSend(@CookieValue(required = false) Optional<IpData> ipData, @RequestBody WebEmail webEmail, HttpServletRequest request) {
+		final String remoteAddr = request.getRemoteAddr();
+		logger.info("Client IP: {}; remoteAddr: {}", ipData, remoteAddr);
 
 		final LocalDateTime now = LocalDateTime.now(ZoneId.of("Canada/Eastern"));
 
 		// Check IP address
-		final Optional<IpAddress> oIpAddress = Optional.empty(); //TODO ipService.getIpAddress(ipData);
+		final Optional<IpAddress> oIpAddress = ipService.getIpAddress(remoteAddr);
 
 		// No clientIP or NOT_TRUSTED
 		if(!oIpAddress.filter(ra->ra.getTrustStatus()!=TrustStatus.NOT_TRUSTED).isPresent()) {
 			final String message = "You are on the blacklist.";
-			logger.warn(message);
+			logger.warn(message + ".\n" + webEmail);
 			return getMessage(message, BootstapClass.TXT_BG_DANGER);
 		}
 

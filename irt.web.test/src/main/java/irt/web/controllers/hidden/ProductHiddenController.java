@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +17,7 @@ import irt.web.bean.jpa.IpAddress;
 import irt.web.bean.jpa.Product;
 import irt.web.bean.jpa.ProductRepository;
 import irt.web.service.IpService;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/hidden")
@@ -28,13 +28,13 @@ public class ProductHiddenController implements ErrorController {
 	@Autowired private IpService ipService;
 
 	@GetMapping("products")
-	public String products(@CookieValue(required = false) String clientIP, Model model) {
-		logger.traceEntry("clientIP: '{}'", clientIP);
+	public String products(HttpServletRequest request, Model model) {
+		final String remoteAddr = request.getRemoteAddr();
+		logger.traceEntry("clientIP: '{}'", remoteAddr);
 
-		final Optional<IpAddress> oRemoteAddress =ipService.getIpAddress(clientIP);
+		final Optional<IpAddress> oRemoteAddress =ipService.getIpAddress(remoteAddr);
 
 		if(!oRemoteAddress.isPresent() || oRemoteAddress.get().getTrustStatus()!=TrustStatus.IRT) {
-			model.addAttribute("errorCode", clientIP);
 			logger.info("{} redirected to error page", oRemoteAddress);
 			return "error";
 		}
@@ -46,12 +46,12 @@ public class ProductHiddenController implements ErrorController {
 	}
 
 	@GetMapping("product/{productId}")
-	public String product(@PathVariable Long productId, @CookieValue(required = false) String clientIP, Model model) {
+	public String product(@PathVariable Long productId, HttpServletRequest request, Model model) {
+		final String remoteAddr = request.getRemoteAddr();
 
-		final Optional<IpAddress> oRemoteAddress =ipService.getIpAddress(clientIP);
+		final Optional<IpAddress> oRemoteAddress =ipService.getIpAddress(remoteAddr);
 
 		if(!oRemoteAddress.isPresent() || oRemoteAddress.get().getTrustStatus()!=TrustStatus.IRT) {
-			model.addAttribute("errorCode", clientIP);
 			logger.info("{} redirected to error page", oRemoteAddress);
 			return "error";
 		}

@@ -27,8 +27,10 @@ input.form-control, input.form-control:focus{
 .form-floating label{
     color: #aaabe8;
 }
-.card-header h4{
-	color: #ffc107;
+.form-floating>textarea.form-control{
+	height: 100%;
+	color: white;
+    background-color: #00000000;
 }
 /* ==================== */
 .quote{
@@ -61,4 +63,13 @@ input.form-control, input.form-control:focus{
 }
 .container .done{
 	background-color: #12434bb3;
+}
+.card-header h4{
+	color: #ffc107;
+}
+.card.disabled{
+	background-color: rgba(63, 53, 53, 0.4);
+}
+.card.disabled h4{
+	color: gray;
 }

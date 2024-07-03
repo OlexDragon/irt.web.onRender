@@ -16,7 +16,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,6 +27,7 @@ import irt.web.bean.TrustStatus;
 import irt.web.bean.jpa.IpAddress;
 import irt.web.service.IpService;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("pdf/hidden")
@@ -70,10 +70,11 @@ public class PdfHiddenController {
 	}
 
 	@PostMapping(path="/product/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public String addPDF(@CookieValue(required = false) String clientIP, @RequestParam Long productId, @RequestPart MultipartFile file) {
-		logger.traceEntry("clientIP: {}; productId: {};", clientIP, productId);
+	public String addPDF(HttpServletRequest request, @RequestParam Long productId, @RequestPart MultipartFile file) {
+		final String remoteAddr = request.getRemoteAddr();
+		logger.traceEntry("clientIP: {}; productId: {};", remoteAddr, productId);
 
-		final Optional<IpAddress> oRemoteAddress = ipService.getIpAddress(clientIP);
+		final Optional<IpAddress> oRemoteAddress = ipService.getIpAddress(remoteAddr);
 
 		if(!oRemoteAddress.isPresent() || oRemoteAddress.get().getTrustStatus()!=TrustStatus.IRT) {
 			logger.info("You are not authorized to perform this action.");
@@ -94,10 +95,11 @@ public class PdfHiddenController {
 	}
 
 	@PostMapping("delete")
-	public String deletePDF(@CookieValue(required = false) String clientIP, @RequestParam Path path) throws IOException{
-		logger.traceEntry("path: {};", path);
+	public String deletePDF(HttpServletRequest request, @RequestParam Path path) throws IOException{
+		final String remoteAddr = request.getRemoteAddr();
+		logger.traceEntry("remoteAddr: {}; path: {};", remoteAddr, path);
 
-		final Optional<IpAddress> oRemoteAddress = ipService.getIpAddress(clientIP);
+		final Optional<IpAddress> oRemoteAddress = ipService.getIpAddress(remoteAddr);
 
 		if(!oRemoteAddress.isPresent() || oRemoteAddress.get().getTrustStatus()!=TrustStatus.IRT) {
 			logger.info("You are not authorized to perform this action.");
