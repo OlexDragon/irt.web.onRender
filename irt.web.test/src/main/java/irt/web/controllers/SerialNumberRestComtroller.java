@@ -1,6 +1,12 @@
 package irt.web.controllers;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -42,6 +48,9 @@ public class SerialNumberRestComtroller {
 		return serialNumberRepository.findBySerialNumberEndingWithIgnoreCase(sn, page).parallelStream().findAny();
 	}
 
+	private static ScheduledFuture<?> schedule;
+	private final static Map<String, Integer> ipCount = new HashMap<>();
+	private final static ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 	@PostMapping("save")
     boolean save(HttpServletRequest request, @RequestParam String sn, @RequestParam String pn, @RequestParam String descr){
 		final String remoteAddr = request.getRemoteAddr();
@@ -51,7 +60,18 @@ public class SerialNumberRestComtroller {
 
 		// No clientIP or NOT_TRUSTED
 		if(!oIpAddress.filter(ra->ra.getTrustStatus()==TrustStatus.IRT).isPresent()) {
-			logger.warn("Unauthorized access. ( {} )", oIpAddress.map(IpAddress::getId).orElse(-1L));
+			Optional.ofNullable(schedule).filter(sch->!sch.isCancelled() && !sch.isDone()).map(sch->sch.cancel(true));
+			Runnable r = ()->{
+				ipCount.entrySet()
+				.forEach(
+						e->{
+							logger.warn("{} - Unauthorized access {} times.", e.getKey(), e.getValue());
+						});
+				ipCount.clear();
+			};
+			Integer count = Optional.ofNullable(ipCount.get(remoteAddr)).orElse(0);
+			ipCount.put(remoteAddr, ++count);
+			schedule = executor.schedule(r, 1, TimeUnit.SECONDS);
 			return false;
 		}
 

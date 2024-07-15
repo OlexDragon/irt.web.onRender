@@ -145,8 +145,11 @@ public class FilesController {
 		}
 
 		final Optional<Long> oWait = connections.parallelStream().max(Comparator.comparing(IpConnection::getDate)).map(ic->ChronoUnit.MINUTES.between(ic.getDate(), now)).filter(l->l<15).map(l->15-l);
-		if(oWait.isPresent())
-			return downloadProhibited("The next download can be done in " + oWait.get() + " minutes.", HttpStatus.LOCKED);
+		if(oWait.isPresent()) {
+			final String string = "The next download can be done in " + oWait.get() + " minutes.";
+			logger.info(string);
+			return downloadProhibited(string, HttpStatus.LOCKED);
+		}
 
 		try(final Stream<Path> stream = Files.walk(filesFolder.resolve("gui")).filter(Files::isRegularFile);){
 
