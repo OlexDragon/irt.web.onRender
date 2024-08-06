@@ -260,8 +260,11 @@ public class RmaRestComtroller {
 		final IpAddress ipAddress = oIpAddress.get();
 		final Long ipAddressId = ipAddress.getId();
 		final List<IpConnection> connectionsIn5min = ipService.getConnections(ipAddressId, ConnectTo.WEB_EMAIL, LocalDateTime.now(ZoneId.of("Canada/Eastern")).minusMinutes(minTime));
-		if(!connectionsIn5min.isEmpty())
-			return getMessage("The next RMA number can be generated in " + minTime + " minutes.", BootstapClass.TXT_BG_WARNING);
+		if(!connectionsIn5min.isEmpty()) {
+			final String message = "The next RMA number can be generated in " + minTime + " minutes.";
+			logger.warn(message);
+			return getMessage(message, BootstapClass.TXT_BG_WARNING);
+		}
 
 		// Validate RmaRequest
 		if(!rmaRequest.isValid()) {
@@ -276,19 +279,26 @@ public class RmaRestComtroller {
 			if(sn.length()==7 && sn.replaceAll("\\D", "").length()==7) {	// Only Numbers
 				final Pageable page = PageRequest.of(0, 1);
 				final List<SerialNumber> serialNumbers = serialNumberRepository.findBySerialNumberEndingWithIgnoreCase(sn, page);
-				if(serialNumbers.isEmpty())
-					return getMessage("We have not produced devices with serial number: " + sn, BootstapClass.TXT_BG_DANGER);
-				else
+				if(serialNumbers.isEmpty()) {
+					final String message = "We have not produced devices with serial number: " + sn;
+					logger.warn(message);
+					return getMessage(message, BootstapClass.TXT_BG_DANGER);
+				}else
 					oSerialNumber = Optional.of(serialNumbers.get(0));
-			}else
-				return getMessage("We have not produced devices with serial number " + sn, BootstapClass.TXT_BG_DANGER);
+			}else {
+				final String message = "We have not produced devices with serial number " + sn;
+				logger.warn(message);
+				return getMessage(message, BootstapClass.TXT_BG_DANGER);
+			}
 		}
 
 		// Check if exists
 		final List<Rma> rmas = rmaRepository.findBySerialNumberSerialNumberIgnoreCaseAndStatusNot(sn, Status.SHIPPED);
 		if(!rmas.isEmpty()) {
 			final Rma rma = rmas.get(0);
-			return getMessage("The serial number " + sn + " already exists - " + rma.getRmaNumber() + statusToText(rma), BootstapClass.TXT_BG_WARNING);
+			final String message = "The serial number " + sn + " already exists - " + rma.getRmaNumber() + statusToText(rma);
+			logger.warn(message);
+			return getMessage(message, BootstapClass.TXT_BG_WARNING);
 		}
 
 		// Create RMA
