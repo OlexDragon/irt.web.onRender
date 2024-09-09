@@ -23,6 +23,7 @@ public class WebContent{
 	@Id private String	pageName;
 	@Id private String	nodeId;
 
+	@Column(length = 1000)
 	private String 	value;
 
 	@Enumerated(EnumType.ORDINAL)

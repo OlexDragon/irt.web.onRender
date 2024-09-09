@@ -229,12 +229,13 @@ public class RmaRestComtroller {
 	}
 
 	@GetMapping("ids-by-status")
-    List<Long> idsByStatus(@RequestParam Status status){
+    List<Long> idsByStatus(@RequestParam Status[] status){
 
 		final CriteriaBuilder criteriaBuilder	 = entityManager.getCriteriaBuilder();
 		final CriteriaQuery<Long> criteriaQuery	 = criteriaBuilder.createQuery(Long.class);
 		final Root<Rma> root					 = criteriaQuery.from(Rma.class);
-		criteriaQuery.where(criteriaBuilder.equal(root.get("status"), status.ordinal()));
+		final Object[] statusIds = Arrays.stream(status).map(s->s.ordinal()).toArray();
+		criteriaQuery.where(root.get("status").in(statusIds));
 		final CriteriaQuery<Long> select = criteriaQuery.select(root.get("id"));
 
 		return entityManager.createQuery(select).getResultList();
