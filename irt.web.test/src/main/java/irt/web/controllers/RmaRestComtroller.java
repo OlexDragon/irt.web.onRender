@@ -243,7 +243,7 @@ public class RmaRestComtroller {
 
 	@PostMapping("create") @Transactional
     ResponseMessage createRma(HttpServletRequest request, @RequestBody RmaRequest rmaRequest){
-		final String remoteAddr = request.getRemoteAddr();
+		final String remoteAddr = Optional.ofNullable(request.getHeader( "X-Forwarded-For" )).orElseGet(()->request.getRemoteAddr());
 		logger.traceEntry("IP: {}; rmaRequest: {}", remoteAddr, rmaRequest);
 
 		// Check IP address
@@ -330,7 +330,7 @@ public class RmaRestComtroller {
 	}
 	@PostMapping("change/status")
     boolean changeStatus(HttpServletRequest request, @RequestParam Long rmaId, @RequestParam Rma.Status status){
-		final String remoteAddr = request.getRemoteAddr();
+		final String remoteAddr = Optional.ofNullable(request.getHeader( "X-Forwarded-For" )).orElseGet(()->request.getRemoteAddr());
 		logger.traceEntry("clientIP: {}; rmaId: {}; status: {}", remoteAddr, rmaId, status);
 
 		// Check IP address

@@ -84,7 +84,7 @@ public class ImagesHiddenController extends FileWorker {
 
 	@PostMapping(path="product/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public String addOneImages(HttpServletRequest request, @RequestParam Long productId, @RequestPart MultipartFile file) {
-		final String remoteAddr = request.getRemoteAddr();
+		final String remoteAddr = Optional.ofNullable(request.getHeader( "X-Forwarded-For" )).orElseGet(()->request.getRemoteAddr());
 		logger.traceEntry("clientIP: {}; productId: {};", remoteAddr, productId);
 
 		final Optional<IpAddress> oRemoteAddress = ipService.getIpAddress(remoteAddr);
@@ -110,7 +110,7 @@ public class ImagesHiddenController extends FileWorker {
 
 	@PostMapping("delete")
 	public String deleteImage(HttpServletRequest request, @RequestParam Path path) throws IOException{
-		final String remoteAddr = request.getRemoteAddr();
+		final String remoteAddr = Optional.ofNullable(request.getHeader( "X-Forwarded-For" )).orElseGet(()->request.getRemoteAddr());
 		logger.traceEntry("remoteAddr: {}; path: {};", path);
 
 		final Optional<IpAddress> oRemoteAddress = ipService.getIpAddress(remoteAddr);
@@ -140,7 +140,7 @@ public class ImagesHiddenController extends FileWorker {
 			HttpServletRequest request,
 			@PathVariable Long cardId,
 			@RequestPart MultipartFile file) {
-		final String remoteAddr = request.getRemoteAddr();
+		final String remoteAddr = Optional.ofNullable(request.getHeader( "X-Forwarded-For" )).orElseGet(()->request.getRemoteAddr());
 
 		logger.traceEntry("cardId: {}; clientIP: {}", cardId, remoteAddr);
 
@@ -179,7 +179,7 @@ public class ImagesHiddenController extends FileWorker {
 			HttpServletRequest request,
 			@PathVariable Long eventId,
 			@RequestPart MultipartFile file) {
-		final String remoteAddr = request.getRemoteAddr();
+		final String remoteAddr = Optional.ofNullable(request.getHeader( "X-Forwarded-For" )).orElseGet(()->request.getRemoteAddr());
 
 		logger.traceEntry("cardId: {}; clientIP: {}", eventId, remoteAddr);
 

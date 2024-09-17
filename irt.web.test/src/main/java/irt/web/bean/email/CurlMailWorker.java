@@ -32,7 +32,7 @@ public class CurlMailWorker implements MailWorker {
 
 	@Override
 	public ResponseMessage sendEmail(final WebEmail webEmail, final IrtEMailData irtEMailData) {
-		logger.info("{}", webEmail);
+		logger.info("\n{}\n{}", webEmail, irtEMailData);
 
 		try {
 

@@ -49,7 +49,8 @@ public class SupporHiddentComtroller {
 
 	@GetMapping
     String support(HttpServletRequest request, Model model){
-		final String remoteAddr = request.getRemoteAddr();
+
+		final String remoteAddr = Optional.ofNullable(request.getHeader( "X-Forwarded-For" )).orElseGet(()->request.getRemoteAddr());
 
 		final Optional<IpAddress> oIpAddress = ipService.getIpAddress(remoteAddr);
 

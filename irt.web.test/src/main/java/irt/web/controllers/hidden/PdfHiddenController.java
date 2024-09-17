@@ -71,7 +71,7 @@ public class PdfHiddenController {
 
 	@PostMapping(path="/product/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public String addPDF(HttpServletRequest request, @RequestParam Long productId, @RequestPart MultipartFile file) {
-		final String remoteAddr = request.getRemoteAddr();
+		final String remoteAddr = Optional.ofNullable(request.getHeader( "X-Forwarded-For" )).orElseGet(()->request.getRemoteAddr());
 		logger.traceEntry("clientIP: {}; productId: {};", remoteAddr, productId);
 
 		final Optional<IpAddress> oRemoteAddress = ipService.getIpAddress(remoteAddr);
@@ -96,7 +96,7 @@ public class PdfHiddenController {
 
 	@PostMapping("delete")
 	public String deletePDF(HttpServletRequest request, @RequestParam Path path) throws IOException{
-		final String remoteAddr = request.getRemoteAddr();
+		final String remoteAddr = Optional.ofNullable(request.getHeader( "X-Forwarded-For" )).orElseGet(()->request.getRemoteAddr());
 		logger.traceEntry("remoteAddr: {}; path: {};", remoteAddr, path);
 
 		final Optional<IpAddress> oRemoteAddress = ipService.getIpAddress(remoteAddr);

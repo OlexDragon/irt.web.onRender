@@ -89,7 +89,7 @@ public class OnRenderRestController {
 
 	@PostMapping("email/send")
     ResponseMessage emailSend(@CookieValue(required = false) Optional<IpData> ipData, @RequestBody WebEmail webEmail, HttpServletRequest request) {
-		final String remoteAddr = request.getRemoteAddr();
+		final String remoteAddr = Optional.ofNullable(request.getHeader( "X-Forwarded-For" )).orElseGet(()->request.getRemoteAddr());
 		logger.info("Client IP: {}; remoteAddr: {}", ipData, remoteAddr);
 
 		final LocalDateTime now = LocalDateTime.now(ZoneId.of("Canada/Eastern"));

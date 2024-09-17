@@ -53,7 +53,7 @@ public class SerialNumberRestComtroller {
 	private final static ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 	@PostMapping("save")
     boolean save(HttpServletRequest request, @RequestParam String sn, @RequestParam String pn, @RequestParam String descr){
-		final String remoteAddr = request.getRemoteAddr();
+		final String remoteAddr = Optional.ofNullable(request.getHeader( "X-Forwarded-For" )).orElseGet(()->request.getRemoteAddr());
 
 		// Check IP address
 		final Optional<IpAddress> oIpAddress = ipService.getIpAddress(remoteAddr);
@@ -65,7 +65,7 @@ public class SerialNumberRestComtroller {
 				ipCount.entrySet()
 				.forEach(
 						e->{
-							logger.warn("{} - Unauthorized access {} times.", e.getKey(), e.getValue());
+							logger.warn("{} - Unauthorized access {} times. SN: {}; PN: {}; descr: {}", e.getKey(), e.getValue(), sn, pn, descr);
 						});
 				ipCount.clear();
 			};

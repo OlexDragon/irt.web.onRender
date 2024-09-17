@@ -1,6 +1,6 @@
 const clientIP = Cookies.get('clientIP');
 if(!clientIP)
-	$.get('https://api.ipify.org', data=>Cookies.set('clientIP', data, { path: window.location.pathname }));
+	$.get('https://api.ipify.org', data=>Cookies.set('clientIP', data));
 
 const $modal = $('#modalFaq');
 const $answer = $('#modalFaq .pre-line');

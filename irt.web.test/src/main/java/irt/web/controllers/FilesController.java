@@ -119,7 +119,7 @@ public class FilesController {
 
 	@GetMapping("gui")
 	public ResponseEntity<InputStreamResource> getGui(HttpServletRequest request) throws IOException{
-		final String remoteAddr = request.getRemoteAddr();
+		final String remoteAddr = Optional.ofNullable(request.getHeader( "X-Forwarded-For" )).orElseGet(()->request.getRemoteAddr());
 		logger.info("RemoteAddre: {}", remoteAddr);
 
 		final Optional<IpAddress> oIpAddress = ipService.getIpAddress(remoteAddr).filter(ip->ip.getTrustStatus()!=TrustStatus.NOT_TRUSTED);

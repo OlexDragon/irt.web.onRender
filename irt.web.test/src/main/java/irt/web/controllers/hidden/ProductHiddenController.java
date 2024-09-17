@@ -29,7 +29,7 @@ public class ProductHiddenController implements ErrorController {
 
 	@GetMapping("products")
 	public String products(HttpServletRequest request, Model model) {
-		final String remoteAddr = request.getRemoteAddr();
+		final String remoteAddr = Optional.ofNullable(request.getHeader( "X-Forwarded-For" )).orElseGet(()->request.getRemoteAddr());
 		logger.traceEntry("clientIP: '{}'", remoteAddr);
 
 		final Optional<IpAddress> oRemoteAddress =ipService.getIpAddress(remoteAddr);
@@ -47,7 +47,7 @@ public class ProductHiddenController implements ErrorController {
 
 	@GetMapping("product/{productId}")
 	public String product(@PathVariable Long productId, HttpServletRequest request, Model model) {
-		final String remoteAddr = request.getRemoteAddr();
+		final String remoteAddr = Optional.ofNullable(request.getHeader( "X-Forwarded-For" )).orElseGet(()->request.getRemoteAddr());
 
 		final Optional<IpAddress> oRemoteAddress =ipService.getIpAddress(remoteAddr);
 

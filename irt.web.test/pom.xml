@@ -12,7 +12,7 @@
 
 	<groupId>irt</groupId>
 	<artifactId>irt.onRender</artifactId>
-	<version>3.3.9</version>
+	<version>3.3.10</version>
 	<packaging>jar</packaging>
 
 	<name>HTTP Test</name>

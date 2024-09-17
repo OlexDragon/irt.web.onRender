@@ -25,7 +25,7 @@ public class EventHiddenController implements ErrorController {
 
 	@GetMapping("news-events")
 	public String products(HttpServletRequest request, Model model) {
-		final String remoteAddr = request.getRemoteAddr();
+		final String remoteAddr = Optional.ofNullable(request.getHeader( "X-Forwarded-For" )).orElseGet(()->request.getRemoteAddr());
 		logger.traceEntry("clientIP: '{}'", remoteAddr);
 
 		final Optional<IpAddress> oRemoteAddress = ipService.getIpAddress(remoteAddr);
