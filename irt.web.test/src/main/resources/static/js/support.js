@@ -90,10 +90,11 @@ $btnCreateRMA.parent().hover(()=>{
 	let isCause = causeLength>0;
 	if(!isCause)
 		$lblRmaCause.addClass('blink');
-	isCause = causeLength<=1000;
-	if(!isCause)
-		alert(`The maximum length for a fault description is 1000 characters, but you entered ${causeLength} characters.`);
-
+	else{
+		isCause = causeLength<=1000;
+		if(!isCause)
+			alert(`The maximum length for a fault description is 1000 characters, but you entered ${causeLength} characters.`);
+	}
 	const emailValue = $rmaEmail.val();
 	const match = emailValue.length<=255 && emailValue.toLowerCase().match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
 	if(!match)
