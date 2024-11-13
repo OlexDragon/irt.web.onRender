@@ -91,4 +91,19 @@ public class SerialNumberRestComtroller {
 
 		return true;
 	}
+
+	@RequestMapping("get-id")
+	Long getId(String serialNumber) {
+		return serialNumberRepository.getId(serialNumber);
+	}
+
+	@RequestMapping("by-sn")
+	Optional<SerialNumber> bySerialNumber(String serialNumber) {
+		return serialNumberRepository.findBySerialNumber(serialNumber);
+	}
+
+	@RequestMapping("by-id")
+	Optional<SerialNumber> byId(long id) {
+		return serialNumberRepository.findById(id);
+	}
 }

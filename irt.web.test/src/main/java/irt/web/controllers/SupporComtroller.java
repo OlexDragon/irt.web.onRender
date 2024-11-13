@@ -133,7 +133,7 @@ public class SupporComtroller {
 						.ifPresent(
 								irtGuiClass->{
 
-									LocalDateTime dt = LocalDateTime.ofInstant(Instant.ofEpochMilli(irtGuiClass.getTime()), ZoneId.of("Canada/Eastern")); 
+									LocalDateTime dt = LocalDateTime.ofInstant(Instant.ofEpochMilli(irtGuiClass.getTime()), ZoneId.systemDefault()); 
 									map.put(DATE, dt.format(DATE_FORMATTER));
 
 									try(	final InputStream is = jar.getInputStream(irtGuiClass);
