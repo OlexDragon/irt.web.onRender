@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import irt.web.bean.RmaCountByStatus;
 import irt.web.bean.jpa.Rma.Status;
 
 
@@ -40,4 +42,7 @@ public interface RmaRepository extends CrudRepository<Rma, Long> {
 	boolean existsBySerialNumberIdAndStatusNotIn(Long snId, Status... status);
 	boolean existsBySerialNumberSerialNumberIgnoreCaseAndStatusIn		(String sn, Status... status);
 	boolean existsBySerialNumberSerialNumberIgnoreCaseAndStatusNotIn	(String sn, Status... status);
+
+	@Query("SELECT new irt.web.bean.RmaCountByStatus(status, COUNT(*)) FROM Rma r WHERE r.status != 1 and r.status != 4 GROUP By r.status")
+	List<RmaCountByStatus> countByStatus();
 }

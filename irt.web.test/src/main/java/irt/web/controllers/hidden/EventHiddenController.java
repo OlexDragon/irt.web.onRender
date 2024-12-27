@@ -32,6 +32,7 @@ public class EventHiddenController implements ErrorController {
 
 		if(!oRemoteAddress.isPresent() || oRemoteAddress.get().getTrustStatus()!=TrustStatus.IRT) {
 			logger.info("{} redirected to error page", oRemoteAddress);
+			oRemoteAddress.map(IpAddress::getAddress).ifPresent(ip->model.addAttribute("errorCode", ip));
 			return "error";
 		}
 

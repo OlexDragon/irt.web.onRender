@@ -31,6 +31,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import irt.web.bean.ConnectTo;
 import irt.web.bean.RmaByIDsRequest;
+import irt.web.bean.RmaCountByStatus;
 import irt.web.bean.RmaData;
 import irt.web.bean.RmaRequest;
 import irt.web.bean.TrustStatus;
@@ -91,6 +92,10 @@ public class RmaRestComtroller {
 
 		return !rmaRepository.existsBySerialNumberSerialNumberIgnoreCaseAndStatusNotIn(sn, Status.SHIPPED, Status.CLOSED) &&
 				serialNumberRepository.existsBySerialNumberIgnoreCase(sn);
+	}
+	@GetMapping("count")
+    List<RmaCountByStatus> count(){
+		return rmaRepository.countByStatus();
 	}
 
 	@GetMapping("by-id")
@@ -328,6 +333,7 @@ public class RmaRestComtroller {
 			return getMessage(getErrorMessage(sb, e), BootstapClass.TXT_BG_DANGER);
 		}
 	}
+
 	@PostMapping("change/status")
     boolean changeStatus(HttpServletRequest request, @RequestParam Long rmaId, @RequestParam Rma.Status status){
 		final String remoteAddr = Optional.ofNullable(request.getHeader( "X-Forwarded-For" )).orElseGet(()->request.getRemoteAddr());

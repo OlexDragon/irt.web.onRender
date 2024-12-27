@@ -55,7 +55,9 @@ public class SupporHiddentComtroller {
 		final Optional<IpAddress> oIpAddress = ipService.getIpAddress(remoteAddr);
 
 		if(!oIpAddress.filter(addr->addr.getTrustStatus()==TrustStatus.IRT).isPresent()) {
-			logger.info("{} redirected to error page", oIpAddress);
+			logger.info("Redirected to error page: {}", oIpAddress);
+			oIpAddress.map(IpAddress::getAddress).ifPresent(ip->model.addAttribute("errorCode", ip));
+			
 			return "error";
 		}
 

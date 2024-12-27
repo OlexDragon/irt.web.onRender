@@ -32,7 +32,7 @@
 			<div class="card-header"><h4>To send you a price quote, we need information about you.</h4></div>
 			<div class="card-body">
         		<div class="form-floating mb-3">
-        			<input id="quoteName" type="text" class="form-control" placeholder="Name">
+        			<input id="quoteName" type="text" class="form-control" placeholder="Name" autofocus>
         			<label for="quoteName">Name</label>
         		</div>
         		<div class="form-floating mb-3">
@@ -70,50 +70,56 @@
 	</div>
     <div class="col-lg ps-0">
     <div class="row">
-    	<div class="card col-md border-light disabled">
-			<div class="card-header"><h4>Select the type of product you are looking for.</h4></div>
+    	<div id="typeCard" class="card col-md border-light disabled">
+			<div class="card-header"><h4>Select the Product Type.</h4></div>
 			<div class="card-body">
 				<div class="row row-cols-1">
 					<div class="col text-truncate">
 			      		<div class="form-check">
-							<input id="tupeOutdoor" name="cbType" type="radio" class="form-check-input visually-hidden" value="OUTDOOR" disabled>
+							<input id="typeOutdoor" name="cbType" type="radio" class="form-check-input visually-hidden" value="OUTDOOR" disabled>
 							<span class="checkbox-custom"></span>
-       						<label for="tupeOutdoor" class="form-check-label">Outdoor BUC/SSPA</label>
+       						<label for="typeOutdoor" class="form-check-label">Outdoor BUC/SSPA</label>
  						</div>
 					</div>
 					<div class="col text-truncate">
 		  	 			<div class="form-check">
- 							<input id="tupeRackMount" name="cbType" type="radio" class="form-check-input visually-hidden" value="RACK_MOUNT" disabled>
+ 							<input id="typeIndoor" name="cbType" type="radio" class="form-check-input visually-hidden" value="RACK_MOUNT" disabled>
 							<span class="checkbox-custom"></span>
-       						<label for="tupeRackMount" class="form-check-label">RackMount BUC/SSPA</label>
+       						<label for="typeIndoor" class="form-check-label">Indoor BUC/SSPA</label>
         				</div>
 					</div>
 					<div class="col text-truncate">
 		  	 			<div class="form-check">
- 							<input id="tupeConverter" name="cbType" type="radio" class="form-check-input visually-hidden" value="CONVERTER" disabled>
+ 							<input id="typeConverter" name="cbType" type="radio" class="form-check-input visually-hidden" value="CONVERTER" disabled>
 							<span class="checkbox-custom"></span>
-       						<label for="tupeConverter" class="form-check-label">Frequency Converters</label>
+       						<label for="typeConverter" class="form-check-label">Frequency Converters</label>
         				</div>
 					</div>
 					<div class="col">
 		  	 			<div class="form-check">
- 							<input id="tupeLNB" name="cbType" type="radio" class="form-check-input visually-hidden" value="LNB" disabled>
+ 							<input id="typeLNB" name="cbType" type="radio" class="form-check-input visually-hidden" value="LNB" disabled>
 							<span class="checkbox-custom"></span>
-       						<label for="tupeLNB" class="form-check-label">LNB</label>
+       						<label for="typeLNB" class="form-check-label">LNB</label>
         				</div>
+					</div>
+					<div class="col">
+						<div class="form-floating">
+							<input type="number" class="form-control" id="unitQuantity" placeholder="Number of Units" value="1" disabled>
+							<label for="unitQuantity">Number of Units</label>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
- 		<div class="card col-md border-light disabled">
-			<div class="card-header"><h4>Select the Frequency you are looking for.</h4></div>
+ 		<div id="freqCard" class="card col-md border-light disabled">
+			<div class="card-header"><h4>Select the Frequency Band.</h4></div>
 			<div class="card-body">
 				<div class="row row-cols-1">
-					<div class="col text-truncate">
+					<div class="col text-truncate visually-hidden">
 			      		<div class="form-check">
-   			     			<input id="freqKu" name="cbFrequency" type="radio" class="form-check-input visually-hidden" value="KU" disabled>
+   			     			<input id="freqL" name="cbFrequency" type="radio" class="form-check-input visually-hidden" value="L" disabled>
 							<span class="checkbox-custom"></span>
-							<label for="freqKu" class="form-check-label">Ku Band</label>
+							<label for="freqL" class="form-check-label">L Band</label>
 						</div>
 					</div>
 					<div class="col text-truncate">
@@ -132,17 +138,23 @@
 					</div>
 					<div class="col text-truncate">
 		  	 			<div class="form-check">
-       						<input id="freqKa" name="cbFrequency" type="radio" class="form-check-input visually-hidden" value="KA" disabled>
+       						<input id="freqKu" name="cbFrequency" type="radio" class="form-check-input visually-hidden" value="Ku" disabled>
 							<span class="checkbox-custom"></span>
-       						<label for="freqKa" class="form-check-label">Ka band</label>
+       						<label for="freqKu" class="form-check-label">Ku band</label>
        					</div>
 					</div>
 					<div class="col text-truncate">
 		  	 			<div class="form-check">
-       						<input id="freqTropo" name="cbFrequency" type="radio" class="form-check-input visually-hidden" value="TROPO" disabled>
+       						<input id="freqKa" name="cbFrequency" type="radio" class="form-check-input visually-hidden" value="Ka" disabled>
 							<span class="checkbox-custom"></span>
-       						<label for="freqTropo" class="form-check-label">Tropo band</label>
+       						<label for="freqKa" class="form-check-label">Ka band</label>
        					</div>
+					</div>
+					<div class="col">
+						<div class="form-floating">
+							<input type="text" class="form-control" id="customBand" placeholder="Custom Band" disabled>
+							<label for="customBand">Custom Band</label>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -154,41 +166,127 @@
 		<div class="overlay"></div>
 		<div class="container">
 			<div class="row">
-				<div class="card col-md border-light disabled">
-					<div class="card-header"><h4>Select the required power.</h4></div>
+				<div id="productName" class="card col-xs-12 col-md-6 col-lg-4 border-light not-lnb disabled">
+					<div class="card-header"><h4>Select the product by name..</h4></div>
 					<div class="card-body">
-						<div class="row" th:each="p: ${power}">
-							<div class="col text-truncate" th:each="v: ${p}">
+						<div id="productNames" class="row">
+							<div class="col">
         						<div class="form-check">
-      								<input id="power8" name="cbFrequency" type="radio" class="form-check-input visually-hidden" value="8" th:id="'power' + ${v}" th:value="${v}" disabled>
+      								<input id="chPicoBuc" name="cbBucName" type="radio" class="form-check-input visually-hidden" disabled>
 									<span class="checkbox-custom"></span>
-       								<label for="power8" class="form-check-label" th:for="'power' + ${v}" th:text="${v} + 'W'">8W</label>
+       								<label for="chPicoBuc" class="form-check-label text-truncate">PicoBUC</label>
         						</div>
         					</div>
+ 		   					<div class="col text-primary">
+ 		   						<div id="picoBucSize" class="row row-cols-1">
+ 		   							<div class="col text-truncate">7.6” x 6.75” x 3.55”</div>
+ 		   							<div class="col text-truncate">6.5” x 6.5” x 4.5”</div>
+ 		   							<div class="col text-truncate">5.5" x 5.9" x 3.8"</div>
+ 		   						</div>
+ 		   					</div>
+ 		   					<div class="col-12 border-bottom"></div>
+							<div class="col">
+        						<div class="form-check">
+      								<input id="chAntBuc" name="cbBucName" type="radio" class="form-check-input visually-hidden" disabled>
+									<span class="checkbox-custom"></span>
+       								<label for="chAntBuc" class="form-check-label">AntBUC</label>
+        						</div>
+        					</div>
+ 		   					<div class="col text-primary">
+ 		   						<div id="antBucSize" class="row row-cols-1" th:remove="body">
+ 		   							<div class="col">15.9"x9"x5.2"</div>
+ 		   							<div class="col"> 18.5"x13.5"x10" ”</div>
+ 		   							<div class="col">5.5" x 5.9" x 3.8"</div>
+ 		   						</div>
+ 		   					</div>
+ 		   					<div class="col-12 border-bottom"></div>
+							<div class="col">
+        						<div class="form-check">
+      								<input id="chKiloBuc" name="cbBucName" type="radio" class="form-check-input visually-hidden" disabled>
+									<span class="checkbox-custom"></span>
+       								<label for="chKiloBuc" class="form-check-label">KiloBUC</label>
+        						</div>
+        					</div>
+ 		   					<div class="col text-primary">
+ 		   						<div id="kicoBucSize" class="row row-cols-1" th:remove="body">
+ 		   							<div class="col">15.9"x9"x5.2"</div>
+ 		   							<div class="col"> 18.5"x13.5"x10" ”</div>
+ 		   							<div class="col">5.5" x 5.9" x 3.8"</div>
+ 		   						</div>
+ 		   					</div>
+ 		   					<div class="col-12 border-bottom"></div>
+							<div class="col">
+        						<div class="form-check">
+      								<input id="chFemtoBuc" name="cbBucName" type="radio" class="form-check-input visually-hidden" disabled>
+									<span class="checkbox-custom"></span>
+       								<label for="chFemtoBuc" class="form-check-label">FemtoBUC</label>
+        						</div>
+        					</div>
+ 		   					<div class="col text-primary">
+ 		   						<div id="fwmtoBucSize" class="row row-cols-1" th:remove="body">
+ 		   							<div class="col">15.9"x9"x5.2"</div>
+ 		   							<div class="col"> 18.5"x13.5"x10" ”</div>
+ 		   							<div class="col">5.5" x 5.9" x 3.8"</div>
+ 		   						</div>
+ 		   					</div>
  						</div>
+						<div class="card-footer">
+							<div class="form-floating">
+								<input id="customPower" type="text" class="form-control" placeholder="Custom Power">
+								<label for="customBand">Custom Power</label>
+							</div>
+						</div>
 					</div>
-					<div class="card-footer"> test</div>
 				</div>
-				<div class="card col-md-3 border-light disabled">
-					<div class="card-header"><h4>Choose between Amplifier and BUC</h4></div>
+				<div id="supplyVoltages" class="card col-xs-12 col-md-4 col-lg-2 col-md border-light not-lnb disabled set-enable">
+					<div id="supplyVoltages" class="card-header"><h4>Select supply voltage</h4></div>
 					<div class="card-body">
 						<div class="row row-cols-1">
 							<div class="col text-truncate">
 			      				<div class="form-check">
-									<input id="tupeSSPB" name="cbBUC" type="radio" class="form-check-input visually-hidden" value="SSPB" disabled>
+									<input id="cbSupplyAC" name="supplyVoltage" type="radio" class="form-check-input visually-hidden" value="AC" disabled>
 									<span class="checkbox-custom"></span>
-       								<label for="tupeSSPB" class="form-check-label">SSPB</label>
+       								<label for="cbSupplyAC" class="form-check-label">AC</label>
  								</div>
 			      				<div class="form-check">
-									<input id="tupeSSPA" name="cbBUC" type="radio disabled" class="form-check-input visually-hidden" value="SSPA" disabled>
+									<input id="cbSupplyDC18" name="supplyVoltage" type="radio" class="form-check-input visually-hidden" value="DC18" disabled>
 									<span class="checkbox-custom"></span>
-       								<label for="tupeSSPA" class="form-check-label">SSPA</label>
+       								<label for="cbSupplyDC18" class="form-check-label">18-75 VDC</label>
+ 								</div>
+			      				<div class="form-check">
+									<input id="cbSupplyDC36" name="supplyVoltage" type="radio" class="form-check-input visually-hidden" value="DC36" disabled>
+									<span class="checkbox-custom"></span>
+       								<label for="cbSupplyDC36" class="form-check-label">36-75 VDC</label>
+ 								</div>
+			      				<div class="form-check">
+									<input id="cbSupplyDCIF" name="supplyVoltage" type="radio" class="form-check-input visually-hidden" value="DCIF" disabled>
+									<span class="checkbox-custom"></span>
+       								<label for="cbSupplyDCIF" class="form-check-label">DC via IF</label>
  								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="card col-md-3 border-light disabled">
+				<div id="amplifireBuc" class="card col-xs-12 col-md-4 col-lg-2 col-md border-light not-lnb disabled set-enable">
+					<div class="card-header"><h4>Choose between Amplifier and BUC</h4></div>
+					<div class="card-body">
+						<div class="row row-cols-1">
+							<div class="col text-truncate">
+			      				<div class="form-check">
+									<input id="typeSSPB" name="cbBUC" type="radio" class="form-check-input visually-hidden" value="SSPB" disabled>
+									<span class="checkbox-custom"></span>
+       								<label for="typeSSPB" class="form-check-label">SSPB</label>
+ 								</div>
+			      				<div class="form-check">
+									<input id="typeSSPA" name="cbBUC" type="radio" class="form-check-input visually-hidden" value="SSPA" disabled>
+									<span class="checkbox-custom"></span>
+       								<label for="typeSSPA" class="form-check-label">SSPA</label>
+ 								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="referenceClock" class="card col-xs-12 col-md-4 col-lg-2 col-md border-light not-lnb disabled set-enable">
 					<div class="card-header"><h4>Select a reference clock.</h4></div>
 					<div class="card-body">
 						<div class="row row-cols-1">
@@ -215,9 +313,9 @@
 			</div>
 		</div>
 	</div>
-    <div class="section quote row">
+    <div class="section quote">
 		<div class="row">
-			<div class="card col-mdt border-light disabled">
+			<div class="card col col-mdt border-light disabled">
 				<div class="card-body">
  		      		<div class="form-floating mb-3">
 						<textarea id="quoteText" rows="12" class="form-control" placeholder="Add more details." disabled></textarea>
@@ -233,20 +331,67 @@
 			<button class="form-control btn home-btn shine-button" disabled>Send the Quote</button>
 		</div>
 	</div>
-<div class="modal fade quote-modal" tabindex="-1" role="dialog" aria-labelledby="Answer" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-      <div class="modal-content  ">
-        <div class="modal-header">
-          <h5 class="modal-title text-warning"></h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body row">
-          <p class="pre-line">
-          </p>
-         </div>
-      </div>
-    </div>
-  </div>
+<div id="modal" class="modal fade quote-modal" role="dialog" aria-labelledby="Answer" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true" th:remove="body">
+
+	<div class="modal-dialog" th:fragment="band">
+<!-- Select : Band -->
+    	<div class="modal-content">
+      		<div class="modal-header">
+        		<h5 class="modal-title" th:text="${header}">L-Band : Select</h5>
+        		<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      		</div>
+      		<div class="modal-body">
+        		<div class="row row-cols-2 text-start fw-bolder">
+        		<th:block th:each="arr: ${arrayList}">
+        			<div class="col">
+ 		  	 			<div class="form-check text-end">
+       						<input th:id="'cb' + ${arr.arrayId.subtype}" name="chBand" th:type="${isConverter} ? 'checkbox' : 'radio'" class="form-check-input visually-hidden" th:value="${arr.arrayId.subtype}">
+							<span class="checkbox-custom"></span>
+       						<label th:for="'cb' + ${arr.arrayId.subtype}" class="form-check-label" th:text="${arr.arrayId.type}">C-band</label>
+       					</div>
+        			</div>
+        			<div class="col pt-2">
+        				<div class="row row-cols-1">
+ 		   					<label th:for="'cb' + ${arr.arrayId.subtype}" class="col text-info" th:each="freq: ${arr.content}" th:text="${freq}">5.85-6.425 GHz</label>
+ 		   				</div>
+ 		   			</div>
+ 		   		</th:block>
+         		</div>
+      		</div>
+      		<div class="modal-footer">
+        		<button type="button" class="btn btn-info" data-bs-dismiss="modal">Close</button>
+			</div>
+ 		</div>
+	</div>
+
+	<div class="modal-dialog" th:fragment="product-power">
+<!-- Product : Power -->
+    	<div class="modal-content">
+      		<div class="modal-header">
+        		<h5 class="modal-title" th:text="${name}">AntBUC : Select Power</h5>
+        		<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      		</div>
+      		<div class="modal-body">
+        		<div class="row row-cols-2 text-start ms-4 fw-bolder">
+        		<th:block th:each="arr: ${listArrays}">
+        			<div class="col">
+ 		  	 			<div class="form-check">
+       						<input th:id="'cb' + ${arr.arrayId.type}" name="chKaBand" type="radio" class="form-check-input visually-hidden" th:value="${arr.arrayId.type}">
+							<span class="checkbox-custom"></span>
+       						<label th:for="'cb' + ${arr.arrayId.type}" class="form-check-label" th:text="${arr.arrayId.type} + 'W'">10W</label>
+       					</div>
+        			</div>
+ 		   			<div class="col text-info pt-2" th:text="${arr.content[0]}">27.0-28.0 GHz</div>
+ 		   		</th:block>
+      			</div>
+      		</div>
+      		<div class="modal-footer">
+        		<button type="button" class="btn btn-info" data-bs-dismiss="modal">Close</button>
+			</div>
+ 		</div>
+	</div>
+</div>
+
 </section>
    <footer  class="footer" th:replace="~{home :: footer}">  
   </footer>

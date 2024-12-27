@@ -57,3 +57,13 @@ function filterSelected(){
 		setTimeout(()=>$btnGetSelected.removeClass('nav-blink'), 3000);
 	});
 }
+function postObject(url, object){
+	const toSend = JSON.stringify(object);
+	return $.ajax({
+	        url: url,
+	        type: 'POST',
+	        contentType: 'application/json',
+	        data: toSend,
+	        dataType: 'json'
+	    });
+}
