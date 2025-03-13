@@ -173,7 +173,7 @@ public class OnRenderController implements ErrorController {
 		final AtomicReference<Predicate> where = new AtomicReference<>();
 		final Optional<List<Long>> oFilters = Optional.ofNullable(filterIDs).filter(ids->!ids.isEmpty());
 		oFilters.ifPresent(
-				ids->{
+				_->{
 					final List<Predicate> predicates = new ArrayList<>();
 					filterIDs.forEach(id -> predicates.add(criteriaBuilder.equal(productFilterRoot.get("filterId"), id)));
 					final Predicate[] array = predicates.toArray(new Predicate[predicates.size()]);
@@ -183,7 +183,7 @@ public class OnRenderController implements ErrorController {
 		//  WHERE search LIKE
 		Optional.ofNullable(search).filter(s->!s.isEmpty())
 		.ifPresent(
-				s->{
+				_->{
 					final Predicate like = criteriaBuilder.like(criteriaBuilder.lower(filterJoin.get("name")), '%' + search.toLowerCase() + '%');
 					final Predicate predicate = where.get();
 

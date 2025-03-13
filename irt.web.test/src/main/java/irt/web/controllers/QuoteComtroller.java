@@ -46,7 +46,7 @@ public class QuoteComtroller {
 	 */
 	@PostMapping("modal")
     String modal(@RequestParam String name, Model model){
-		logger.error("name: {};", name);
+		logger.traceEntry("name: {};", name);
 
 		final List<IrtArrays> listArrays = arraysRepository.findByArrayIdNameOrderByArrayIdType(name);
 		model.addAttribute("arrayList", listArrays);

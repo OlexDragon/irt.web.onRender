@@ -20,7 +20,7 @@ const $redNeed	= $('input[name=cbRedundancy]').on('input', function(e){
 
 		case redYes:
 
-			const $input = $('<input>', {type: 'number', class: 'form-control', id: 'redQuantity', placeholder: 'Number of Systems', value: 1}).on('input', checkCard).on('input', redundChange);
+			const $input = $('<input>', {type: 'number', class: 'form-control', id: 'redQuantity', placeholder: 'Number of Systems', value: 1, disabled: true}).on('input', redundChange).on('input', checkCard);
 
 			const $oneToOne = createFormCheck('oneToOne', cbRedType, '1:1', '', 'ONE_TO_ONE');
 			$oneToOne.find('input').attr('data-factor', '2').on('input', redundChange);
@@ -52,19 +52,25 @@ const $redNeed	= $('input[name=cbRedundancy]').on('input', function(e){
 	}
 });
 
-const $unitQuantity = $('#unitQuantity');
+const $unitQuantity = $('#unitQuantity').on('input', e=>{
+	if(e.currentTarget.value<1)
+		e.currentTarget.value = 1;
+});
 
 function redundChange(e){
 
 	const $parent = $(e.currentTarget).parents('.card-body');
+	const $numbers = $parent.find('input[type=number]');
+
+	let val = $numbers.val();
+	if(val<1){
+		$numbers.val(1);
+		val = 1;
+	}
 
 	const factor = $parent.find('input:checked').filter((i,el)=>el.dataset.factor).data('factor');
-	if(!factor)
-		return;
-
-	const val = $parent.find('input[type=number]').val();
-	if(!val)
-		return;
+	if(factor)
+		$numbers.prop('disabled', false);
 
 	$unitQuantity.val(factor*val);
 }
@@ -241,23 +247,12 @@ function fillProductNames(band, type){
 	.done(data=>{
 
 		const pNames = {};
-
-		data.forEach(a=>{
-			a.forEach(o=>{
-
-				if(!pNames[o.arrayId.type])
-					pNames[o.arrayId.type] = {};
-
-				if(!pNames[o.arrayId.type][o.arrayId.subtype])
-					pNames[o.arrayId.type][o.arrayId.subtype] = [];
-
-				o.content.forEach(size=>{
-					pNames[o.arrayId.type][o.arrayId.subtype].push(size);
-				});
-			});
-		});
 		const keys = Object.keys(pNames);
 		const limit = keys.length>3 ? 2 : keys.length>2 ? 5 : 7;
+
+		data.forEach(a=>{
+			
+		});
 
 		keys.forEach(name=>{
 
@@ -333,10 +328,20 @@ function modalBandChange(e){
 
 	fillProductNames(e.currentTarget.value, type);
 
-	setTimeout(()=>$modal.find('button').eq(0).click(), 1000);
+	setTimeout(()=>{ if(!$modal.prop('aria-hidden'))$modal.find('button').eq(0).click(); }, 1000);
 }
 
-const $customPower = $('#customPower');
+const $cbSupplyAC = $('#cbSupplyAC');
+const $customPower = $('#customPower').on('input', e=>{
+	const power = e.currentTarget.value.replace(/\D/g, '');
+	if(power>40){
+		$supplyVoltages.find('input').filter((i,el)=>el.id!='cbSupplyAC').prop('disabled', true).prop('ckecked', false);
+		$cbSupplyAC.prop('checked', true);
+		checkCard($supplyVoltages[0]);
+	}else{
+		$supplyVoltages.find('input').filter((i,el)=>el.id!='cbSupplyAC').prop('disabled', false);
+	}
+});
 const $supplyVoltages = $('#supplyVoltages');
 function productNameClick(e){
 
@@ -374,7 +379,7 @@ function modalPowerChange(e){
 	$.post('/rest/quote/supply', {productName: type, power: e.currentTarget.value})
 	.done(enableSupply);
 
-	setTimeout(()=>$modal.find('button').eq(0).click(), 1000);
+	setTimeout(()=>{ if(!$modal.prop('aria-hidden'))$modal.find('button').eq(0).click(); }, 1000);
 }
 
 const $amplifireBuc = $('#amplifireBuc');
@@ -406,4 +411,20 @@ $customBand.change(e=>{
 	const type = $checkedtype.val();
 
 	fillProductNames(null, type);
-})
+});
+
+
+
+
+
+function NewCssCal(e, t, a, o, r, n, l) {
+	if (
+			dtToday = new Date,
+			Cal = new Calendar(dtToday),
+			void 0 !== o && (o ? Cal.ShowTime = !0 : Cal.ShowTime = !1,
+				r && (r = parseInt(r, 10)),
+				TimeMode = 12 === r || 24 === r ? r : 24,
+				void 0 !== n && n ? Cal.ShowSeconds = !0 : Cal.ShowSeconds = !1),
+			void 0 !== e && (Cal.Ctrl = e),
+			void 0 !== t && "" !== t ? Cal.Format = t.toUpperCase() : Cal.Format = "MMDDYYYY", void 0 !== a && "" !== a && ("ARROW" === a.toUpperCase() ? Cal.Scroller = "ARROW" : Cal.Scroller = "DROPDOWN"), void 0 === l || "future" !== l && "past" !== l || (Cal.EnableDateMode = l), exDateTime = document.getElementById(e).value) { var s, i, d, p, c, u, h, C, m, g, y = exDateTime.indexOf(DateSeparator, 0), M = exDateTime.indexOf(DateSeparator, parseInt(y, 10) + 1), D = parseInt(Cal.Format.toUpperCase().lastIndexOf("M"), 10) - parseInt(Cal.Format.toUpperCase().indexOf("M"), 10) - 1, S = ""; "DDMMYYYY" === Cal.Format.toUpperCase() || "DDMMMYYYY" === Cal.Format.toUpperCase() ? "" === DateSeparator ? (d = exDateTime.substring(2, 4 + D), p = exDateTime.substring(0, 2), c = exDateTime.substring(4 + D, 8 + D)) : -1 !== exDateTime.indexOf("D*") ? (d = exDateTime.substring(8, 11), p = exDateTime.substring(0, 2), c = "20" + exDateTime.substring(11, 13)) : (d = exDateTime.substring(y + 1, M), p = exDateTime.substring(0, y), c = exDateTime.substring(M + 1, M + 5)) : "MMDDYYYY" === Cal.Format.toUpperCase() || "MMMDDYYYY" === Cal.Format.toUpperCase() ? "" === DateSeparator ? (d = exDateTime.substring(0, 2 + D), p = exDateTime.substring(2 + D, 4 + D), c = exDateTime.substring(4 + D, 8 + D)) : (d = exDateTime.substring(0, y), p = exDateTime.substring(y + 1, M), c = exDateTime.substring(M + 1, M + 5)) : "YYYYMMDD" === Cal.Format.toUpperCase() || "YYYYMMMDD" === Cal.Format.toUpperCase() ? "" === DateSeparator ? (d = exDateTime.substring(4, 6 + D), p = exDateTime.substring(6 + D, 8 + D), c = exDateTime.substring(0, 4)) : (d = exDateTime.substring(y + 1, M), p = exDateTime.substring(M + 1, M + 3), c = exDateTime.substring(0, y)) : "YYMMDD" !== Cal.Format.toUpperCase() && "YYMMMDD" !== Cal.Format.toUpperCase() || ("" === DateSeparator ? (d = exDateTime.substring(2, 4 + D), p = exDateTime.substring(4 + D, 6 + D), c = exDateTime.substring(0, 2)) : (d = exDateTime.substring(y + 1, M), p = exDateTime.substring(M + 1, M + 3), c = exDateTime.substring(0, y))), u = isNaN(d) ? Cal.GetMonthIndex(d) : parseInt(d, 10) - 1, parseInt(u, 10) >= 0 && parseInt(u, 10) < 12 && (Cal.Month = u), h = /^\d{4}$/, h.test(c) && parseInt(c, 10) >= StartYear && parseInt(c, 10) <= dtToday.getFullYear() + EndYear && (Cal.Year = parseInt(c, 10)), parseInt(p, 10) <= Cal.GetMonDays() && parseInt(p, 10) >= 1 && (Cal.Date = p), Cal.ShowTime === !0 && (12 === TimeMode && (S = exDateTime.substring(exDateTime.length - 2, exDateTime.length), Cal.AMorPM = S), s = exDateTime.indexOf(":", 0), i = exDateTime.indexOf(":", parseInt(s, 10) + 1), s > 0 ? (C = exDateTime.substring(s, s - 2), Cal.SetHour(C), m = exDateTime.substring(s + 1, s + 3), Cal.SetMinute(m), g = exDateTime.substring(i + 1, i + 3), Cal.SetSecond(g)) : -1 !== exDateTime.indexOf("D*") && (C = exDateTime.substring(2, 4), Cal.SetHour(C), m = exDateTime.substring(4, 6), Cal.SetMinute(m))) } selDate = new Date(Cal.Year, Cal.Month, Cal.Date), RenderCssCal(!0)
+}

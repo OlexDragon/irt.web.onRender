@@ -43,8 +43,8 @@
 <!-- 		<logger name="irt.web.controllers.FilesController" level="all" /> -->
 <!-- 		<logger name="irt.web.controllers.FiltersRestComtroller" level="all" /> -->
 <!-- 		<logger name="irt.web.controllers.hidden.FileHiddenController" level="all" /> -->
-		<logger name="irt.web.controllers.QuoteRestComtroller" level="all" />
-		<logger name="irt.web.controllers.QuoteComtroller" level="all" />
+<!-- 		<logger name="irt.web.controllers.QuoteRestComtroller" level="all" /> -->
+<!-- 		<logger name="irt.web.controllers.QuoteComtroller" level="all" /> -->
 
 
         <Root level="info">

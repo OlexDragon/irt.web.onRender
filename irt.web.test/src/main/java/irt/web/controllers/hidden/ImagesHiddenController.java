@@ -71,7 +71,10 @@ public class ImagesHiddenController extends FileWorker {
 
 		if(path.toFile().exists()) {
 
-			try(final Stream<Path> stream = Files.find(path, Integer.MAX_VALUE, (filePath, fileAttr)->fileAttr.isRegularFile());){
+			try(
+					@SuppressWarnings("unused")
+					final Stream<Path> stream = Files.find(path, Integer.MAX_VALUE, (filePath, fileAttr)->fileAttr.isRegularFile());){
+
 				return stream
 						.map(imagesFolder::relativize)
 						.map(Path::toString)

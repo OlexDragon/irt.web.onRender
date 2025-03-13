@@ -138,7 +138,7 @@ public class RmaRestComtroller {
 		return Optional.ofNullable(status).filter(s->s.length>0)
 
 				.map(
-						st->Optional.ofNullable(statusNot).filter(sn->sn).map(sn->rmaRepository.findByRmaNumberContainingIgnoreCaseAndStatusNotIn(like, page, st))
+						st->Optional.ofNullable(statusNot).filter(sn->sn).map(_->rmaRepository.findByRmaNumberContainingIgnoreCaseAndStatusNotIn(like, page, st))
 									.orElseGet(()->rmaRepository.findByRmaNumberContainingIgnoreCaseAndStatusIn(like, page, st)))
 
 				.orElseGet(()->rmaRepository.findByRmaNumberContainingIgnoreCase(like, page))
@@ -161,7 +161,7 @@ public class RmaRestComtroller {
 			.map(
 					st->
 					Optional.ofNullable(statusNot).filter(sn->sn)
-					.map(sn->rmaRepository.findBySerialNumberSerialNumberContainingIgnoreCaseAndStatusNotIn(like, page, st))
+					.map(_->rmaRepository.findBySerialNumberSerialNumberContainingIgnoreCaseAndStatusNotIn(like, page, st))
 					.orElseGet(()->rmaRepository.findBySerialNumberSerialNumberContainingIgnoreCaseAndStatusIn(like, page, st)))
 
 			.orElseGet(()->rmaRepository.findBySerialNumberSerialNumberContainingIgnoreCase(like, page))
@@ -170,7 +170,7 @@ public class RmaRestComtroller {
 
 	protected PageRequest getPageRequest(Direction direction, String name, Integer size) {
 
-		return Optional.ofNullable(direction).filter(d->name!=null && !name.trim().isEmpty())
+		return Optional.ofNullable(direction).filter(_->name!=null && !name.trim().isEmpty())
 				.map(d-> Sort.by(d, name)).map(sort->PageRequest.of(0, Optional.ofNullable(size).orElse(MAX_SIZE), sort))
 				.orElseGet(()->PageRequest.of(0, Optional.ofNullable(size).orElse(MAX_SIZE)));
 	}
@@ -190,7 +190,7 @@ public class RmaRestComtroller {
 
 				.map(
 						st->
-						Optional.ofNullable(statusNot).filter(sn->sn).map(sn->rmaRepository.findBySerialNumberPartNumberDescriptionContainingIgnoreCaseAndStatusNotIn(like, page, st))
+						Optional.ofNullable(statusNot).filter(sn->sn).map(_->rmaRepository.findBySerialNumberPartNumberDescriptionContainingIgnoreCaseAndStatusNotIn(like, page, st))
 						.orElseGet(()->rmaRepository.findBySerialNumberPartNumberDescriptionContainingIgnoreCaseAndStatusIn(like, page, st)))
 
 				.orElseGet(()->rmaRepository.findBySerialNumberPartNumberDescriptionContainingIgnoreCase(like, page)).stream().map(RmaData::new).collect(Collectors.toList());
@@ -211,7 +211,7 @@ public class RmaRestComtroller {
 
 				.map(
 						st->
-						Optional.ofNullable(statusNot).filter(sn->sn).map(sn->rmaRepository.findByMalfunctionContainingIgnoreCaseAndStatusNotIn(like, page, st))
+						Optional.ofNullable(statusNot).filter(sn->sn).map(_->rmaRepository.findByMalfunctionContainingIgnoreCaseAndStatusNotIn(like, page, st))
 						.orElseGet(()->rmaRepository.findByMalfunctionContainingIgnoreCaseAndStatusIn(like, page, st)))
 
 				.orElseGet(()->rmaRepository.findByMalfunctionContainingIgnoreCase(like, page))
@@ -228,7 +228,7 @@ public class RmaRestComtroller {
 
 		final PageRequest page =  getPageRequest(direction, name, size);
 
-		return Optional.ofNullable(statusNot).filter(sn->sn).map(sn->rmaRepository.findByStatusNot(status, page))
+		return Optional.ofNullable(statusNot).filter(sn->sn).map(_->rmaRepository.findByStatusNot(status, page))
 		.orElseGet(()->rmaRepository.findByStatus(status, page))
 		.stream().map(RmaData::new).collect(Collectors.toList());
 	}

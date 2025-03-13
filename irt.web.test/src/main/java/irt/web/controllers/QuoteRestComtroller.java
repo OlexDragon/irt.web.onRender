@@ -33,33 +33,49 @@ public class QuoteRestComtroller {
 	 * @return product names with sizes
 	 */
 	@PostMapping("product-name")
-    List<List<IrtArrays>> productName(@RequestParam String band, String type){
-		logger.traceEntry("band: {}; type: {};", band, type);
+    List<List<IrtArrays>> productName(@RequestParam(required = false) String band, @RequestParam String type){
+		logger.error("band: {}; type: {};", band, type);
 
-//		final List<IrtArrays> lArrays = Optional.ofNullable(band).map(b->new ArraysId("band", type, b)).flatMap(arraysRepository::findById).map(o->new IrtArrays[] {o}).map(Arrays::asList).orElseGet(()->arraysRepository.findByArrayIdNameAndArrayIdSubtype("band", type));
-//		logger.error(lArrays);
+//		final List<IrtArrays> lArrays = 
+		return Optional.ofNullable(band)
 
-		ArraysId id = new ArraysId("band", type, band);
-
-		// Get all related bands
-		List<List<IrtArrays>> list = arraysRepository.findById(id)
-
+				.map(b->new ArraysId("band", type, b))
+				.flatMap(arraysRepository::findById)
+				.map(o->new IrtArrays[] {o})
+				.map(Arrays::asList)
+				.orElseGet(()->arraysRepository.findByArrayIdNameAndArrayIdType("band", type))
+				.stream()
 				.map(IrtArrays::getContent)
-				.map(List::parallelStream)
-				// or use only one band
-				.orElseGet(()->java.util.Arrays.stream(new String[] { band }))
-				// find all product names with given bands
+				.flatMap(List::parallelStream)
 				.map(
-						b->{
-							final String name = "buc_size_" + type;
-							logger.debug("name: {}; subtype: {}'", name, b);
-							return arraysRepository.findByArrayIdNameAndArrayIdSubtype(name, b);
-						})
+					b->{
+						final String name = "buc_size_" + type;
+						logger.debug("name: {}; subtype: {}'", name, b);
+						return arraysRepository.findByArrayIdNameAndArrayIdSubtype(name, b);
+				})
 				.collect(Collectors.toList());
-
-		logger.debug(list);
-
-		return list;
+//
+//		ArraysId id = new ArraysId("band", type, band);
+//
+//		// Get all related bands
+//		List<List<IrtArrays>> list = arraysRepository.findById(id)
+//
+//				.map(IrtArrays::getContent)
+//				.map(List::parallelStream)
+//				// or use only one band
+//				.orElseGet(()->java.util.Arrays.stream(new String[] { band }))
+//				// find all product names with given bands
+//				.map(
+//						b->{
+//							final String name = "buc_size_" + type;
+//							logger.debug("name: {}; subtype: {}'", name, b);
+//							return arraysRepository.findByArrayIdNameAndArrayIdSubtype(name, b);
+//						})
+//				.collect(Collectors.toList());
+//
+//		logger.debug(list);
+//
+//		return list;
     }
 
 	@PostMapping("name-exists")
@@ -69,7 +85,7 @@ public class QuoteRestComtroller {
 		HashMap<String, Boolean> map = new HashMap<>();
 		idName.entrySet().forEach(e->map.put(e.getKey(), arraysRepository.existsByArrayIdName(e.getValue())));
 
-		logger.error(map);
+		logger.debug(map);
 
 		return map;
     }
@@ -85,9 +101,8 @@ public class QuoteRestComtroller {
 				.map(o->new IrtArrays[] {o})
 				.map(Arrays::asList)
 				.orElseGet(()->arraysRepository.findByArrayIdNameAndArrayIdType("supply", productName));
-		logger.error("productName: {}; power:{}", productName, power);
 
-		logger.traceEntry("{}", arrays);
+		logger.trace("{}", arrays);
 
 		return arrays;
     }
