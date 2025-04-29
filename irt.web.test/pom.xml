@@ -7,12 +7,12 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.1</version>
+		<version>3.4.5</version>
 	</parent>
 
 	<groupId>irt</groupId>
 	<artifactId>irt.onRender</artifactId>
-	<version>3.3.14</version>
+	<version>3.3.15</version>
 	<packaging>jar</packaging>
 
 	<name>HTTP Test</name>

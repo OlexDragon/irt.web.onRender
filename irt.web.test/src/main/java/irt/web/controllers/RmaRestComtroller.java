@@ -286,13 +286,13 @@ public class RmaRestComtroller {
 				final Pageable page = PageRequest.of(0, 1);
 				final List<SerialNumber> serialNumbers = serialNumberRepository.findBySerialNumberEndingWithIgnoreCase(sn, page);
 				if(serialNumbers.isEmpty()) {
-					final String message = "We have not produced devices with serial number: " + sn;
+					final String message = "We did not manufacture the unit with this serial number: " + sn;
 					logger.warn(message);
 					return getMessage(message, BootstapClass.TXT_BG_DANGER);
 				}else
 					oSerialNumber = Optional.of(serialNumbers.get(0));
 			}else {
-				final String message = "We have not produced devices with serial number " + sn;
+				final String message = "We did not manufacture the unit with this serial number: " + sn;
 				logger.warn(message);
 				return getMessage(message, BootstapClass.TXT_BG_DANGER);
 			}

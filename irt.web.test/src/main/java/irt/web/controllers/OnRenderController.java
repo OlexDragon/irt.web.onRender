@@ -152,6 +152,11 @@ public class OnRenderController implements ErrorController {
 		return "news-events";
 	}
 
+	@GetMapping("packet")
+	public String packet() {
+		return "packet";
+    }
+
 	private void modelAddProducts(Model model, String search, List<Long> filterIDs, Integer page) {
 		logger.traceEntry("search: {}; filterIDs: {}; page: {};", search, filterIDs, page);
 	
