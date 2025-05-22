@@ -61,8 +61,19 @@ public class SupporHiddentComtroller {
 			return "error";
 		}
 
-		final File folder = filesFolder.resolve("gui").toFile();
+		final File folder4 = filesFolder.resolve("gui4").toFile();
+		addNewVersion(folder4, "BOOT-INF/classes/application.properties", "newGuiVersion", model);
 
+		final File folder = filesFolder.resolve("gui").toFile();
+		addVersion(folder, "irt/irt_gui/IrtGui.class", "version", model);
+
+		// Documentation
+		docService.addDocuments(model);
+
+		return "hidden/support";
+    }
+
+	public void addNewVersion(final File folder, String fileName, String versionName, Model model) {
 		if(folder.exists())
 
 			Stream.of(folder.listFiles()).findAny()
@@ -71,7 +82,43 @@ public class SupporHiddentComtroller {
 
 						try(	final ZipFile jar = new ZipFile(f); ) {
 
-							Collections.list(jar.entries()).stream().filter(j->j.getName().equals("irt/irt_gui/IrtGui.class")).findAny()
+							Collections.list(jar.entries()).stream().filter(j->j.getName().equals(fileName)).findAny()
+							.ifPresent(
+									irtGuiClass->{
+										try(	final InputStream is = jar.getInputStream(irtGuiClass);
+												final Scanner scanner = new Scanner(is);) {
+
+											String next = null;
+
+											while(scanner.hasNextLine()) {
+												next = scanner.nextLine().trim();
+												if(next.startsWith("info.app.version="))
+													break;
+											}
+
+											model.addAttribute(versionName, next.replace("info.app.version=", ""));
+
+										} catch (IOException e) {
+											logger.catching(e);
+										}
+									});
+
+						} catch (IOException e) {
+							logger.catching(e);
+						}
+					});
+	}
+
+	public void addVersion(final File folder, String fileName, String versionName, Model model) {
+		if(folder.exists())
+
+			Stream.of(folder.listFiles()).findAny()
+			.ifPresent(
+					f->{
+
+						try(	final ZipFile jar = new ZipFile(f); ) {
+
+							Collections.list(jar.entries()).stream().filter(j->j.getName().equals(fileName)).findAny()
 							.ifPresent(
 									irtGuiClass->{
 										try(	final InputStream is = jar.getInputStream(irtGuiClass);
@@ -87,7 +134,7 @@ public class SupporHiddentComtroller {
 													break;
 											}
 
-											model.addAttribute("version", next);
+											model.addAttribute(versionName, next);
 
 										} catch (IOException e) {
 											logger.catching(e);
@@ -98,10 +145,5 @@ public class SupporHiddentComtroller {
 							logger.catching(e);
 						}
 					});
-
-		// Documentation
-		docService.addDocuments(model);
-
-		return "hidden/support";
-    }
+	}
 }

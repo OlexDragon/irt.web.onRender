@@ -144,7 +144,7 @@ function parseToString(data){
 		
 	return String.fromCharCode.apply(String, data);
 }
-function toIrtRegister(bytes, packetId){
+function parseToRegister(bytes, packetId){
 	const packets = parsePackets(bytes);
 	if(!packets || !packets.length){
 		console.warn('Something went wrong.\n bytes: ' + bytes);
@@ -290,9 +290,54 @@ PACKET_GROUP_ID[packetGroupId.redundancy]	 = 'redundancy';
 PACKET_GROUP_ID[packetGroupId.deviceDebug]	 = 'device debug';
 PACKET_GROUP_ID[packetGroupId.production]	 = 'production generic set 1';
 PACKET_GROUP_ID[packetGroupId.developer]	 = 'developer generic set 1';
+
+const parameterCode = {};
 const deviceInfo = {};
-deviceInfo.serialNumber	 = 5;
-deviceInfo.description	 = 6;
+deviceInfo.type				 = 1;
+deviceInfo.firmwareVersion	 = 2;
+deviceInfo.firmwareBuild	 = 3;
+deviceInfo.uptimeCounter	 = 4;
+deviceInfo.serialNumber		 = 5;
+deviceInfo.description		 = 6;
+deviceInfo.partNumber		 = 7;
+deviceInfo.sequence = {};
+deviceInfo.sequence[deviceInfo.description]		 = 0;
+deviceInfo.sequence[deviceInfo.serialNumber]	 = 1;
+deviceInfo.sequence[deviceInfo.partNumber]		 = 2;
+deviceInfo.sequence[deviceInfo.type]			 = 3;
+deviceInfo.sequence[deviceInfo.firmwareVersion]	 = 4;
+deviceInfo.sequence[deviceInfo.firmwareBuild]	 = 5;
+deviceInfo.sequence[deviceInfo.uptimeCounter]	 = 6;
+parameterCode[packetGroupId.deviceInfo] = {};
+parameterCode[packetGroupId.deviceInfo][deviceInfo.type] = {};
+parameterCode[packetGroupId.deviceInfo][deviceInfo.type].description	 = 'Type'
+parameterCode[packetGroupId.deviceInfo][deviceInfo.type].showTex	 = 'ID'
+parameterCode[packetGroupId.deviceInfo][deviceInfo.type].parseFunction = parseToString; // Unit Type
+parameterCode[packetGroupId.deviceInfo][deviceInfo.firmwareVersion] = {};
+parameterCode[packetGroupId.deviceInfo][deviceInfo.firmwareVersion].description	 = 'Firmware Version'
+parameterCode[packetGroupId.deviceInfo][deviceInfo.firmwareVersion].description	 = 'FW Version'
+parameterCode[packetGroupId.deviceInfo][deviceInfo.firmwareVersion].parseFunction = parseToString; // Firmware Version
+parameterCode[packetGroupId.deviceInfo][deviceInfo.firmwareBuild] = {};
+parameterCode[packetGroupId.deviceInfo][deviceInfo.firmwareBuild].description	 = 'Firmware Build Date'
+parameterCode[packetGroupId.deviceInfo][deviceInfo.firmwareBuild].description	 = 'FW Build'
+parameterCode[packetGroupId.deviceInfo][deviceInfo.firmwareBuild].parseFunction = parseToString; // Firmware Build Date
+parameterCode[packetGroupId.deviceInfo][deviceInfo.uptimeCounter] = {};
+parameterCode[packetGroupId.deviceInfo][deviceInfo.uptimeCounter].description	 = 'Uptime Counter'
+parameterCode[packetGroupId.deviceInfo][deviceInfo.uptimeCounter].description	 = 'Uptime'
+parameterCode[packetGroupId.deviceInfo][deviceInfo.uptimeCounter].parseFunction = parseToString; // Uptime Counter
+parameterCode[packetGroupId.deviceInfo][deviceInfo.serialNumber] = {}
+parameterCode[packetGroupId.deviceInfo][deviceInfo.serialNumber].description	 = 'Serial Number';
+parameterCode[packetGroupId.deviceInfo][deviceInfo.serialNumber].description	 = 'SN';
+parameterCode[packetGroupId.deviceInfo][deviceInfo.serialNumber].parseFunction = parseToString; // Serial Number
+parameterCode[packetGroupId.deviceInfo][deviceInfo.description] = {};
+parameterCode[packetGroupId.deviceInfo][deviceInfo.description].description	 = 'Description'
+parameterCode[packetGroupId.deviceInfo][deviceInfo.description].description	 = ''
+parameterCode[packetGroupId.deviceInfo][deviceInfo.description].parseFunction = parseToString; // Description
+parameterCode[packetGroupId.deviceInfo][deviceInfo.partNumber] = {};
+parameterCode[packetGroupId.deviceInfo][deviceInfo.partNumber].description	 = 'Part Number'
+parameterCode[packetGroupId.deviceInfo][deviceInfo.partNumber].description	 = 'PN'
+parameterCode[packetGroupId.deviceInfo][deviceInfo.partNumber].parseFunction = parseToString; // Part Number
+
 const deviceDebug = {};
 deviceDebug.parameter = {};
 deviceDebug.parameter.debugInfo = 1;		/* device information: parts, firmware and etc. */
@@ -302,14 +347,6 @@ deviceDebug.parameter.index		= 4;		/* device index information print */
 deviceDebug.parameter.calibrationMode = 5;	/* calibration mode */
 deviceDebug.parameter.environmentIo = 10;	/* operations with environment variables */
 deviceDebug.parameter.devices	= 30;
-const parameterCode = {};
-parameterCode[packetGroupId.deviceInfo] = {};
-parameterCode[packetGroupId.deviceInfo][deviceInfo.serialNumber] = {}
-parameterCode[packetGroupId.deviceInfo][deviceInfo.serialNumber].description	 = 'Serial Number';
-parameterCode[packetGroupId.deviceInfo][deviceInfo.serialNumber].parseFunction = parseToString; // Serial Number
-parameterCode[packetGroupId.deviceInfo][deviceInfo.description] = {};
-parameterCode[packetGroupId.deviceInfo][deviceInfo.description].description	 = 'Description'
-parameterCode[packetGroupId.deviceInfo][deviceInfo.description].parseFunction = parseToString; // Description
 
 parameterCode[packetGroupId.deviceDebug] = {};
 parameterCode[packetGroupId.deviceDebug][deviceDebug.parameter.readWrite] = {};
@@ -326,13 +363,12 @@ class Packet{
 	constructor(header, payloads, unitAddr){
 		// From bytes
 		if(Array.isArray(header)){
-			const bytes = header;
-			if(bytes[0]==FLAG_SEQUENCE)
-				bytes.splice(0,1)
-			if(bytes[bytes.length-1]==FLAG_SEQUENCE)
-				bytes.splice(bytes.length-1)
+			if(header[0]==FLAG_SEQUENCE)
+				header.splice(0,1)
+			const flagseqIndex = header.indexOf(FLAG_SEQUENCE);
+			const bytes = byteStuffing(flagseqIndex<0 ? header : header.splice(0, flagseqIndex));
 //			console.log(bytes);
-			const packetArray = byteStuffing(bytes.splice(0,bytes.length-2));
+			const packetArray = bytes.splice(0,bytes.length-2);
 			const chcksm = checksumToBytes(packetArray);
 			if(chcksm[0]==(bytes[0]&0xff) && chcksm[1]==(bytes[1]&0xff)){
 				if(payloads){	// Has Link Header

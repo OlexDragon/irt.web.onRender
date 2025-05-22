@@ -50,8 +50,9 @@ public class FileHiddenController extends FileWorker {
 
 	@PostMapping(path="upload/gui", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public String uploadGui(HttpServletRequest request, @RequestParam String folder, @RequestPart MultipartFile file){
+
 		final String remoteAddr = Optional.ofNullable(request.getHeader( "X-Forwarded-For" )).orElseGet(()->request.getRemoteAddr());
-		logger.traceEntry("clientIP: {}; folder: {};", remoteAddr, folder);
+		logger.info("clientIP: {}; folder: {};", remoteAddr, folder);
 
 		final Optional<IpAddress> oIpAddress = ipService.getIpAddress(remoteAddr);
 
@@ -63,7 +64,10 @@ public class FileHiddenController extends FileWorker {
 		try {
 
 			final Path path = filesFolder.resolve(folder);
-			FileUtils.cleanDirectory(path.toFile());
+			final File f = path.toFile();
+			if(!f.exists())
+				f.mkdirs();
+			FileUtils.cleanDirectory(f);
 			saveFile(path, file);
 
 		} catch (IllegalStateException | IOException e) {

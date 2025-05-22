@@ -32,6 +32,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.HandlerMapping;
@@ -117,8 +118,8 @@ public class FilesController {
 		return contentType.body(new InputStreamResource(is));
 	}
 
-	@GetMapping("gui")
-	public ResponseEntity<InputStreamResource> getGui(HttpServletRequest request) throws IOException{
+	@GetMapping("gui/{version}")
+	public ResponseEntity<InputStreamResource> getGui(@PathVariable Integer version,  HttpServletRequest request) throws IOException{
 		final String remoteAddr = Optional.ofNullable(request.getHeader( "X-Forwarded-For" )).orElseGet(()->request.getRemoteAddr());
 		logger.info("RemoteAddre: {}", remoteAddr);
 
@@ -151,7 +152,7 @@ public class FilesController {
 			return downloadProhibited(string, HttpStatus.LOCKED);
 		}
 
-		try(final Stream<Path> stream = Files.walk(filesFolder.resolve("gui")).filter(Files::isRegularFile);){
+		try(final Stream<Path> stream = Files.walk(filesFolder.resolve("gui" + (version ==3 ? "" : version))).filter(Files::isRegularFile);){
 
 			final Optional<Path> oPath = stream.findAny();
 			logger.debug(oPath);

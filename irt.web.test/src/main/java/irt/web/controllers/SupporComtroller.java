@@ -72,7 +72,7 @@ public class SupporComtroller {
 	@GetMapping
     String support(Model model){
 
-		final Path path = Paths.get(root, filesPath, "gui");
+		final Path path = Paths.get(root, filesPath, "gui4");
 
 		final File file = path.toFile();
 
@@ -80,37 +80,7 @@ public class SupporComtroller {
 			model.addAttribute(WEB_CONTENT_ID.getNodeId(), "Sorry, file not found.");
 
 		}else
-			webContentRepository.findById(WEB_CONTENT_ID).map(WebContent::getValue)
-			.ifPresent(
-				text->{
-
-					final Optional<File> oFile = Stream.of(file.listFiles()).findAny();
-					oFile.ifPresent(
-
-							f->{
-								Map<String, String> map = new HashMap<>();
-								map.put(NAME, f.getName());
-
-								try {
-
-									final Path p = f.toPath();
-									long size = Files.size(p);
-									final Long kilobytes = size / 1024;
-									map.put(SIZE, kilobytes + " kilobytes");
-
-								} catch (IOException e) {
-									logger.catching(e);
-								}
-
-								addVersionAndDate(oFile, map);
-
-								String t = text;
-								for(String n: NAMES)
-									t = t.replace(n, Optional.ofNullable(map.get(n)).orElse("N/A"));
-
-								model.addAttribute(WEB_CONTENT_ID.getNodeId(), t);
-							});
-				});
+			webContentRepository.findById(WEB_CONTENT_ID).map(WebContent::getValue).ifPresent(text->guiData(file, text, model));
 
 		final Iterable<Faq> all = faqRepository.findAll();
 		logger.trace(all);
@@ -122,6 +92,35 @@ public class SupporComtroller {
 		return "support";
     }
 
+	public void guiData(final File file, String text, Model model) {
+		final Optional<File> oFile = Stream.of(file.listFiles()).findAny();
+		oFile.ifPresent(
+
+				f->{
+					Map<String, String> map = new HashMap<>();
+					map.put(NAME, f.getName());
+
+					try {
+
+						final Path p = f.toPath();
+						long size = Files.size(p);
+						final Long kilobytes = size / 1024;
+						map.put(SIZE, kilobytes + " kilobytes");
+
+					} catch (IOException e) {
+						logger.catching(e);
+					}
+
+					addVersionAndDate(oFile, map);
+
+					String t = text;
+					for(String n: NAMES)
+						t = t.replace(n, Optional.ofNullable(map.get(n)).orElse("N/A"));
+
+					model.addAttribute(WEB_CONTENT_ID.getNodeId(), t);
+				});
+	}
+
 	private void addVersionAndDate(Optional<File> oFile, Map<String, String> map) {
 
 		oFile
@@ -129,7 +128,7 @@ public class SupporComtroller {
 				f->{
 					try(final ZipFile jar = new ZipFile(f);) {
 						
-						Collections.list(jar.entries()).stream().filter(j->j.getName().equals("irt/irt_gui/IrtGui.class")).findAny()
+						Collections.list(jar.entries()).stream().filter(j->j.getName().equals("BOOT-INF/classes/application.properties")).findAny()
 						.ifPresent(
 								irtGuiClass->{
 
@@ -141,10 +140,10 @@ public class SupporComtroller {
 								
 										String next = null;
 
-										while(scanner.hasNext()) {
-											next = scanner.next().trim();
-											if(next.startsWith("3.")) {
-												map.put(VERSION, next);
+										while(scanner.hasNextLine()) {
+											next = scanner.nextLine().trim();
+											if(next.startsWith("info.app.version=")) {
+												map.put(VERSION, next.replace("info.app.version=", ""));
 												break;
 											}
 										}

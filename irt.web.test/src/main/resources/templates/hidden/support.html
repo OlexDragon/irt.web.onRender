@@ -16,7 +16,13 @@
     <div class="container">
     	<div class="row">
     		<div class="col">
-				<label for="guiFile" class="btn btn-outline-primary form-control" th:text="${version}==null ? 'Select GUI to Upload' : 'GUI v.' + ${version} + '. Click to Upload New Version.'">Select GUI to Upload</label>
+				<label for="newGuiFile" class="btn btn-outline-primary form-control" th:text="${newGuiVersion}==null ? 'Select GUI v.4 to Upload' : 'GUI v.' + ${newGuiVersion} + '. Click to Upload New Version.'" title="GUI v.4">Select GUI to Upload</label>
+				<input id="newGuiFile" type="file" style="display:none"  accept=".jar">
+    		</div>
+    	</div>
+   		<div class="row">
+    		<div class="col">
+				<label for="guiFile" class="btn btn-outline-primary form-control" th:text="${version}==null ? 'Select GUI v.3 to Upload' : 'GUI v.' + ${version} + '. Click to Upload New Version.'" title="GUI v.3">Select GUI to Upload</label>
 				<input id="guiFile" type="file" style="display:none"  accept=".jar">
     		</div>
     	</div>

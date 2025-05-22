@@ -1,4 +1,26 @@
 
+//New GUI v.4
+$('#newGuiFile').change(e=>{
+
+	let files = e.currentTarget.files;
+	if(!files.length){
+		alert('No files are selected for upload.');
+		return;
+	}
+
+	if(!confirm('New GUI v.4 - Are you sure you want to upload this file?\nThe old file will be deleted.'))
+		return;
+
+	const form_data = new FormData();
+	form_data.append('folder', 'gui4');
+	form_data.append('file', files[0]);
+	const url = `/hidden/files/upload/gui`;
+	ajax(url, form_data);
+});
+
+
+
+// Old GUI v.3
 $('#guiFile').change(e=>{
 
 	let files = e.currentTarget.files;
@@ -7,7 +29,7 @@ $('#guiFile').change(e=>{
 		return;
 	}
 
-	if(!confirm('Are you sure you want to upload this file?\nThe old file will be deleted.'))
+	if(!confirm('Old GUI v.3 - Are you sure you want to upload this file?\nThe old file will be deleted.'))
 		return;
 
 	const form_data = new FormData();
