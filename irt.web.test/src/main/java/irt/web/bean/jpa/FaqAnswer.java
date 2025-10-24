@@ -29,4 +29,6 @@ public class FaqAnswer{
 	@Accessors(chain = true)
 	@Column(nullable = false, length = 1000)
 	private String 	answer;
+	@Column(length = 1000)
+	private String 	answerFr;
 }

@@ -23,6 +23,8 @@ window.addEventListener('DOMContentLoaded', function() {
 });
 let $navLabel = $('nav label').click(e=>{
 	let span = e.currentTarget.previousElementSibling;
+	if (span.localName !== 'span')
+		return;
 	let input = span.previousElementSibling;
 	if(input.checked){
 		e.preventDefault();

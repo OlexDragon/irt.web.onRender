@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About - IRT Technologies Inc.</title>
+    <title th:text="#{page.about.title}">About - IRT Technologies Inc.</title>
     <th:block th:replace="~{home :: links}">
     	<link rel="preconnect" href="https://fonts.googleapis.com">
     	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -237,63 +237,67 @@
     <div class="section">
       
 		<div class="content about-section1 text-uppercase text-start mt-5">
-			<h1>About IRT Technologies</h1>
+			<h1 th:text="#{page.about.aboutIRT}">About IRT Technologies</h1>
 		</div>
 		<div class="overlay"></div>
     </div>
     <div class="section about-description ">
-        <h1>Who We Are</h1>
+        <h1 th:text="#{page.about.whoWeAre}">Who We Are</h1>
       <div class="content">
-        <p class="pre-line">   IRT Technologies, an acronym for Intelligent RF Telecom technologies, designs, develops and manufactures advanced satellite RF systems and products for real time voice, data and multimedia delivery anywhere in the world.
+        <p class="pre-line" th:text="#{page.about.description}">   IRT Technologies, an acronym for Intelligent RF Telecom technologies, designs, develops and manufactures advanced satellite RF systems and products for real time voice, data and multimedia delivery anywhere in the world.
 
    IRT products are revolutionary innovative, super compact, efficient and reliable, serving both commercial and government sectors.
 
    IRT satellite solutions shapes the next-generation communication equipment with its breakthrough technology, vanguard research and development, state of the art engineering design, and product innovation.   
         </p>
       </div>
-     
+
     </div>
- 
+
 		<div class="section about-solution" id="section-contact">
-        
 
             <div class="text-center" >
-                <h1>Contact Us</h1>
+                <h1 th:text="#{menu.contact}">Contact Us</h1>
                 <div class="content row text-start">
                     <div class="col col-lg-7 mx-5">
                         <div class="container">
-                        	<h4>If you have any questions about our Products or Solutions, please fill in the form below.</h4> 
+                        	<h4 id="contactUsDescr" th:text="${message} == null ? #{page.about.contactUs.form} : #{page.support.request.whatToDo}">If you have any questions about our Products or Solutions, please fill in the form below.</h4> 
                             	<div class="row">
                               <div class="col-md-6">
                                   <div class="form-group  .bg-light.bg-gradient">
-                                    <input id="first" type="text" class="form-control" placeholder="First name">
+                                    <input id="first" type="text" class="form-control" placeholder="First name" th:placeholder="#{page.about.contactUs.form.firstName}">
                                   </div>
                                   <div class="form-group">
-                                    <input id="phone" type="text" class="form-control" placeholder="Phone number">
+                                    <input id="phone" type="text" class="form-control" placeholder="Phone number" th:placeholder="#{page.about.contactUs.form.phoneNumber}">
                                   </div>
                                   <div class="form-group">
-                                    <input id="company" type="text" class="form-control" placeholder="Company">
+                                    <input id="company" type="text" class="form-control" placeholder="Company" th:placeholder="#{page.about.contactUs.form.company}">
                                   </div>
                               </div>
                               <div class="col-md-6">
                                   <div class="form-group">
-                                    <input id="last" type="text" class="form-control" placeholder="Last name">
+                                    <input id="last" type="text" class="form-control" placeholder="Last name" th:placeholder="#{page.about.contactUs.form.lastName}">
                                   </div>
                                   <div class="form-group">
-                                    <input id="email" type="text" class="form-control" placeholder="Email">
+                                    <input id="email" type="text" class="form-control" placeholder="Email" th:placeholder="#{page.about.contactUs.form.email}">
                                   </div>
                                   <div class="form-group">
-                                    <input id="industry" type="text" class="form-control" placeholder="Your industry">
+                                    <input id="industry" type="text" class="form-control" placeholder="Your industry" th:placeholder="#{page.about.contactUs.form.industry}">
                                   </div>
                               </div>
                             </div>
                             <div class="row">
                               <div class="col-md-12">
                                   <div class="form-group">
-                                    <textarea id="toSend" class="form-control" rows="5" placeholder="What can we do for you?"></textarea>
+                                    <textarea id="toSend" class="form-control" rows="5" placeholder="What can we do for you?" th:placeholder="#{page.about.contactUs.form.whatCanWeDo}" th:text="${message}"></textarea>
+									<script if="${message != null}">
+										const textarea = document.getElementById("toSend");
+										textarea.style.height = 'auto';
+										  textarea.style.height = `${textarea.scrollHeight}px`;
+									</script>
                                   </div>
                                   <div class="p-1">
-                                  	<button id="send" class="btn form-btn shine-button " disabled="disabled">Send</button>
+                                  	<button id="send" class="btn form-btn shine-button " disabled="disabled" th:text="#{page.about.contactUs.form.send}">Send</button>
                                   </div>
                                </div>
                             </div>
@@ -305,7 +309,7 @@
                                  <div class="col-md-12 "> 
                             <div class="card " data-bs-toggle="modal" data-bs-target="#companyModal">
                                 <div class="card-header border-0 mt-4 ">
-                                    <h4>IRT Technologies Inc.<br>Corporate Headquarters</h4>
+                                    <h4>IRT Technologies Inc.<br/><span th:text="#{page.about.contactUs.form.headquarters}">Corporate Headquarters</span></h4>
                                 </div>
                                 <div class="card-body">
                                     <ul>
@@ -313,12 +317,9 @@
                                             9630 Trans Canada Route <br>
                                             Saint Laurent, QC
                                             Canada <br> H4S 1V9</li>
-                                        <li>Phone:
-                                            +1-514-907-1161</li>
-                                        <li>Email:
-                                            info@irttechnologies.com </li>
-                                        <li>Fax:
-                                            +1-514-907-1123</li>
+                                        <li><span th:text="#{phone}">Phone</span>:  +1-514-907-1161</li>
+                                        <li><span th:text="#{email}">Email</span>: info@irttechnologies.com </li>
+                                        <li><span th:text="#{fax}">Fax</span>: +1-514-907-1123</li>
                                     </ul>
                                 </div>
                                 
@@ -350,7 +351,7 @@
         <div class="modal-body row">
           <div class="card col-md-6 ">
             <div class="card-header border-0 mt-4">
-              <h4>IRT Technologies Inc.<br>Corporate Headquarters</h4>
+              <h4>IRT Technologies Inc.<br/><span th:text="#{page.about.contactUs.form.headquarters}">Corporate Headquarters</span></h4>
             </div>
             <div class="card-body">
               <ul>
@@ -456,5 +457,12 @@
 </th:block>
 
 <script type="application/javascript" src="../static/js/about.js" th:src="@{'/js/about.js'}"></script>
+<script th:if="${message != null}">
+	let blinkCount = 0;
+    (function blink() {
+		if (blinkCount++ < 5)
+  			$('#contactUsDescr').fadeOut(500).fadeIn(500, blink);
+	})();
+</script>
 </body>
 </html>

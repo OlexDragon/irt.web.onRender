@@ -229,7 +229,7 @@
 	<div class="col"></div>
 	<div class="col">
 		<h1 class="fw-bold text-info-emphasis text-danger-emphasis" th:text="${errorCode}">404</h1>
-		<h3 class="fw-bold">Sorry, we can’t show the page you’re looking for.</h3>
+		<h3 class="fw-bold" th:text="#{page.error}">Sorry, we can’t show the page you’re looking for.</h3>
 	</div>
 	<div class="col">
 		<img alt="" src="../static/images/system.png" th:src="@{/images/system.png}">

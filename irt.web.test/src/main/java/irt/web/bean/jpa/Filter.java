@@ -32,6 +32,7 @@ public class Filter implements Serializable{
 	private Long	id;
 	private Long 	ownerId;
 	private String 	name;
+	private String 	nameFr;
 	private String 	description;
 	@Column(insertable = false)
 	private int 	filterOrder;

@@ -31,6 +31,7 @@ public class Faq{
 	@Accessors(chain = true)
 	@Column(nullable = false, unique = true)
 	private String 	question;
+	private String 	questionFr;
 
 	@JsonIgnore
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

@@ -419,7 +419,7 @@ class Packet{
 		return pl;
 	}
 	toBytes(){
-		const linkHeaderrBytes = this.linkHeader?.toBytes();
+		const linkHeaderrBytes = this.linkHeader? this.linkHeader.toBytes() : undefined;
 		const headerBytes = this.header.toBytes();
 		const payloadBytes = this.payloadsToBytes();
 		return linkHeaderrBytes ? linkHeaderrBytes.concat(headerBytes).concat(payloadBytes) : headerBytes.concat(payloadBytes);
@@ -439,9 +439,15 @@ class Packet{
 		return linkHeader + this.header.toString() + (this.payloads ? ', ' + this.payloads.map(pl=>pl.toString(this.header.groupId)) : '');
 	}
 	getData(parameterCode){
-		if(parameterCode)
-			return this.payloads?.filter(pl=>(pl.parameter.code&0xff)==parameterCode).map(pl=>pl.getData(this.header.groupId));
-		if(this.payloads?.length)
+
+		if (!this.payloads)
+			return;
+
+		if(parameterCode){
+			return this.payloads.filter(pl=>(pl.parameter.code&0xff)==parameterCode).map(pl=>pl.getData(this.header.groupId));
+		}
+
+		if(this.payloads.length)
 			return this.payloads[0].getData(this.header.groupId);
 	}
 }

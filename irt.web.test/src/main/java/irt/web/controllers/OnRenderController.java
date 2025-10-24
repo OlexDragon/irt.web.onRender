@@ -4,8 +4,11 @@ import java.net.UnknownHostException;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -14,9 +17,11 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.error.ErrorController;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,10 +30,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import irt.web.bean.ProductMenu;
 import irt.web.bean.ProductSubmenu;
 import irt.web.bean.SliderCard;
+import irt.web.bean.ThreadRunner;
 import irt.web.bean.jpa.Filter;
 import irt.web.bean.jpa.FilterRepository;
 import irt.web.bean.jpa.Product;
 import irt.web.bean.jpa.ProductFilter;
+import irt.web.bean.jpa.ProductRepository;
 import irt.web.bean.jpa.WebContent;
 import irt.web.bean.jpa.WebContentRepository;
 import irt.web.bean.jpa.WebMenuRepository;
@@ -47,6 +54,9 @@ import jakarta.servlet.http.HttpServletRequest;
 public class OnRenderController implements ErrorController {
 	private final static Logger logger = LogManager.getLogger();
 
+	private static List<ProductMenu> collectMenu;
+	private static FutureTask<Void> task;
+
 	@Value("${irt.web.product.par_page}")
 	private Integer productParPage;
 
@@ -55,6 +65,9 @@ public class OnRenderController implements ErrorController {
 	@Autowired private WebMenuRepository	menuRepository;
 	@Autowired private FilterRepository		filterRepository;
 	@Autowired private WebContentRepository	webRepository;
+	@Autowired private ProductRepository	productRepository;
+
+	@Autowired private MessageSource messageSource;
 
 	@ModelAttribute("menus")
 	public List<ProductMenu> menus() {
@@ -62,7 +75,11 @@ public class OnRenderController implements ErrorController {
 	}
 
 	@GetMapping
-	public String home(Model model) throws UnknownHostException {
+	public String home(@CookieValue(required = false) String localeInfo, Model model) throws UnknownHostException {
+		logger.traceEntry("localeInfo='{}'", localeInfo);
+
+		// Set Language
+		Optional.ofNullable(localeInfo).filter(s->s.equals("fr") || s.equals("en")).ifPresent(s->model.addAttribute("lang", s));
 
 		final List<WebContent> sliderCardFields = webRepository.findByPageName("home_slider");
 		final Map<Integer, SliderCard> fieldsToCards = SliderCard.fieldsToCards(sliderCardFields);
@@ -72,7 +89,11 @@ public class OnRenderController implements ErrorController {
     }
 
     @RequestMapping("/error")
-    public String handleError(HttpServletRequest request, Model model) {
+    public String handleError(@CookieValue(required = false) String localeInfo, HttpServletRequest request, Model model) {
+		logger.traceEntry("localeInfo='{}'", localeInfo);
+
+		// Set Language
+		Optional.ofNullable(localeInfo).filter(s->s.equals("fr") || s.equals("en")).ifPresent(s->model.addAttribute("lang", s));
 
 		final String attribute = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE).toString();
 		final Integer code = Integer.valueOf(attribute);
@@ -83,15 +104,34 @@ public class OnRenderController implements ErrorController {
     }
 
 	@GetMapping("about")
-	public String about(Model model) throws UnknownHostException {
+	public String about(@CookieValue(required = false) String localeInfo, @RequestParam(required = false) Long id, Model model) throws UnknownHostException {
+		logger.traceEntry("localeInfo='{}', id='{}'", localeInfo, id);
+
+		// Set Language
+		Optional<String> oLang = Optional.ofNullable(localeInfo).filter(s->s.equals("fr") || s.equals("en"));
+		oLang.ifPresent(s->model.addAttribute("lang", s));
+
+		Optional.ofNullable(id)
+		.ifPresent(
+				i->{
+					final Product product = productRepository.findById(i).orElse(null);
+					String name = Optional.ofNullable(product).map(Product::getName).orElse("[INSERT PRODUCT NAME OR CATEGORY]");
+					final String message = messageSource.getMessage("page.support.request", null, Locale.of(oLang.orElse("en")));
+					model.addAttribute("message", String.format(message, name));
+				});
+
 		return "about";
     }
 
 	@GetMapping("products")
 	public String products(
+			@CookieValue(required = false) String localeInfo, 
 			@RequestParam(name = "filter", required = false) List<Long> selected, 
 			@RequestParam(required = false) String search,  
 			Model model) throws UnknownHostException {
+
+		// Set Language
+		Optional.ofNullable(localeInfo).filter(s->s.equals("fr") || s.equals("en")).ifPresent(s->model.addAttribute("lang", s));
 
 		final int page = 0;
 		logger.traceEntry("selected filters: {}; search: {};", selected, search);
@@ -133,12 +173,17 @@ public class OnRenderController implements ErrorController {
     }
 
 	@GetMapping("products/search")
-	public String searchProduct(@RequestParam(required = false) List<Long> filter, 
-						@RequestParam(required = false) String search, 
-						@RequestParam(required = false) Integer page, 
-						Model model) throws InterruptedException {
+	public String searchProduct(
+			@CookieValue(required = false) String localeInfo, 
+			@RequestParam(required = false) List<Long> filter, 
+			@RequestParam(required = false) String search, 
+			@RequestParam(required = false) Integer page, 
+			Model model) throws InterruptedException {
 
 		logger.traceEntry("filter: {}; search: {}; page: {};", filter, search, page);
+
+		// Set Language
+		Optional.ofNullable(localeInfo).filter(s->s.equals("fr") || s.equals("en")).ifPresent(s->model.addAttribute("lang", s));
 
 		modelAddProducts(model, search, filter, page);
 
@@ -146,8 +191,13 @@ public class OnRenderController implements ErrorController {
 	}
 
 	@GetMapping("news-events")
-	public String events(Model model) throws InterruptedException {
-		logger.traceEntry();
+	public String events(
+			@CookieValue(required = false) String localeInfo,
+			Model model) {
+		logger.traceEntry("localeInfo='{}'", localeInfo);
+
+		// Set Language
+		Optional.ofNullable(localeInfo).filter(s->s.equals("fr") || s.equals("en")).ifPresent(s->model.addAttribute("lang", s));
 
 		return "news-events";
 	}
@@ -223,7 +273,17 @@ public class OnRenderController implements ErrorController {
 		return query.getResultList();
 	}
 
-	public static List<ProductMenu> getActiveMenuItems( WebMenuRepository	repository) {
+	public static List<ProductMenu> getActiveMenuItems(WebMenuRepository repository) {
+
+
+		if (collectMenu != null) {
+			runTask();
+			synchronized (OnRenderController.class) {
+				return collectMenu;
+			}
+		}
+		canselTask();
+
 		List<ProductMenu> menus = new ArrayList<>();
 		repository.findByActiveOrderByMenuOrderAsc(true)
 		.forEach(
@@ -234,6 +294,7 @@ public class OnRenderController implements ErrorController {
 						if(oPMenu.isPresent()) {
 							final ProductMenu pm = oPMenu.get();
 							pm.setName(m.getName());
+							pm.setNameFr(m.getNameFr());
 							pm.setOrder(m.getMenuOrder());
 							pm.setActive(m.getActive());
 						}
@@ -256,6 +317,27 @@ public class OnRenderController implements ErrorController {
 					}
 				});
 
-		return menus.stream().filter(pm->pm.getActive()!=null).sorted((a,b)->a.getOrder()-b.getOrder()).collect(Collectors.toList());
+		collectMenu = menus.stream().filter(pm->pm.getActive()!=null).sorted((a,b)->a.getOrder()-b.getOrder()).collect(Collectors.toList());
+		return collectMenu;
+	}
+
+	private static void runTask(){
+
+		canselTask();
+
+		task = new FutureTask<>(
+				() -> {
+					TimeUnit.MINUTES.sleep(7);
+					synchronized (OnRenderController.class) {
+						collectMenu = null;
+					}
+					return null;
+				});
+		ThreadRunner.runThread(task);
+	}
+
+	private static void canselTask(){
+		if (task != null && !task.isDone())
+			task.cancel(true);
 	}
 }

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Support - IRT Technologies Inc.</title>
+    <title th:text="#{page.support.title}">Support - IRT Technologies Inc.</title>
     <th:block th:replace="~{home :: links}">
     	<link rel="preconnect" href="https://fonts.googleapis.com">
     	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,18 +22,18 @@
     <div class="section">
       
       <div class="content support text-banner mt-5">
-        <h1 class="text-uppercase">Support</h1>
+        <h1 class="text-uppercase" th:text="#{menu.support}">Support</h1>
         <div class="row justify-content-md-center text-center">
-        	<div class="col-lg-2" data-name="download"><h4>GUI Download</h4></div>
+        	<div class="col-lg-2" data-name="download"><h4 th:text="#{page.support.guiDownload}">GUI Download</h4></div>
 			<div class="col-lg-1" data-name="faq"><h4>FAQ</h4></div>
-			<div class="col-lg-2" data-name="docs"><h4>Documentation</h4></div>
-			<div class="col-lg-2" data-name="rma"><h4>Get RMA Number</h4></div>
+			<div class="col-lg-2" data-name="docs"><h4 th:text="#{page.support.docs}">Documentation</h4></div>
+			<div class="col-lg-2" data-name="rma" th:text="#{page.support.rma}"><h4>Get RMA Number</h4></div>
         </div>
       </div>
       <div class="overlay"></div>
     </div>
     <div class="section gui gui-download">
-		<h1>IRT GUI Download</h1>
+		<h1 th:text="#{page.support.guiDownload.title}">IRT GUI Download</h1>
 		<div class="content">
         <p class="pre-line" th:utext="${guiText}">   IRT Technologies, an acronym for Intelligent RF Telecom technologies, designs, develops and manufactures advanced satellite RF systems and products for real time voice, data and multimedia delivery anywhere in the world.
 
@@ -46,11 +46,11 @@
     </div>
     <div class="section faq">
 		<div class="text-center" >
-			<h1>Frequently Asked Questions</h1>
+			<h1 th:text="#{page.support.fac.title}">Frequently Asked Questions</h1>
 			<div class="content row text-start">
 				<div class="col col-lg-7 mx-5">
 					<div class="container" th:remove="all-but-first">
-						<h4 class="mb-3 text-warning" th:each="faq: ${allFAQs}" data-th-data-id="${faq.id}" th:text="${faq.question}">If you have any questions about our Products or Solutions.</h4>
+						<h4 class="mb-3 text-warning" th:each="faq: ${allFAQs}" data-th-data-id="${faq.id}" th:text="${lang == 'fr' ? faq.questionFr : faq.question}">If you have any questions about our Products or Solutions.</h4>
 						<h4 class="mb-3">If you have any questions about our Products or Solutions, please fill in the form below.</h4>
 						<h4 class="mb-3">If you have any questions about our Products or Solutions, please fill in the form below.</h4>
 						<h4 class="mb-3">If you have any questions about our Products</h4>
@@ -62,7 +62,7 @@
       <div class="overlay"></div>
 	</div>
 	<div class="section docs">
-		<h1>IRT Documentation</h1>
+		<h1 th:text="#{page.support.docs.title}">IRT Documentation</h1>
      	<div class="container mt-5" th:with="keySet=${docs.keySet()}">
     		<div class="row m-2 p-2" th:each="description, stat : ${keySet}" th:classappend="${stat.odd} ? 'odd'" th:with="fileNames=${docs.get(description)}">
     			<div class="col">
@@ -118,7 +118,7 @@
     <div class="modal-dialog modal-xl" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title text-warning">You contact info:</h5>
+          <h5 class="modal-title text-warning" th:text="#{page.support.contactInfo}">You contact info:</h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body row">
@@ -126,33 +126,33 @@
 				<div class="row-cols-1">
 					<div class="col-sm">
 						<div class="form-floating mb-3">
-							<input id="rmaName" type="text" class="form-control" placeholder="Name">
-							<label for="rmaName">Name</label>
+							<input id="rmaName" type="text" class="form-control" placeholder="Name" th:placeholder="#{page.support.name}">
+							<label for="rmaName" th:text="#{page.support.name}">Name</label>
 						</div>
 					</div>
 					<div class="col-sm">
 						<div class="form-floating mb-3">
-							<input id="rmaEmail" type="email" class="form-control" placeholder="Email">
-							<label for="rmaEmail">Email address</label>
+							<input id="rmaEmail" type="email" class="form-control" placeholder="Email" th:placeholder="#{page.about.contactUs.form.email}">
+							<label for="rmaEmail" th:placeholder="#{page.support.email}">Email address</label>
 						</div>
 					</div>
 					<div class="col-sm">
 						<div class="form-floating mb-3">
-							<input id="rmaSN" type="text" class="form-control" placeholder="Unit Serial Number">
-							<label for="rmaSN">Unit Serial Number</label>
+							<input id="rmaSN" type="text" class="form-control" placeholder="Unit Serial Number" th:placeholder="#{page.support.serial}">
+							<label for="rmaSN" th:text="#{page.support.serial}">Unit Serial Number</label>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="col-sm">
 				<div class="form-floating mb-3">
-					<textarea id="rmaCause" rows="9" class="form-control" placeholder="Description of the malfunction."></textarea>
-					<label for="rmaCause">Description of the malfunction.</label>
+					<textarea id="rmaCause" rows="9" class="form-control" placeholder="Description of the malfunction." th:placeholder="#{page.support.malfunction}"></textarea>
+					<label for="rmaCause" th:text="#{page.support.malfunction}">Description of the malfunction.</label>
 				</div>
 			</div>
          </div>
 		<div class="modal-footer">
-			<button id="btnCreateRMA" type="button" class="btn btn-outline-light form-control" disabled>Click here to get RMA number</button>
+			<button id="btnCreateRMA" type="button" class="btn btn-outline-light form-control" disabled th:text="#{page.support.clickToRMA}">Click here to get RMA number</button>
 		</div>
       </div>
     </div>
@@ -165,6 +165,17 @@
     <script type="application/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 </th:block>
 
+<script th:inline="javascript">
+	const mastBeFilled = /*[[#{page.support.mastBeFilled}]]*/ 'All fields must be filled.';
+	const notManufacturedByIRT = /*[[#{page.support.notManufacture}]]*/ 'The unit with the provided serial number is not manufactured by IRT Technologies Inc.';
+	const maybeMeant = /*[[#{page.support.maybeMeant}]]*/ 'Maybe you meant IRT-2506001';
+	const rmaStopped = /*[[#{page.support.stopped}]]*/ 'The RMA creation process stopped';
+	const unsupportedBrowser = /*[[#{page.support.unsupportedBrowser}]]*/ 'Unsupported browser. Please use the latest version of Chrome, Firefox, Edge or Safari.';
+	const somethingWrong = /*[[#{page.support.somethingWrong}]]*/ 'Something went wrong.';
+	const shippingAddress = /*[[#{page.support.shippingAddress}]]*/ 'Shipping address:';
+	const pleaseWait = /*[[#{page.support.pleaseWait}]]*/ 'Please wait';
+	const notLong = /*[[#{page.support.notLong}]]*/ 'This shouldn\'t take long.';
+</script>
 <script type="application/javascript" src="../static/js/support.js" th:src="@{'/js/support.js'}"></script>
 </body>
 </html>

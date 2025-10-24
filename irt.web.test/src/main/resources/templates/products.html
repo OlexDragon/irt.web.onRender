@@ -36,7 +36,7 @@
                   
                     <form>
                       <div class="form-group search">
-                        <label for="filter-name">Search by Description</label>
+                        <label for="filter-name" th:text="#{page.product.search}">Search by Description</label>
                         <div>
 
                           <input type="text" class="form-control" id="filter-name" data-product-name="name" th:value="${search}" >
@@ -48,24 +48,29 @@
                     </form>
                 </div>
                 <div class="filter-family " th:each="filter: ${filters}" th:if="${filter.active}">
-                  <h6 class="card-header border-0"  th:text="${filter.name}">
+                  <h6 class="card-header border-0"  th:text="${lang == 'fr' ? filter.nameFr : filter.name}">
                     Environment
                   </h6>
                   <div class="card-body" th:remove="all-but-first">
                     <div class="form-group" th:remove="all-but-first" th:each="f: ${filter.children}" th:if="${f.active}">
-                         <label class="form-label w-100 text-start btn btn-sm text-end " for="f_od" th:for="'fID' + ${f.id}">
+                         <label
+                         		class="form-label w-100 text-start btn btn-sm text-end text-truncate"
+                         		for="f_od"
+                         		th:for="'fID' + ${f.id}"
+                         		th:title="${lang == 'fr' ? f.nameFr : f.name}"
+								data-bs-toggle="tooltip">
                          	<input 
-                              class="form-check-input mx-2 visually-hidden"	
-                              type="checkbox" 
-                        			id="f_od" 
-                        			value="1" 
-                        			th:id="'fID' + ${f.id}" 
-                        			th:name="'fName' + ${filter.id}" 
-                        			th:value="${f.id}" 
-                        			th:type="${f.radio} ? 'radio' : 'checkbox'"
-                        			th:checked="${f.selected}">
-                              <span class="checkbox-custom"></span>
-                            [[${f.name}]]
+								class="form-check-input mx-2 visually-hidden"	
+								type="checkbox" 
+								id="f_od" 
+								value="1" 
+								th:id="'fID' + ${f.id}" 
+								th:name="'fName' + ${filter.id}" 
+								th:value="${f.id}" 
+								th:type="${f.radio} ? 'radio' : 'checkbox'"
+								th:checked="${f.selected}">
+                            <span class="checkbox-custom"></span>
+                            [[${lang == 'fr' ? f.nameFr : f.name}]]
                         </label>
                       <div >
                         <label for="f_ind" class="form-label w-100 bg-body-tertiary text-start btn btn-sm" >
@@ -334,9 +339,9 @@
             <div class="filters-current  my-3 d-flex p-1  align-items-center" >
               
               <div class="selected-filter-wrapper">
-                <h2 class="filters-title">Selected Filter :</h2>
+                <h2 class="filters-title" th:text="#{page.product.selectedFilter} + ' :'">Selected Filter :</h2>
                 <div class="delete">
-                  <p class="delete-all-button">Delete all selected filters</p>
+                  <p class="delete-all-button" th:text="#{page.product.deleteFilters}">Delete all selected filters</p>
                 </div>
               </div>
               <ul class="filters-list gap-2 "   
@@ -358,7 +363,7 @@
             </div>
           </div>
 
-          <h2 class="mt-4 ms-3 p-1 text-uppercase title-product">Our product</h2>
+          <h2 class="mt-4 ms-3 p-1 text-uppercase title-product" th:text="#{page.product.ourProduct}">Our product</h2>
           <div class="container py-4">
             
 
@@ -368,10 +373,10 @@
  /*/-->
                   <!-- card1 -->
                 <div class="col-md-3 mb-4 " th:each="product: ${products}">
-                  <div class="card product border-0" th:data-product-id="${product.id}">
-                    <img src="../static/images/jpeg/ipb_2U.jpg" class="img-fluid rounded" th:src="@{'/images/product/' + ${product.id}}" title="Click to download PDF">
+                  <div class="card product border-0" th:data-product-id="${product.id}" th:data-lang="${lang}">
+                    <img src="../static/images/jpeg/ipb_2U.jpg" class="img-fluid rounded" th:src="@{'/images/product/' + ${product.id}}" th:title="${lang} == 'fr' ? #{page.product.clickForRequest} : #{page.product.clickForPDF}">
                     <div class="card-body card-product">
-                      <h5 class="card-title fw-bold" th:text="${product.name}">Product name</h5>
+                      <h5 class="card-title fw-bold" th:text="${lang == 'fr' ? product.nameFr : product.name}">Product name</h5>
 
                       <!-- <div>
                         <a href="pdf-view.html?fileInput" target="_blank">Open PDF</a>
@@ -379,10 +384,11 @@
                      
                     </div>
                     <div class="ms-3 mb-3 invisible">
-                      	<a href="detail.html?productId=24" th:href="@{'product_detail?productId=' + ${product.id}}" target="_blank" type="button" class="btn shine-button lien">
-                        	in more detail
-						</a>  
-                    </div>
+						<a href="detail.html?productId=24"
+							th:href="@{'product_detail?productId=' + ${product.id}}"
+							target="_blank" type="button" class="btn shine-button lien"
+							th:text="#{page.product.detail}"> in more detail </a>
+					</div>
                   </div>
                 </div>
 <!--/*/
@@ -397,7 +403,7 @@
                        ">
                     </div>
                     <div class="card-body ">
-                      <h5 class="card-title fw-bold">Product name</h5>
+                      <h5 class="card-title fw-bold" th:text="#{page.product.name}">Product name</h5>
                       <p class="card-text">Important features</p>
   
                     </div>

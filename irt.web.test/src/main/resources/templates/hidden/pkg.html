@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PKGs Upload - IRT Technologies Inc.</title>
+    <th:block th:replace="~{home :: links}">
+    	<link rel="preconnect" href="https://fonts.googleapis.com">
+    	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    	<link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,300;0,500;1,100&display=swap" rel="stylesheet">
+    	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    </th:block>
+</head>
+<body>
+
+<div class="container">
+    <div class="card text-center mt-5 mb-5">
+        <div class="card-header">
+            <h3>Upload Package</h3>
+        </div>
+        <div class="card-body">
+        	<div class="row">
+        		<div class="col form-floating">
+        			<input id="pkgName" type="text" class="form-control" placeholder="Package Group Name">
+        			<label for="pkgName">Package Group Name</label>
+        		</div>
+        		<div class="col">
+					<input id="pkgUpgrade" type="file" accept=".pkg" hidden="hidden" multiple>
+					<label for="pkgUpgrade" class="btn btn-lg btn-outline-secondary form-control">Select Package</label>
+        		</div>
+        		<div class="col-auto">
+        			<button id="btnUploadPkg" type="button" class="btn btn-lg btn-outline-primary form-control" disabled>Upload Packages</button>
+        		</div>
+        	</div>
+        </div>
+    </div>
+</div>
+<div class="container">
+	<table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Group Name</th>
+                <th scope="col">File Name</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+			<tr th:each="pkg : ${pkgs}">
+				<th th:text="${pkg.key}">Group Name</th>
+				<td>
+					<table class="table">
+						<tr th:each="fileName : ${pkg.value}">
+							<td th:text="${fileName}">File Name</td>
+							<td>
+								<button type="button" class="btn btn-outline-danger btn-sm btn-delete-pkg" th:value="${pkg.key + '/' + fileName}">Delete</button>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+        </tbody>
+	</table>
+</div>
+
+<th:block th:replace="~{home :: javascript}">
+    <script type="application/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script type="application/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+</th:block>
+
+<script type="module" src="../../static/js/pkg.js" th:src="@{'/js/pkg.js'}"></script>
+</body>
+</html>

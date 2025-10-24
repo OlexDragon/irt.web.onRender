@@ -32,6 +32,7 @@ public class WebMenu{
 	@Column(nullable = true)
 	private Long	 ownerId;
 	private String name;
+	private String nameFr;
 	@Column(insertable = false)
 	private String link;
 	@Column(insertable = false)

@@ -24,6 +24,7 @@ public class Product{
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long	id;
 	private String 	name;
+	private String 	nameFr;
 	@Column(insertable = false, columnDefinition = "default true")
 	private boolean active;
 

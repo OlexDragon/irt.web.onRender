@@ -14,6 +14,7 @@ public class ProductMenu {
 
 	private Long id;
 	private String name;
+	private String nameFr;
 	private Integer order;
 	private Boolean active;
 

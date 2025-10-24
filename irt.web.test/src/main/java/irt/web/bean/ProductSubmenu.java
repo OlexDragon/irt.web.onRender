@@ -15,6 +15,7 @@ public class ProductSubmenu {
 
 	private final Long id;
 	private final String name;
+	private final String nameFr;
 	private final Long filterId;
 	private final Boolean active;
 	private final boolean radio;
@@ -24,6 +25,7 @@ public class ProductSubmenu {
 		id = webMenu.getId();
 		name = webMenu.getName();
 		active = webMenu.getActive();
+		nameFr = webMenu.getNameFr();
 
 		final Optional<Filter> oFilter = Optional.ofNullable(webMenu.getMenuFilters()).map(List::stream).flatMap(s->s.map(WebMenuFilter::getFilter).findAny());
 		if(oFilter.isPresent()) {

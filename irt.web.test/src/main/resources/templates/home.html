@@ -4,8 +4,25 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - IRT Technologies Inc.</title>
+    <title th:text="#{page.home.title}">Home - IRT Technologies Inc.</title>
     <th:block th:fragment="links">
+    	<script th:if="${lang} == null">
+    	function getLangCookieValue(){
+			return document.cookie.split('; ').filter(c => c.startsWith('localeInfo')).map(c => c.split('=')[1]).pop();;
+		}
+    	const jsLang = getLangCookieValue();
+    	if(jsLang !== 'fr' && jsLang !== 'en') {
+    		let lang = navigator.languages[0].split('-')[0];
+    		if(lang !== 'fr' && lang !== 'en')
+    			lang = 'en';
+    		const date = new Date();
+    		date.setDate(date.getDate() + 99); // Add 99 days
+    		document.cookie = `localeInfo=${lang}; expires=${date.toUTCString()}; path=/`;
+    		if(getLangCookieValue() === lang)
+    			location.reload();
+    	}
+    	</script>
+    	<link rel="stylesheet" href="../static/css/language.css" th:href="@{${lang} == 'fr' ? '/css/language-fr.css' : '/css/language-en.css'}">
     	<link rel="preconnect" href="https://fonts.googleapis.com">
     	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     	<link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,300;0,500;1,100&display=swap" rel="stylesheet">
@@ -16,23 +33,28 @@
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top border-bottom border-primary" th:fragment="irt_menu(selection)">
         <div class="container-fluid">
-           
+
                 <a class="navbar-brand ms-3" href="/">
                     <img src="../static/images/logo.png" alt="logo-IRT Technologies" th:src="${'/images/logo.png'}">
                 </a>
-                <small class="text-uppercase slogan mt-4">Connecting the world together</small>
+                <small class="text-uppercase slogan mt-4" th:text="#{menu.together}">Connecting the world together</small>
 
                 <button class="navbar-toggler expand" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
+<div class="language-selector visually-hidden">
+	<img src="../static/images/flags/f-usa.png" th:src="'/images/flags/f-english.png'" alt="Language">
+	<label class="badge text-uppercase align-middle" th:text="${lang} eq 'fr' ? 'English' : 'Fran&ccedil;ais'">English</label>
+</div>
+
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-5">
                     <li class="nav-item">
-                        <a id="navHome" class="nav-link" href="home.html" th:href="@{'/'}" th:classAppend="${selection==null} ? 'active'">Home</a>
+                        <a id="navHome" class="nav-link" href="home.html" th:href="@{'/'}" th:classAppend="${selection==null} ? 'active'" th:text="#{menu.home}">Home</a>
                     </li>
                     <li class="nav-item dropdown-var">    
-                        <a id="vavProducts" class="nav-link dropdown-toggle has-checkbox" href="#"  data-bs-toggle="dropdown" aria-expanded="false" th:classAppend="${selection eq 'products'} ? 'active'">
+                        <a id="vavProducts" class="nav-link dropdown-toggle has-checkbox" href="#"  data-bs-toggle="dropdown" aria-expanded="false" th:classAppend="${selection eq 'products'} ? 'active'" th:text="#{menu.products}">
                             Products
                         </a>
                     <!-- Products Menu -->
@@ -42,7 +64,7 @@
                                 	<div class="row row-cols-1 justify-content-end">
  
                                     	<strong	class="col-11 text-uppercase dropdown-link"
-                                    		th:text="${menu.name}"> Environment </strong>
+                                    		th:text="${lang == 'fr' ? menu.nameFr : menu.name}"> Environment </strong>
  
                                     	<div class="col-11 sous-link text-truncate" th:each="submenu : ${menu.submenus}">
 		  	 								<div class="form-check row">
@@ -57,7 +79,7 @@
     	   										<label
 	       											for="redNo" th:for="'m' + ${submenu.id}"
        												class="form-check-label btn product_od btn-v3 col-6"
-       												th:text="${submenu.name}">Text</label>
+       												th:text="${lang == 'fr' ? submenu.nameFr : submenu.name}">Text</label>
 											</div>
                                    		</div>
                                 	</div>
@@ -65,25 +87,25 @@
                             </div>
                             <div class="row justify-content-center">
                             	<div class="col-8">
-                             		<a id="btnGetSelected" class="btn shine-button form-control" href="/products" role="button">Show selected</a>
+                             		<a id="btnGetSelected" class="btn shine-button form-control" href="/products" role="button" th:text="#{home.show}">Show selected</a>
                             	</div>
                             </div>
                         </div>
                     </li>
                     <li class="nav-item" >
-                        <a id="navEvent" href="news-events.html" class="nav-link" th:href="@{'/news-events'}" th:classAppend="${selection eq 'news'} ? 'active'">News &amp; Events</a>
+                        <a id="navEvent" href="news-events.html" class="nav-link" th:href="@{'/news-events'}" th:classAppend="${selection eq 'news'} ? 'active'" th:text="#{menu.NewsEvents}">News & Events</a>
                     </li>
 <!--                     <li class="nav-item" > -->
 <!--                         <a id="navQuote" href="news-events.html" class="nav-link" th:href="@{'/quote'}" th:classAppend="${selection eq 'quote'} ? 'active'">Quote</a> -->
 <!--                     </li> -->
                     <li class="nav-item" >
-                        <a id="navSupport" href="news-events.html" class="nav-link" th:href="@{'/support'}" th:classAppend="${selection eq 'support'} ? 'active'">Support</a>
+                        <a id="navSupport" href="news-events.html" class="nav-link" th:href="@{'/support'}" th:classAppend="${selection eq 'support'} ? 'active'" th:text="#{menu.support}">Support</a>
                     </li>
                     <li class="nav-item">
-                        <a id="navAbout" href="about.html" class="nav-link" th:href="@{'/about'}" th:classAppend="${selection eq 'about'} ? 'active'">About Us</a>
+                        <a id="navAbout" href="about.html" class="nav-link" th:href="@{'/about'}" th:classAppend="${selection eq 'about'} ? 'active'" th:text="#{menu.about}">About Us</a>
                     </li>
                     <li class="nav-item">
-						<a  class="btn menu-contact-us shine-button" href="about.html#section-contact" th:href="@{'/about#section-contact'}">Contact Us</a>
+						<a  class="btn menu-contact-us shine-button" href="about.html#section-contact" th:href="@{'/about#section-contact'}" th:text="#{menu.contact}">Contact Us</a>
                     </li>
                     <!-- <li class="nav-item" th:remove="all">
                         <a class="nav-link" href="home.html">Next</a>
@@ -101,7 +123,8 @@
 			<div class="row">
 				<div id="bannerAlignment" class="col text-banner">
 					<h1 id="companyName">IRT Technologies</h1>
-					<p id="companySlogan" class="text-center fs-4" style="text-shadow: 2px 2px black;">connecting the world together</p>
+<!-- 					<p id="companySlogan" class="text-center fs-4" style="text-shadow: 2px 2px black;" th:text="#{home.division}">connecting the world together</p> -->
+					<p class="text-center fs-4" style="text-shadow: 2px 2px black;" th:text="#{home.division}">connecting the world together</p>
 				</div>
 			</div>
 			<div class="overlay"></div>
@@ -157,7 +180,7 @@
 			<div cladd="row">
 			<div class="col d-flex justify-content-center">
 				<div class="  align-self-center mx-5 mb-5 ">
-					<a class="btn home-btn shine-button " href="/products">View All Our Products</a>
+					<a class="btn home-btn shine-button " href="/products" th:text="#{page.home.allProducts}">View All Our Products</a>
 				</div>
 			</div>
 			</div>
@@ -165,33 +188,27 @@
       
         <div class="section home-solution">
             <div class="row">
-
-               
-                    <div class="col-md-6 px-5" >
-    
-                        <h1 id="solutionHeader">Find Your Solution</h1>
-                        <div class="content pre-line">
-                          <p id="solutionContent" class="pre-wrap">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla massa vel orci suscipit, sit amet varius odio luctus. Etiam et malesuada eros. Integer mollis tellus id orci iaculis, vitae ullamcorper nibh vestibulum. </p>
-                        </div>
-                    </div>
-                    <div class="col d-flex justify-content-center">
-
-                        <div class="  align-self-center mx-5">
-                                 <a id="buttonText" class="btn about-btn shine-button" href="about.html#section-contact" th:href="@{'/about#section-contact'}">Contact</a>
-                        </div>
-                    </div>
-    
-                
-                    <div class="overlay"></div>
+				<div class="col-md-6 px-5" >
+					<h1 th:text="#{page.about.aboutIRT}">Find Your Solution</h1>
+					<div class="content pre-line">
+						<p class="pre-wrap solutionContent" th:text="#{page.home.about}">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fringilla massa vel orci suscipit, sit amet varius odio luctus. Etiam et malesuada eros. Integer mollis tellus id orci iaculis, vitae ullamcorper nibh vestibulum. </p>
+					</div>
+				</div>
+				<div class="col d-flex justify-content-center">
+					<div class="  align-self-center mx-5">
+						<a class="btn about-btn shine-button buttonText" href="about.html#section-contact" th:href="@{'/about#section-contact'}" th:text="#{menu.contact}">Contact</a>
+					</div>
+				</div>
+				<div class="overlay"></div>
             </div>
         </div>
        </section>
       <footer  class="footer" th:fragment="footer">
         <nav class="footer__nav row">
-            <a class="footer__link col-lg"  href="/">Home</a>
-            <a class="footer__link col-lg"  href="/products">Products</a>
-            <a class="footer__link col-lg"  href="/news-events">News &amp; Events</a>
-            <a class="footer__link col-lg"  href="/about.html" th:href="@{'/about'}">About Us</a>
+            <a class="footer__link col-lg"  href="/" th:text="#{menu.home}">Home</a>
+            <a class="footer__link col-lg"  href="/products" th:text="#{menu.products}">Products</a>
+            <a class="footer__link col-lg"  href="/news-events" th:text="#{menu.NewsEvents}">News &amp; Events</a>
+            <a class="footer__link col-lg"  href="/about.html" th:href="@{'/about'}" th:text="#{menu.about}">About Us</a>
             
         </nav>
         <div class="footer-container mt-5">
@@ -199,31 +216,31 @@
             <div class="grid  footer__cols">
                 <div class="grid-item">
                     <div class=" fullwidth">
-                        <strong class="text-uppercase">Contact Us</strong>
-                        <p>08:30 am - 5:00 pm (Mon-Fri)</p>
+                        <strong class="text-uppercase" th:text="#{menu.contact}">Contact Us</strong>
+                        <p th:text="#{page.footer.openTime}">08:30 am - 5:00 pm (Mon-Fri)</p>
                         <p>  9630 Trans Canada Route
                           Saint Laurent, QC
                           Canada H4S 1V9</p>
-                        <p> <small>Phone:</small> +1-514-907-1161</p>
-                        <p> <small>Fax:</small>+1-514-907-1123</p>
-                        <p> <small>Email:</small> info@irttechnologies.com </p>
+                        <p><small><span th:text="#{phone}">Phone</span>:</small> +1-514-907-1161</p>
+                        <p> <small><span th:text="#{fax}">Fax</span>:</small>+1-514-907-1123</p>
+                        <p> <small><span th:text="#{email}">Email</span>:</small> info@irttechnologies.com </p>
                     </div>
                 </div>
                 <div class="grid-item">
                     <div class="fullwidth logo-footer">
-                      <p class="text-uppercase slogan my-5">Connecting the world together</p>
+                      <p class="text-uppercase slogan my-5" th:text="#{menu.together}">Connecting the world together</p>
                         <span class="span-img"><img class="logo__img" src="../static/images/logo.png" alt="logo" th:src="${'/images/logo.png'}"></span>
                     </div>
                         
                     </div>
                 <div class="grid-item">
                     <div class=" fullwidth ">
-                         <p><a class="btn shine-button" href="about.html#section-contact" th:href="@{'/about#section-contact'}">Contact Us</a></p>
+                         <p><a class="btn shine-button" href="about.html#section-contact" th:href="@{'/about#section-contact'}" th:text="#{menu.contact}">Contact Us</a></p>
                     </div>
                     
                 </div>
             </div>
-            <p class="text-center mt-3 pb-3">Copyright &copy; 2024 All rights reserved.</p>
+            <p class="text-center mt-3 pb-3" th:text="#{page.footer.copyright}">Copyright &copy; 2024 All rights reserved.</p>
         </div>
         
       </footer>
@@ -232,6 +249,25 @@
 	<script type="application/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 	<script type="application/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>	<script type="application/javascript" src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
 	<script type="application/javascript" src="../static/js/main.js" th:src="@{'/js/main.js'}"></script>
+	<script th:inline="javascript">
+    /*<![CDATA[*/
+		const localeInfo = Cookies.get('localeInfo');
+		if(localeInfo === 'fr' || localeInfo === 'en')
+			$('.language-selector').removeClass('visually-hidden');
+		else{
+			$('<div>', {class: 'alert alert-warning alert-dismissible fade show', role: 'alert'})
+				.append($('<strong>').text('To use internationalization, you must enable cookies.'))
+				.append($('<button>', {type: 'button', class: 'btn-close', 'data-bs-dismiss': 'alert', 'aria-label': 'Close'}))
+				.prependTo('body');
+		}
+		$('.language-selector').click(()=>{
+			const lang = /*[[${lang}]]*/ 'en';
+			Cookies.set('localeInfo', lang === 'en' ? 'fr' : 'en', { expires: 99, path: '/' });
+			location.reload();
+		});
+	/*]]>*/
+	//# sourceURL=language-control.js
+	</script>
 </th:block>
 
 <script type="application/javascript" src="../static/js/home.js" th:src="@{'/js/home.js'}"></script>

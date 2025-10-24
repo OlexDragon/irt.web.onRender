@@ -15,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
@@ -25,8 +26,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,6 +55,7 @@ public class SupporComtroller {
 	private static final String NAME = "{name}";
 	private static final String[] NAMES = {NAME, VERSION, DATE, SIZE};
 	private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("MMM dd yyyy HH:mm:ss");
+	private static final DateTimeFormatter DATE_FORMATTER_FR = DateTimeFormatter.ofPattern("d MMMM yyyy HH:mm:ss", Locale.FRENCH);
 	private static final WebContentId WEB_CONTENT_ID = new WebContentId("suport", "guiText",  ValueType.TEXT);
 
 	@Value("${irt.web.root.path}")
@@ -60,9 +64,11 @@ public class SupporComtroller {
 	private String filesPath;
 
 	@Autowired private WebMenuRepository	menuRepository;
-	@Autowired private WebContentRepository	webContentRepository;
+//	@Autowired private WebContentRepository	webContentRepository;
 	@Autowired private FaqRepository	 	faqRepository;
 	@Autowired private DocumentsService		docService;
+
+	@Autowired private MessageSource messageSource;
 
 	@ModelAttribute("menus")
 	public List<ProductMenu> menus() {
@@ -70,17 +76,23 @@ public class SupporComtroller {
 	}
 
 	@GetMapping
-    String support(Model model){
+    String support(@CookieValue(required = false) String localeInfo, Model model){
 
 		final Path path = Paths.get(root, filesPath, "gui4");
 
 		final File file = path.toFile();
 
-		if (!file.exists()) {
-			model.addAttribute(WEB_CONTENT_ID.getNodeId(), "Sorry, file not found.");
+		// Set Language
+		Optional<String> oLang = Optional.ofNullable(localeInfo).filter(s->s.equals("fr") || s.equals("en"));
+		oLang.ifPresent(s->model.addAttribute("lang", s));
+		final Locale locale = oLang.map(Locale::of).orElse(Locale.ENGLISH);
 
-		}else
-			webContentRepository.findById(WEB_CONTENT_ID).map(WebContent::getValue).ifPresent(text->guiData(file, text, model));
+		if (!file.exists()) 
+			model.addAttribute(WEB_CONTENT_ID.getNodeId(), messageSource.getMessage("page.support.fileNotFound", null, locale));
+
+		else
+			guiData(file, messageSource.getMessage("page.support.gui", null, locale), model, locale);
+//			webContentRepository.findById(WEB_CONTENT_ID).map(WebContent::getValue).ifPresent(text->guiData(file, text, model));
 
 		final Iterable<Faq> all = faqRepository.findAll();
 		logger.trace(all);
@@ -92,7 +104,7 @@ public class SupporComtroller {
 		return "support";
     }
 
-	public void guiData(final File file, String text, Model model) {
+	public void guiData(final File file, String text, Model model, Locale locale) {
 		final Optional<File> oFile = Stream.of(file.listFiles()).findAny();
 		oFile.ifPresent(
 
@@ -105,13 +117,13 @@ public class SupporComtroller {
 						final Path p = f.toPath();
 						long size = Files.size(p);
 						final Long kilobytes = size / 1024;
-						map.put(SIZE, kilobytes + " kilobytes");
+						map.put(SIZE, kilobytes + " " + messageSource.getMessage("kilobytes", null, locale));
 
 					} catch (IOException e) {
 						logger.catching(e);
 					}
 
-					addVersionAndDate(oFile, map);
+					addVersionAndDate(oFile, map, locale);
 
 					String t = text;
 					for(String n: NAMES)
@@ -121,7 +133,7 @@ public class SupporComtroller {
 				});
 	}
 
-	private void addVersionAndDate(Optional<File> oFile, Map<String, String> map) {
+	private void addVersionAndDate(Optional<File> oFile, Map<String, String> map, Locale locale) {
 
 		oFile
 		.ifPresent(
@@ -132,8 +144,9 @@ public class SupporComtroller {
 						.ifPresent(
 								irtGuiClass->{
 
-									LocalDateTime dt = LocalDateTime.ofInstant(Instant.ofEpochMilli(irtGuiClass.getTime()), ZoneId.systemDefault()); 
-									map.put(DATE, dt.format(DATE_FORMATTER));
+									LocalDateTime dt = LocalDateTime.ofInstant(Instant.ofEpochMilli(irtGuiClass.getTime()), ZoneId.systemDefault());
+									DateTimeFormatter dFormatter = locale == Locale.FRENCH ? DATE_FORMATTER_FR : DATE_FORMATTER;
+									map.put(DATE, dt.format(dFormatter));
 
 									try(	final InputStream is = jar.getInputStream(irtGuiClass);
 											final Scanner scanner = new Scanner(is);) {

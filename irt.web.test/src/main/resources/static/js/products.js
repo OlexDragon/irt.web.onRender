@@ -113,7 +113,7 @@ function filter() {
 					start = -1;
 					$matte.fadeOut();
 
-					$('.product').click(function(e){ productClick(e, $(this)); return false; });
+					$('.product').click(function(e){ productClick(e); return false; });
 
 					let load = $(data).length;
 					if (load < pageSize){
@@ -210,7 +210,7 @@ function loadMore() {
 			return;
 		}
 
-		$card.click(function(e){productClick(e, $(this));return false;});
+		$card.click(function(e){productClick(e);return false;});
 
 		$productsContent.append($data);
 //		addImage($card);
@@ -279,6 +279,10 @@ $('.filter-item').each(function(){
         new bootstrap.Tooltip(this);
 });
 
+$('[data-bs-toggle="tooltip"]').each(function(){
+        new bootstrap.Tooltip(this);
+});
+
 let $filtersList = $(".filters-list");
 // fonction pour mettre à jour les current filtres  dans le balisage
 $('.filter-cross').hover(function(){
@@ -323,15 +327,22 @@ $(".delete-all-button").click(function() {
 
 //pour desactiver modal pendent le click sur un boutton detail
 	$('.product').click(function(e) {
-		productClick(e, $(this));
+		productClick(e);
 		return false;
 	});
 
 //pour remplire les donner dans modal 
-function productClick(e, $product){
+function productClick({currentTarget:product}){
 
-	let productId = $product.data('productId');
-	window.open('/pdf/product/' + productId, '_blank', 'fullscreen=yes');
+	const $product = $(product);
+	const productId = $product.data('productId');
+	const lang = $product.data('lang');
+	if(lang=='fr')
+		// open About page in a new tab and fill the contact form with the product datasheet request
+		window.open(`/about?id=${productId}#section-contact`, '_blank', 'fullscreen=yes');
+	else
+		// open PDF in a new tab
+		window.open('/pdf/product/' + productId, '_blank', 'fullscreen=yes');
 
 //	if (e.target.localName!='a'){
 //		let cardLink = $product.find('a').prop('href');
