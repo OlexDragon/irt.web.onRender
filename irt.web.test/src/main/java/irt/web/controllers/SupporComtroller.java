@@ -12,6 +12,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.ZipFile;
 
@@ -27,6 +29,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
+import org.springframework.context.NoSuchMessageException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -37,12 +40,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import irt.web.bean.ProductMenu;
 import irt.web.bean.jpa.Faq;
 import irt.web.bean.jpa.FaqRepository;
-import irt.web.bean.jpa.WebContent;
 import irt.web.bean.jpa.WebContent.ValueType;
-import irt.web.service.DocumentsService;
 import irt.web.bean.jpa.WebContentId;
-import irt.web.bean.jpa.WebContentRepository;
 import irt.web.bean.jpa.WebMenuRepository;
+import irt.web.service.DocumentsService;
 
 @Controller
 @RequestMapping("support")
@@ -99,7 +100,15 @@ public class SupporComtroller {
 		model.addAttribute("allFAQs", all);
 
 		// Documentation
-		docService.addDocuments(model);
+		try {
+
+			final Map<String, List<String>> documents = docService.getDocuments();
+
+			model.addAttribute("docs", documents);
+
+		} catch (IOException e) {
+			logger.catching(e);
+		}
 
 		return "support";
     }

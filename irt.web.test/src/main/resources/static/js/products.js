@@ -336,13 +336,13 @@ function productClick({currentTarget:product}){
 
 	const $product = $(product);
 	const productId = $product.data('productId');
-	const lang = $product.data('lang');
-	if(lang=='fr')
+//	const lang = $product.data('lang');
+//	if(lang=='fr')
 		// open About page in a new tab and fill the contact form with the product datasheet request
 		window.open(`/about?id=${productId}#section-contact`, '_blank', 'fullscreen=yes');
-	else
-		// open PDF in a new tab
-		window.open('/pdf/product/' + productId, '_blank', 'fullscreen=yes');
+//	else
+//		// open PDF in a new tab
+//		window.open('/pdf/product/' + productId, '_blank', 'fullscreen=yes');
 
 //	if (e.target.localName!='a'){
 //		let cardLink = $product.find('a').prop('href');

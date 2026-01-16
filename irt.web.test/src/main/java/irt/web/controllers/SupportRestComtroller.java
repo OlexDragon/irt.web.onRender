@@ -14,10 +14,11 @@ import irt.web.bean.jpa.FaqAnswerRepository;
 @RestController
 @RequestMapping("rest/suport")
 public class SupportRestComtroller {
+
 	@Autowired private FaqAnswerRepository	 answerRepository;
 
 	@PostMapping("answer")
     String answer(@CookieValue(required = false) String localeInfo, @RequestParam Long faqID){
-		return answerRepository.findByFaqId(faqID).map(fa->Optional.ofNullable(localeInfo).filter(l->l.startsWith("fr")).map(l->fa.getAnswerFr()).orElse(fa.getAnswer())).orElse("");
+		return answerRepository.findByFaqId(faqID).map(fa->Optional.ofNullable(localeInfo).filter(l->l.startsWith("fr")).map(_->fa.getAnswerFr()).orElse(fa.getAnswer())).orElse("");
 	}
 }

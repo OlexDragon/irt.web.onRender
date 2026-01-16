@@ -67,7 +67,7 @@
     		<div class="row m-2 p-2" th:each="description, stat : ${keySet}" th:classappend="${stat.odd} ? 'odd'" th:with="fileNames=${docs.get(description)}">
     			<div class="col">
     				<div class="row">
-	 		  			<p class="col" th:text="${description}"></p>
+	 		  			<p class="col" th:text="#{${description}}"></p>
   	 		  			<div class="col">
 	 		  				<div class="row p-1" th:each="fileName : ${fileNames}">
 	 		  					<p class="col"><a class="link-warning link-underline link-underline-opacity-0" th:href="@{'/files/get/docs/' + ${description} + '/' + ${fileName}}" th:text="${fileName}" target="_blank"></a></p>

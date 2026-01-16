@@ -34,8 +34,18 @@ public class DocumentsService {
 	}
 
 	public void addDocuments(Model model) {
-		final Map<String, List<String>> docs = new HashMap<>();
 		try {
+
+			final Map<String, List<String>> docs = getDocuments();
+			model.addAttribute("docs", docs);
+
+		} catch (IOException e) {
+			logger.catching(e);
+		}
+	}
+
+	public Map<String, List<String>> getDocuments() throws IOException {
+		final Map<String, List<String>> docs = new HashMap<>();
 			Files.walk(docsPath)
 			.filter(p->p.getNameCount() > docsPath.getNameCount())
 			.forEach(p->{
@@ -65,11 +75,6 @@ public class DocumentsService {
 				if(!name.isEmpty())
 					nameList.add(name);
 			});
-
-			model.addAttribute("docs", docs);
-
-		} catch (IOException e) {
-			logger.catching(e);
-		}
+		return docs;
 	}
 }
