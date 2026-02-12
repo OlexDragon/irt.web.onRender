@@ -106,11 +106,11 @@ function validate(){
 	let first = $first.val().trim();
 	if(!first){
 		$first.addClass('bg-danger-subtle');
-		showToast('Required fields', 'Name field must be filled in', 'text-bg-danger');
+		showToast(requestFieldsTitle, firstNameRequired, 'text-bg-danger');
 		disable = true;
 	}else if(first.length>50){
 		$first.addClass('bg-danger-subtle');
-		showToast('Length Error', 'The First Name is too long.', 'text-bg-danger');
+		showToast('Length Error', firstNameToLong, 'text-bg-danger');
 		disable = true;
 	}
 
@@ -118,7 +118,7 @@ function validate(){
 	let last = $last.val().trim();
 	if(last.length>50){
 		$last.addClass('bg-danger-subtle');
-		showToast('Length Error', 'The Last Name is too long.', 'text-bg-danger');
+		showToast('Length Error', lastNameToLong, 'text-bg-danger');
 		disable = true;
 	}
 
@@ -126,7 +126,7 @@ function validate(){
 	let phone = $phone.val().trim();
 	if(phone.length>50){
 		$phone.addClass('bg-danger-subtle');
-		showToast('Length Error', 'The Phone Number is too long.', 'text-bg-danger');
+		showToast('Length Error', phoneToLong, 'text-bg-danger');
 		disable = true;
 	}
 
@@ -134,17 +134,17 @@ function validate(){
 	let email = $email.val().trim();
 	if(!email){
 		$email.addClass('bg-danger-subtle');
-		showToast('Required fields', 'Email field must be filled in', 'text-bg-danger');
+		showToast(requestFieldsTitle, emailRequired, 'text-bg-danger');
 		disable = true;
 	}
 	else if(email.length>320){
 		$email.addClass('bg-danger-subtle');
-		showToast('Length error', 'The email address is too long. Please enter a valid email address.', 'text-bg-danger');
+		showToast('Length error', emailToLong, 'text-bg-danger');
 		disable = true;	
 	}
 	else if(!email.toLowerCase().match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)){
 		$email.addClass('bg-danger-subtle');
-		showToast('Required fields', 'Please enter a valid email address.', 'text-bg-danger');
+		showToast(requestFieldsTitle, emailNotValid, 'text-bg-danger');
 		disable = true;	
 	}
 
@@ -152,7 +152,7 @@ function validate(){
 	let company = $company.val().trim();
 	if(company.length>50){
 		$company.addClass('bg-danger-subtle');
-		showToast('Length Error', 'The Company name is too long.', 'text-bg-danger');
+		showToast('Length Error', companyToLong, 'text-bg-danger');
 		disable = true;
 	}
 
@@ -160,7 +160,7 @@ function validate(){
 	let industry = $industry.val().trim();
 	if(industry.length>50){
 		$industry.addClass('bg-danger-subtle');
-		showToast('Length Error', 'The Industry is too long.', 'text-bg-danger');
+		showToast('Length Error', industryToLong, 'text-bg-danger');
 		disable = true;
 	}
 
@@ -168,11 +168,11 @@ function validate(){
 	let toSend = $toSend.val().trim();
 	if(!toSend){
 		$toSend.addClass('bg-danger-subtle');
-		showToast('Required fields', 'Text field must be filled in', 'text-bg-danger');
+		showToast(requestFieldsTitle, requectText, 'text-bg-danger');
 		disable = true;
 	}else if($toSend.length>1000){
 		$toSend.addClass('bg-danger-subtle');
-		showToast('Length Error', 'The Message is too long.', 'text-bg-danger');
+		showToast('Length Error', requestToLong, 'text-bg-danger');
 		disable = true;
 	}
 
@@ -184,7 +184,7 @@ function validate(){
 }
 function showToast(title, message, headerClass){
 
-	let $toast = $('<div>', {class: 'toast', role: 'alert', 'aria-live': 'assertive', 'aria-atomic': true, 'data-bs-delay': 25*1000})
+	let $toast = $('<div>', {class: 'toast', role: 'alert', 'aria-live': 'assertive', 'aria-atomic': true})
 		.append(
 			$('<div>', {class: 'toast-header'})
 			.append(

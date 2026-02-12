@@ -23,6 +23,7 @@ public class ProductMenu {
 	public ProductMenu(WebMenu webMenu) {
 		id = webMenu.getId();
 		name = webMenu.getName();
+		nameFr= webMenu.getNameFr();
 		order = webMenu.getMenuOrder();
 		active = webMenu.getActive();
 	}

@@ -48,7 +48,7 @@ body {
     color: white;
     height: auto;
     min-width: 350px;
-    cursor: pointer;
+/*     cursor: pointer; */
     transition: transform 0.3s ease, font-size 0.3s ease;
 }
 #section-contact .card:hover{

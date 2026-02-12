@@ -291,15 +291,16 @@ public class OnRenderController implements ErrorController {
 
 					if(m.getOwnerId()==null){
 						Optional<ProductMenu> oPMenu = menus.parallelStream().filter(pm->pm.getId()==m.getId()).findAny();
+
 						if(oPMenu.isPresent()) {
+
 							final ProductMenu pm = oPMenu.get();
 							pm.setName(m.getName());
 							pm.setNameFr(m.getNameFr());
 							pm.setOrder(m.getMenuOrder());
 							pm.setActive(m.getActive());
-						}
 
-						else
+						}else
 							menus.add(new ProductMenu(m));
 
 						return;

@@ -307,7 +307,8 @@
                         <div class="container ">
                             <div class="row"> 
                                  <div class="col-md-12 "> 
-                            <div class="card " data-bs-toggle="modal" data-bs-target="#companyModal">
+<!--                             <div class="card " data-bs-toggle="modal" data-bs-target="#companyModal"> -->
+                            <div class="card">
                                 <div class="card-header border-0 mt-4 ">
                                     <h4>IRT Technologies Inc.<br/><span th:text="#{page.about.contactUs.form.headquarters}">Corporate Headquarters</span></h4>
                                 </div>
@@ -463,6 +464,20 @@
 		if (blinkCount++ < 5)
   			$('#contactUsDescr').fadeOut(500).fadeIn(500, blink);
 	})();
+</script>
+<script th:inline="javascript">
+	const requestFieldsTitle = /*[[#{page.about.contactUs.requestFieldsTitle}]]*/ 'Required fields';
+	const firstNameRequired = /*[[#{page.about.contactUs.firstNameRequired}]]*/ 'First name is required.';
+	const firstNameToLong = /*[[#{page.about.contactUs.firstNameToLong}]]*/ 'The First name is too long.';
+	const lastNameToLong = /*[[#{page.about.contactUs.lastNameToLong}]]*/ 'The Last name is too long.';
+	const phoneToLong = /*[[#{page.about.contactUs.phoneToLong}]]*/ 'The Phone number is too long.';
+	const emailRequired = /*[[#{page.about.contactUs.emailRequired}]]*/ 'Email is required.';
+	const emailToLong = /*[[#{page.about.contactUs.emailToLong}]]*/ 'The Email is too long.';
+	const emailNotValid = /*[[#{page.about.contactUs.emailNotValid}]]*/ 'Email is not valid.';
+	const companyToLong = /*[[#{page.about.contactUs.companyToLong}]]*/ 'The Company name is too long.';
+	const industryToLong = /*[[#{page.about.contactUs.industryToLong}]]*/ 'The Industry is too long.';
+	const requectText = /*[[#{page.about.contactUs.requectText}]]*/ 'Text field must be filled in';
+	const requestToLong = /*[[#{page.about.contactUs.requestToLong}]]*/ 'The Message is too long.';
 </script>
 </body>
 </html>
