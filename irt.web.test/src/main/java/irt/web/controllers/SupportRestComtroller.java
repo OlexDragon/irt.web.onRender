@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import irt.web.bean.jpa.FaqAnswerRepository; 
 
 @RestController
-@RequestMapping("rest/suport")
+@RequestMapping("rest/support")
 public class SupportRestComtroller {
 
 	@Autowired private FaqAnswerRepository	 answerRepository;

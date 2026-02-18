@@ -8,7 +8,7 @@ const $modalTitle = $('#modalFaq .modal-title');
 
 $('.faq h4').click(e=>{
 
-	$.post('/rest/suport/answer', {faqID: e.currentTarget.dataset.id})
+	$.post('/rest/support/answer', {faqID: e.currentTarget.dataset.id})
 	.done(answer=>{
 
 		$modalTitle.text(e.currentTarget.textContent);

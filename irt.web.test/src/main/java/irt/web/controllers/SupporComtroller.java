@@ -54,7 +54,7 @@ public class SupporComtroller {
 	private static final String[] NAMES = {NAME, VERSION, DATE, SIZE};
 	private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("MMM dd yyyy HH:mm:ss");
 	private static final DateTimeFormatter DATE_FORMATTER_FR = DateTimeFormatter.ofPattern("d MMMM yyyy HH:mm:ss", Locale.FRENCH);
-	private static final WebContentId WEB_CONTENT_ID = new WebContentId("suport", "guiText",  ValueType.TEXT);
+	private static final WebContentId WEB_CONTENT_ID = new WebContentId("support", "guiText",  ValueType.TEXT);
 
 	@Value("${irt.web.root.path}")
 	private String root;

@@ -93,17 +93,17 @@ public class SerialNumberRestComtroller {
 	}
 
 	@RequestMapping("get-id")
-	Long getId(String serialNumber) {
-		return serialNumberRepository.getId(serialNumber);
+	Long getId(@RequestParam String sn) {
+		return serialNumberRepository.getId(sn);
 	}
 
 	@RequestMapping("by-sn")
-	Optional<SerialNumber> bySerialNumber(String serialNumber) {
-		return serialNumberRepository.findBySerialNumber(serialNumber);
+	Optional<SerialNumber> bySerialNumber(@RequestParam String sn) {
+		return serialNumberRepository.findBySerialNumber(sn);
 	}
 
 	@RequestMapping("by-id")
-	Optional<SerialNumber> byId(long id) {
+	Optional<SerialNumber> byId(@RequestParam long id) {
 		return serialNumberRepository.findById(id);
 	}
 }
